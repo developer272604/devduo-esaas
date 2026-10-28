@@ -2,6 +2,7 @@ import Image from '@/components/common/Img';
 import type { CSSProperties } from 'react';
 import { hash } from '@/lib/format';
 import type { ImageSrc } from '@/lib/types';
+import { ImageControls, useImageEditing, useSlotImage } from '@/components/demo/SlotImg';
 
 type Props = {
   id: string;
@@ -13,19 +14,30 @@ type Props = {
   sizes?: string;
   priority?: boolean;
   className?: string;
+  /** Show the change-image controls while edit mode is on (home page cards only). */
+  editable?: boolean;
 };
+
+/** The slot a product's picture is saved under. A replacement shows everywhere the product does. */
+export const productSlot = (id: string) => `product.${id}`;
 
 /**
  * Product picture. With an image it renders an <img>; without one it falls back
  * to a tinted gradient and an emoji. The tint follows --ph (the primary hue), so it
  * changes live when the colour changes.
  */
-export function Art({ id, emoji, name, image, view = 0, sizes = '(max-width: 700px) 50vw, 25vw', priority, className = '' }: Props) {
+export function Art({ id, emoji, name, image, view = 0, sizes = '(max-width: 700px) 50vw, 25vw', priority, className = '', editable }: Props) {
+  const custom = useSlotImage(productSlot(id));
+  const editing = useImageEditing() && !!editable;
+  const src = custom ?? image;
   const style = { '--dh': (hash(id) % 5) * 16 - 32 + view * 10 } as CSSProperties;
-  if (image) {
+  const controls = editing && <ImageControls slot={productSlot(id)} />;
+
+  if (src) {
     return (
       <div className={`art art-img v${view} ${className}`} style={style}>
-        <Image src={image} alt={name} fill sizes={sizes} priority={priority} className="art-photo" />
+        <Image src={src} alt={name} fill sizes={sizes} priority={priority} className="art-photo" />
+        {controls}
       </div>
     );
   }
@@ -49,6 +61,7 @@ export function Art({ id, emoji, name, image, view = 0, sizes = '(max-width: 700
       ) : (
         <span className="em">{emoji}</span>
       )}
+      {controls}
     </div>
   );
 }
