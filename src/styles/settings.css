@@ -1,0 +1,159 @@
+.stab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 70;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: var(--radius-btn) 0 0 var(--radius-btn);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  writing-mode: vertical-rl;
+  box-shadow: var(--shadow-float);
+}
+.stab svg {
+  writing-mode: horizontal-tb;
+}
+#drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(380px, 100%);
+  background: var(--surface);
+  z-index: 90;
+  transform: translateX(102%);
+  transition: transform 0.25s;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  visibility: hidden;
+  outline: none;
+}
+#drawer.on {
+  transform: none;
+  visibility: visible;
+  box-shadow: var(--shadow-drawer);
+}
+.dh {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.dh h2 {
+  font-size: 19px;
+}
+.db {
+  overflow: auto;
+  padding: 8px 20px 28px;
+  flex: 1;
+}
+.db section {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.db section.last {
+  border: 0;
+}
+.db h3 {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tpls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.tpl {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tpl.on {
+  border-color: var(--primary);
+  background: var(--soft);
+}
+.tpl .te {
+  font-size: 26px;
+}
+.tpl small {
+  color: var(--muted);
+}
+.sw {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sw button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  outline: 1px solid var(--border);
+}
+.sw button.on {
+  outline: 2px solid var(--text);
+}
+.cust {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.cust input {
+  width: 44px;
+  height: 30px;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.fonts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.fonts button {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  padding: 9px 10px;
+  text-align: left;
+  font-size: 15px;
+}
+.fonts button.on {
+  border-color: var(--primary);
+  background: var(--soft);
+}
+.seg {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+}
+.seg button {
+  flex: 1;
+  padding: 9px;
+  font-size: 14px;
+}
+.seg button.on {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+@media (max-width: 520px) {
+  #drawer {
+    width: 100%;
+  }
+}

@@ -1,0 +1,163 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-padding-top: 130px;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+  outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+blockquote {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+img {
+  max-width: 100%;
+}
+:focus-visible {
+  outline: 2px solid var(--primary-text);
+  outline-offset: 2px;
+}
+.muted {
+  color: var(--muted);
+}
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -60px;
+  z-index: 200;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: var(--radius-btn);
+}
+.skip:focus {
+  top: 12px;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: var(--radius-btn);
+  padding: 12px 22px;
+  font-weight: 600;
+  border: 1px solid var(--primary);
+  transition: filter 0.15s;
+  text-align: center;
+}
+.btn:hover {
+  filter: brightness(1.08);
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn.ghost:hover {
+  border-color: var(--text);
+  filter: none;
+}
+.btn.dark {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+.btn.light {
+  background: var(--surface);
+  color: var(--primary-text);
+  border-color: var(--surface);
+}
+.btn.sm {
+  padding: 8px 14px;
+  font-size: 14px;
+}
+.btn.block {
+  width: 100%;
+}
+.btn[disabled],
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.linkbtn {
+  text-decoration: underline;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  position: relative;
+}
+.icon:hover {
+  background: var(--soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation-duration: 0.01s !important;
+    scroll-behavior: auto !important;
+  }
+}
