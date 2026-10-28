@@ -2,22 +2,29 @@ import { useEffect, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { applyTheme } from '@/lib/theme';
 import { useTemplate } from '@/store/template';
+import { useText } from '@/components/demo/Txt';
 import { themeFor, useThemeStore } from '@/store/theme';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SettingsDrawer, SettingsTab } from '@/components/settings/SettingsDrawer';
 import { ModalHost } from '@/components/common/ModalHost';
 import { ToastHost } from '@/components/common/Toast';
+import { DemoBar } from '@/components/demo/DemoBar';
+import { ImagePicker } from '@/components/demo/ImagePicker';
+import { Tour } from '@/components/demo/Tour';
 
 /** Writes the active template's theme to CSS variables on <html> whenever it changes. */
 function ThemeApplier() {
   const template = useTemplate();
   const themes = useThemeStore((s) => s.themes);
   const theme = themeFor(themes, template);
+  const brand = useText('brand.name', template.name);
   useEffect(() => {
     applyTheme(theme, template.theme.bg);
-    document.title = `${template.name} · Vilva D2C demo`;
   }, [theme, template]);
+  useEffect(() => {
+    document.title = `${brand} · Devduo ESaas demo`;
+  }, [brand]);
   return null;
 }
 
@@ -47,6 +54,9 @@ export function AppShell({ children }: { children: ReactNode }) {
       <SettingsDrawer />
       <ModalHost />
       <ToastHost />
+      <DemoBar />
+      <ImagePicker />
+      <Tour />
     </>
   );
 }

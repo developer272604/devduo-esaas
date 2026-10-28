@@ -7,11 +7,13 @@ import { useCartStore } from '@/store/cart';
 import { useCheckoutStore } from '@/store/checkout';
 import { firstErrorField, placeOrder } from '@/store/actions';
 import { Crumbs, EmptyState } from '@/components/common/bits';
+import { Txt, useNameOf } from '@/components/demo/Txt';
 import { AddressForm, OrderSummary, PaymentOptions, ShippingOptions } from '@/components/checkout/parts';
 import { inr } from '@/lib/format';
 
 export function CheckoutView() {
   const { product } = useCatalog();
+  const nameOf = useNameOf();
   const router = useRouter();
   const lines = useCartStore((s) => s.lines);
   const coupon = useCartStore((s) => s.coupon);
@@ -51,7 +53,9 @@ export function CheckoutView() {
     <div className="wrap page">
       <Crumbs trail={[{ label: 'Cart', href: '/cart' }, { label: 'Checkout' }]} />
       <div className="ph">
-        <h1>Checkout</h1>
+        <h1>
+          <Txt id="page.checkout.title" text="Checkout" />
+        </h1>
       </div>
       <div className="two">
         <form
@@ -67,7 +71,7 @@ export function CheckoutView() {
         </form>
         <OrderSummary
           totals={totals}
-          lines={priced.map((l) => ({ label: `${l.product.name} × ${l.qty}`, amount: unitPrice(l.product, l.o) * l.qty }))}
+          lines={priced.map((l) => ({ label: `${nameOf(l.product.id, l.product.name)} × ${l.qty}`, amount: unitPrice(l.product, l.o) * l.qty }))}
           footer={
             <>
               <button type="button" className="btn block place" onClick={submit}>

@@ -4,6 +4,7 @@ import type { Product } from '@/lib/types';
 import { fromPrice } from '@/lib/pricing';
 import { ProductGrid } from '@/components/common/ProductCard';
 import { Crumbs, EmptyState } from '@/components/common/bits';
+import { Txt } from '@/components/demo/Txt';
 
 type Sort = 'feat' | 'plh' | 'phl' | 'rate' | 'disc';
 
@@ -49,9 +50,18 @@ function PriceSlider({ min, max, value, onCommit }: { min: number; max: number; 
   );
 }
 
-type Props = { title: string; blurb: string; items: Product[]; trail: { label: string; href?: string }[]; emptyText?: string };
+type Props = {
+  title: string;
+  blurb: string;
+  items: Product[];
+  trail: { label: string; href?: string }[];
+  emptyText?: string;
+  /** Slot ids that make the heading and intro editable. */
+  titleId?: string;
+  blurbId?: string;
+};
 
-export function ListView({ title, blurb, items, trail, emptyText }: Props) {
+export function ListView({ title, blurb, items, trail, emptyText, titleId, blurbId }: Props) {
   const [sort, setSort] = useState<Sort>('feat');
   const [sale, setSale] = useState(false);
   const bounds = useMemo(() => {
@@ -78,8 +88,8 @@ export function ListView({ title, blurb, items, trail, emptyText }: Props) {
     <div className="wrap page">
       <Crumbs trail={trail} />
       <div className="ph">
-        <h1>{title}</h1>
-        {blurb && <p>{blurb}</p>}
+        <h1>{titleId ? <Txt id={titleId} text={title} /> : title}</h1>
+        {blurb && <p>{blurbId ? <Txt id={blurbId} text={blurb} /> : blurb}</p>}
       </div>
       <div className="tools">
         <label>

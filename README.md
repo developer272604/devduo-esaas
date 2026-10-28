@@ -1,6 +1,6 @@
-# Vilva D2C storefront demo
+# Devduo ESaas storefront demo
 
-A frontend-only, themeable demo storefront for Vilva D2C. In a sales call, open **Settings**, pick a template, a colour and a font, and the whole store (home, category, product, cart, checkout, orders) changes instantly.
+A frontend-only, themeable demo storefront for Devduo ESaas. In a sales call, open **Settings**, pick a template, a colour and a font, and the whole store (home, category, product, cart, checkout, orders) changes instantly.
 
 Built with **Vite, React 18, TypeScript (strict), React Router and Zustand**. No backend: data is local config plus `localStorage`.
 
@@ -36,6 +36,15 @@ Adding a template: create the folder, add one line to `src/templates/index.ts`. 
 | `marketplace` | Marketly | Deals hero, flash deal countdown, brand promos, testimonial |
 | `wellness` | Gutwell | Photo panels, dark spotlight card, product feature rows |
 
+## Demo tools (for sales calls)
+
+- **First-visit tour.** A four-step walkthrough opens the first time someone arrives. Skip ends it for good; Settings has "Show the tour again".
+- **Edit (home page only).** On the home page, the bottom bar's Edit button turns on edit mode. Click any text to type over it (Enter saves, Escape cancels, clearing the text restores the original). Click an image, or its camera button, to replace it from the device. A small x on a replaced image puts the original back.
+  Other pages have no Edit button and nothing is editable, but they show the saved changes (brand name, footer, product names and pictures). Leaving the home page switches edit mode off.
+  Edits are saved per template in the browser (`devduo.custom`), so they survive a refresh and any theme change. Settings > Your edits resets them. Product names and descriptions can be edited; prices cannot.
+- **Full screen.** Hides the tools so the site fills the screen. Esc exits.
+- **Screenshot.** Captures the whole site (not just the visible part) without the tools or edit marks, adds a diagonal watermark and a corner badge, then shows it in a dialog with **Download** and **Share on WhatsApp**. On phones the share sheet attaches the image. On computers a link cannot attach an image, so the image downloads and WhatsApp opens with the message ready to attach it to.
+
 ## Structure
 
 ```
@@ -45,11 +54,11 @@ src/App.tsx           routes
 src/pages/            thin route wrappers
 src/components/       layout, common, settings, auth, sections, product, checkout, views
 src/templates/        registry plus one folder per template
-src/store/            Zustand stores (persist to localStorage, prefix vilvad2c.)
+src/store/            Zustand stores (persist to localStorage, prefix devduo.)
 src/lib/              theme, pricing, validation, format, adapters
 src/styles/           tokens, base, layout, common, sections, pages, settings
 ```
 
 ## Adapters
 
-`src/lib/adapters/` defines `CatalogAdapter`, `AuthAdapter`, `PaymentAdapter`, `OrderAdapter` and `NotifyAdapter` with mock implementations. UI code calls these only. Replace the object exported from `src/lib/adapters/index.ts` to plug in Vilva Fintech payments and the WhatsApp Business API.
+`src/lib/adapters/` defines `CatalogAdapter`, `AuthAdapter`, `PaymentAdapter`, `OrderAdapter` and `NotifyAdapter` with mock implementations. UI code calls these only. Replace the object exported from `src/lib/adapters/index.ts` to plug in Devduo ESaas payments and the WhatsApp Business API.

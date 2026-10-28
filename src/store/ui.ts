@@ -4,6 +4,7 @@ export type ModalState =
   | { t: 'auth' }
   | { t: 'confirm'; title: string; text: string; yes: string; onYes: () => void }
   | { t: 'busy'; title: string; text: string }
+  | { t: 'shot'; url: string; blob: Blob; brand: string }
   | null;
 
 export type ToastState = { id: number; message: string; action?: { label: string; href: string } } | null;

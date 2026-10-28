@@ -5,10 +5,12 @@ import { useCatalog } from '@/lib/hooks';
 import { inr } from '@/lib/format';
 import { Art } from '@/components/common/Art';
 import { Icon } from '@/components/common/Icon';
+import { useNameOf } from '@/components/demo/Txt';
 
 export function SearchBox() {
   const { search } = useCatalog();
   const router = useRouter();
+  const nameOf = useNameOf();
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -57,8 +59,8 @@ export function SearchBox() {
         {results.length > 0 ? (
           results.map((p) => (
             <Link key={p.id} href={`/product/${p.id}`} onClick={() => setOpen(false)}>
-              <Art id={p.id} emoji={p.emoji} name={p.name} image={p.image} sizes="40px" />
-              <span>{p.name}</span>
+              <Art id={p.id} emoji={p.emoji} name={nameOf(p.id, p.name)} image={p.image} sizes="40px" />
+              <span>{nameOf(p.id, p.name)}</span>
               <b>{inr(p.price)}</b>
             </Link>
           ))

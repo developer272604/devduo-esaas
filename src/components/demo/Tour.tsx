@@ -1,0 +1,106 @@
+import { useEffect, useRef, useState } from 'react';
+import { useDemoStore, useTourOpen } from '@/store/demo';
+
+type Step = { title: string; text: string; target: string | null };
+
+const STEPS: Step[] = [
+  {
+    title: 'Welcome to the demo store',
+    text: 'In about a minute you can make this store look like your own brand. The next steps show how.',
+    target: null,
+  },
+  {
+    title: 'Pick a template, colour and font',
+    text: 'Open Settings on the right edge. Choose a template, then a colour, font, light or dark mode and corner style. The whole store changes at once.',
+    target: '.stab',
+  },
+  {
+    title: 'Change any text or image',
+    text: 'On the home page, press Edit in the bar below. Click any text to type over it, and click any image to swap in your own. Changes stay after a refresh, and a small × puts the original back. Other pages show your changes but are not editable.',
+    target: '[data-tour="edit"]',
+  },
+  {
+    title: 'Show it full screen and share it',
+    text: 'Full screen hides the tools so the site fills your screen. Screenshot saves the whole site with a watermark, and you can share it on WhatsApp.',
+    target: '[data-tour="bar"]',
+  },
+];
+
+type Box = { top: number; left: number; width: number; height: number };
+
+const PAD = 8;
+
+function useTargetBox(selector: string | null): Box | null {
+  const [box, setBox] = useState<Box | null>(null);
+  useEffect(() => {
+    if (!selector) return setBox(null);
+    const measure = () => {
+      const el = document.querySelector(selector);
+      if (!el) return setBox(null);
+      const r = el.getBoundingClientRect();
+      setBox({ top: r.top - PAD, left: r.left - PAD, width: r.width + PAD * 2, height: r.height + PAD * 2 });
+    };
+    measure();
+    const t = setInterval(measure, 300); // catches layout shifts as images and fonts load
+    window.addEventListener('resize', measure);
+    window.addEventListener('scroll', measure, true);
+    return () => {
+      clearInterval(t);
+      window.removeEventListener('resize', measure);
+      window.removeEventListener('scroll', measure, true);
+    };
+  }, [selector]);
+  return box;
+}
+
+/** First-visit walkthrough. Skip ends it for good; Settings can reopen it. */
+export function Tour() {
+  const open = useTourOpen();
+  const endTour = useDemoStore((s) => s.endTour);
+  const [step, setStep] = useState(0);
+  const next = useRef<HTMLButtonElement>(null);
+  const current = STEPS[step];
+  const box = useTargetBox(open ? current.target : null);
+  const last = step === STEPS.length - 1;
+
+  useEffect(() => {
+    if (open) setStep(0);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    next.current?.focus({ preventScroll: true });
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && endTour();
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open, step, endTour]);
+
+  if (!open) return null;
+
+  return (
+    <>
+      {box ? <div className="tour-ring" style={box} aria-hidden="true" data-no-capture /> : <div className="tour-dim" aria-hidden="true" data-no-capture />}
+      <section className={`tour-card${box ? '' : ' center'}`} role="dialog" aria-label="Quick tour" data-no-capture data-tour-card>
+        <p className="tour-step">
+          Step {step + 1} of {STEPS.length}
+        </p>
+        <h2>{current.title}</h2>
+        <p>{current.text}</p>
+        <div className="tour-actions">
+          <button type="button" className="btn ghost sm" onClick={endTour}>
+            Skip tour
+          </button>
+          <span className="sp" />
+          {step > 0 && (
+            <button type="button" className="btn ghost sm" onClick={() => setStep(step - 1)}>
+              Back
+            </button>
+          )}
+          <button type="button" className="btn sm" ref={next} onClick={() => (last ? endTour() : setStep(step + 1))}>
+            {last ? 'Got it' : step === 0 ? 'Show me' : 'Next'}
+          </button>
+        </div>
+      </section>
+    </>
+  );
+}

@@ -22,6 +22,7 @@ import '@/styles/common.css';
 import '@/styles/sections.css';
 import '@/styles/pages.css';
 import '@/styles/settings.css';
+import '@/styles/demo.css';
 
 import App from './App';
 

@@ -1,6 +1,6 @@
 import type { StateStorage } from 'zustand/middleware';
 
-export const KEY_PREFIX = 'vilvad2c.';
+export const KEY_PREFIX = 'devduo.';
 export const TEMPLATE_KEY = KEY_PREFIX + 'template';
 export const THEME_KEY = KEY_PREFIX + 'theme';
 /** Last applied CSS variables, read by the inline script in index.html so the first paint already has the right look. */

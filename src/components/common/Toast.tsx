@@ -13,7 +13,7 @@ export function ToastHost() {
   }, [toast, hide]);
 
   return (
-    <div id="toast" role="status" aria-live="polite" className={toast ? 'on' : ''}>
+    <div id="toast" data-no-capture role="status" aria-live="polite" className={toast ? 'on' : ''}>
       {toast && (
         <>
           <span>{toast.message}</span>

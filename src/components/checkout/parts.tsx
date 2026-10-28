@@ -80,7 +80,7 @@ export function PaymentOptions({ form, errors, set }: { form: CheckoutForm; erro
   return (
     <div className="box">
       <h3>Payment</h3>
-      <Opt group="pay" value="upi" current={form.pay} title="UPI with Vilva Pay" hint="Pay with any UPI app" onPick={pick} />
+      <Opt group="pay" value="upi" current={form.pay} title="UPI with Devduo Pay" hint="Pay with any UPI app" onPick={pick} />
       {form.pay === 'upi' && (
         <div className="f sub">
           <Field id="upi" label="UPI ID (for example name@upi)" value={form.upi} error={errors.upi} wide onChange={(v) => set({ upi: v.trim() })} />

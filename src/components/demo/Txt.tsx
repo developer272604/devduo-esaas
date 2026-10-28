@@ -1,6 +1,8 @@
 import type { ClipboardEvent, ElementType, KeyboardEvent, MouseEvent } from 'react';
 import { useTemplateStore } from '@/store/template';
 import { useCustomize } from '@/store/customize';
+import { productDescId, productNameId } from '@/lib/textIds';
+import { useEditMode } from './useEditMode';
 
 /** The text for `id`: the visitor's edit if there is one, otherwise `fallback`. */
 export function useText(id: string, fallback: string): string {
@@ -8,10 +10,16 @@ export function useText(id: string, fallback: string): string {
   return useCustomize((s) => s.texts[tpl]?.[id]) ?? fallback;
 }
 
-export const productNameId = (id: string) => `product.${id}.name`;
-export const productDescId = (id: string) => `product.${id}.desc`;
+export { productNameId, productDescId };
 /** A product's display name, including any edit the visitor made. */
 export const useProductName = (id: string, fallback: string) => useText(productNameId(id), fallback);
+
+/** Lookup for product names inside loops, where a hook per row is not possible. */
+export function useNameOf(): (id: string, fallback: string) => string {
+  const tpl = useTemplateStore((s) => s.tpl);
+  const texts = useCustomize((s) => s.texts[tpl]);
+  return (id, fallback) => texts?.[productNameId(id)] ?? fallback;
+}
 
 type Props = {
   /** Stable slot id, for example `home.0.title`. Edits are saved per template under this id. */
@@ -31,7 +39,7 @@ const clean = (v: string) => v.replace(/\s+/g, ' ').trim();
 export function Txt({ id, text, as: Tag = 'span', className }: Props) {
   const tpl = useTemplateStore((s) => s.tpl);
   const override = useCustomize((s) => s.texts[tpl]?.[id]);
-  const editing = useCustomize((s) => s.editing);
+  const editing = useEditMode();
   const value = override ?? text;
   const Component = Tag as ElementType;
 

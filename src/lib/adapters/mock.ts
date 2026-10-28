@@ -72,7 +72,7 @@ const notify: NotifyAdapter = {
     const text =
       `Hi ${first}, your ${brand} order ${order.id} is confirmed ✅\n` +
       `${n} item${n === 1 ? '' : 's'}, total ${inr(order.t.total)}.\n` +
-      `Track it here: vilva.link/${order.id.toLowerCase()}`;
+      `Track it here: devduo.link/${order.id.toLowerCase()}`;
     return { channel: 'whatsapp', text };
   },
 };

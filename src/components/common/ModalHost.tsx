@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { usePathname } from '@/lib/nav';
 import { useUiStore } from '@/store/ui';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { ShotModal } from '@/components/demo/ShotModal';
 import { Modal } from './Modal';
 
 export function ModalHost() {
@@ -17,6 +18,7 @@ export function ModalHost() {
   if (!modal) return null;
 
   if (modal.t === 'auth') return <AuthModal />;
+  if (modal.t === 'shot') return <ShotModal url={modal.url} blob={modal.blob} brand={modal.brand} />;
 
   if (modal.t === 'confirm') {
     return (

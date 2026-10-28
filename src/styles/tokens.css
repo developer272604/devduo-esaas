@@ -55,3 +55,10 @@
   --danger: #ff8a7d;
   --veil: rgba(0, 0, 0, 0.6);
 }
+
+/* demo tools */
+:root {
+  --edit-ring: #f59e0b;
+  --edit-bg: rgba(15, 18, 17, 0.82);
+  --edit-fg: #ffffff;
+}

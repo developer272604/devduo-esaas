@@ -1,28 +1,29 @@
 import { useEffect, useState } from 'react';
-import Image from '@/components/common/Img';
 import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
 import { fromPrice } from '@/lib/pricing';
 import { inr } from '@/lib/format';
 import { Icon } from '@/components/common/Icon';
 import { Stars } from '@/components/common/bits';
+import { SlotImg } from '@/components/demo/SlotImg';
+import { Txt, useProductName } from '@/components/demo/Txt';
 import { useUiStore } from '@/store/ui';
-import type { S } from './types';
+import { slot, type SP } from './types';
 
 const href = (go: string) => (go.startsWith('/') ? go : `/${go}`);
 
-export function Usp({ s }: { s: S<'usp'> }) {
+export function Usp({ s, i }: SP<'usp'>) {
   return (
     <section className={`wrap usp-wrap ${s.style === 'card' ? 'usp-card' : 'strip'}`}>
       <ul className="usp">
-        {s.items.map((i) => (
-          <li key={i.title}>
+        {s.items.map((item, j) => (
+          <li key={item.title}>
             <span className="usp-ic">
-              <Icon name={i.icon} size={s.style === 'card' ? 22 : 20} />
+              <Icon name={item.icon} size={s.style === 'card' ? 22 : 20} />
             </span>
             <span>
-              <b>{i.title}</b>
-              <small>{i.text}</small>
+              <Txt as="b" id={slot(i, `items.${j}.title`)} text={item.title} />
+              <Txt as="small" id={slot(i, `items.${j}.text`)} text={item.text} />
             </span>
           </li>
         ))}
@@ -32,34 +33,34 @@ export function Usp({ s }: { s: S<'usp'> }) {
 }
 
 /** Text with a checklist on one side, a photo with a round sticker on the other. */
-export function Feature({ s }: { s: S<'feature'> }) {
+export function Feature({ s, i }: SP<'feature'>) {
   return (
     <section className="s">
       <div className="wrap">
         <div className="feature">
           <div className="feature-copy">
-            <span className="eyebrow">{s.eyebrow}</span>
-            <h2>{s.title}</h2>
+            <Txt as="span" className="eyebrow" id={slot(i, 'eyebrow')} text={s.eyebrow} />
+            <Txt as="h2" id={slot(i, 'title')} text={s.title} />
             <ul className="checks">
-              {s.checks.map((c) => (
+              {s.checks.map((c, j) => (
                 <li key={c}>
                   <span className="tick-sm">
                     <Icon name="check" size={12} />
                   </span>
-                  {c}
+                  <Txt id={slot(i, `checks.${j}`)} text={c} />
                 </li>
               ))}
             </ul>
             <Link className="btn" href={href(s.go)}>
-              {s.cta}
+              <Txt id={slot(i, 'cta')} text={s.cta} />
             </Link>
           </div>
           <div className="feature-pic">
-            <Image src={s.image} alt="" fill sizes="(max-width: 860px) 100vw, 560px" className="feature-photo" />
+            <SlotImg slot={slot(i, 'image')} src={s.image} alt="" sizes="(max-width: 860px) 100vw, 560px" className="feature-photo" />
             <span className="sticker">
-              <span>{s.sticker[0]}</span>
+              <Txt as="span" id={slot(i, 'sticker.0')} text={s.sticker[0]} />
               <i />
-              <b>{s.sticker[1]}</b>
+              <Txt as="b" id={slot(i, 'sticker.1')} text={s.sticker[1]} />
             </span>
           </div>
         </div>
@@ -69,22 +70,22 @@ export function Feature({ s }: { s: S<'feature'> }) {
 }
 
 /** Two or three coloured promo cards. Tints come from the primary hue, so they follow the theme. */
-export function Promos({ s }: { s: S<'promos'> }) {
+export function Promos({ s, i }: SP<'promos'>) {
   return (
     <section className="s">
       <div className="wrap">
         <div className={`promos cols-${s.cols}`}>
-          {s.items.map((p, i) => (
-            <div key={p.title} className={`promo tone${i % 3}`}>
+          {s.items.map((p, j) => (
+            <div key={p.title} className={`promo tone${j % 3}`}>
               <div className="promo-copy">
-                <h3>{p.title}</h3>
-                <p>{p.text}</p>
+                <Txt as="h3" id={slot(i, `items.${j}.title`)} text={p.title} />
+                <Txt as="p" id={slot(i, `items.${j}.text`)} text={p.text} />
                 <Link className="btn sm" href={href(p.go)}>
-                  {p.cta}
+                  <Txt id={slot(i, `items.${j}.cta`)} text={p.cta} />
                 </Link>
               </div>
               <div className="promo-pic">
-                {p.image ? <Image src={p.image} alt="" fill sizes="200px" className="promo-photo" /> : <span aria-hidden="true">{p.emoji}</span>}
+                <SlotImg slot={slot(i, `items.${j}.image`)} src={p.image} alt="" sizes="200px" className="promo-photo" fallback={<span aria-hidden="true">{p.emoji}</span>} />
               </div>
             </div>
           ))}
@@ -94,30 +95,30 @@ export function Promos({ s }: { s: S<'promos'> }) {
   );
 }
 
-export function PromoBenefits({ s }: { s: S<'promoBenefits'> }) {
+export function PromoBenefits({ s, i }: SP<'promoBenefits'>) {
   return (
     <section className="s">
       <div className="wrap">
         <div className="pbanner">
           <div className="pbanner-copy">
-            <span className="script-sm">{s.eyebrow}</span>
-            <h2>{s.title}</h2>
-            <p>{s.text}</p>
+            <Txt as="span" className="script-sm" id={slot(i, 'eyebrow')} text={s.eyebrow} />
+            <Txt as="h2" id={slot(i, 'title')} text={s.title} />
+            <Txt as="p" id={slot(i, 'text')} text={s.text} />
             <Link className="btn" href={href(s.go)}>
-              {s.cta}
+              <Txt id={slot(i, 'cta')} text={s.cta} />
             </Link>
           </div>
           <div className="pbanner-pic" aria-hidden="true">
             <span>{s.emoji}</span>
           </div>
           <ul className="pbanner-list">
-            {s.benefits.map((b, i) => (
+            {s.benefits.map((b, j) => (
               <li key={b.title}>
-                <span className={`bdot d${i % 4}`}>
-                  <Icon name={(['star', 'sparkle', 'check', 'truck'] as const)[i % 4]} size={16} />
+                <span className={`bdot d${j % 4}`}>
+                  <Icon name={(['star', 'sparkle', 'check', 'truck'] as const)[j % 4]} size={16} />
                 </span>
-                <b>{b.title}</b>
-                <small>{b.text}</small>
+                <Txt as="b" id={slot(i, `benefits.${j}.title`)} text={b.title} />
+                <Txt as="small" id={slot(i, `benefits.${j}.text`)} text={b.text} />
               </li>
             ))}
           </ul>
@@ -129,10 +130,11 @@ export function PromoBenefits({ s }: { s: S<'promoBenefits'> }) {
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-/** Flash deal with a live countdown. The first render is static so server and client match. */
-export function Flash({ s }: { s: S<'flash'> }) {
+/** Flash deal with a live countdown. The first render is static so it never jumps. */
+export function Flash({ s, i }: SP<'flash'>) {
   const { product } = useCatalog();
   const p = product(s.productId);
+  const name = useProductName(p?.id ?? '', p?.name ?? '');
   const total = s.endsInHours * 3600;
   const [left, setLeft] = useState(total);
   useEffect(() => {
@@ -152,19 +154,19 @@ export function Flash({ s }: { s: S<'flash'> }) {
     <section className="wrap flash-wrap">
       <div className="flash">
         <div className="flash-pic">
-          <Image src={s.image} alt="" fill sizes="120px" className="flash-photo" />
+          <SlotImg slot={slot(i, 'image')} src={s.image} alt={name} sizes="120px" className="flash-photo" />
         </div>
         <div className="flash-copy">
           <span className="flash-tag">
-            <Icon name="bolt" size={16} filled /> {s.title}
+            <Icon name="bolt" size={16} filled /> <Txt id={slot(i, 'title')} text={s.title} />
           </span>
-          <small>{s.label}</small>
+          <Txt as="small" id={slot(i, 'label')} text={s.label} />
           <div className="flash-price">
             <b>{inr(price.price)}</b>
             <s>{inr(price.mrp)}</s>
           </div>
           <Link className="btn sm flash-btn" href={`/product/${p.id}`}>
-            {s.cta}
+            <Txt id={slot(i, 'cta')} text={s.cta} />
           </Link>
         </div>
         <ul className="flash-clock" aria-label="Time left">
@@ -180,23 +182,23 @@ export function Flash({ s }: { s: S<'flash'> }) {
   );
 }
 
-export function Testimonial({ s }: { s: S<'testimonial'> }) {
+export function Testimonial({ s, i }: SP<'testimonial'>) {
   return (
     <section className="s">
       <div className="wrap">
         <figure className="testi">
-          {s.image && (
-            <span className="testi-pic">
-              <Image src={s.image} alt="" fill sizes="56px" />
-            </span>
-          )}
+          <span className="testi-pic">
+            <SlotImg slot={slot(i, 'image')} src={s.image} alt="" sizes="56px" />
+          </span>
           <figcaption>
-            <b>{s.name}</b>
-            <small>{s.role}</small>
+            <Txt as="b" id={slot(i, 'name')} text={s.name} />
+            <Txt as="small" id={slot(i, 'role')} text={s.role} />
           </figcaption>
           <blockquote>
             <Stars rating={5} />
-            <p>“{s.quote}”</p>
+            <p>
+              “<Txt id={slot(i, 'quote')} text={s.quote} />”
+            </p>
           </blockquote>
         </figure>
       </div>
@@ -204,17 +206,17 @@ export function Testimonial({ s }: { s: S<'testimonial'> }) {
   );
 }
 
-export function Values({ s }: { s: S<'values'> }) {
+export function Values({ s, i }: SP<'values'>) {
   return (
     <section className="s">
       <div className="wrap">
         <ul className="values">
-          {s.items.map((v) => (
+          {s.items.map((v, j) => (
             <li key={v}>
               <span className="tick-sm solid">
                 <Icon name="check" size={14} />
               </span>
-              {v}
+              <Txt id={slot(i, `items.${j}`)} text={v} />
             </li>
           ))}
         </ul>
@@ -223,7 +225,7 @@ export function Values({ s }: { s: S<'values'> }) {
   );
 }
 
-export function News({ s }: { s: S<'news'> }) {
+export function News({ s, i }: SP<'news'>) {
   const toast = useUiStore((st) => st.showToast);
   const [email, setEmail] = useState('');
   const [wa, setWa] = useState(true);
@@ -246,8 +248,10 @@ export function News({ s }: { s: S<'news'> }) {
             <Icon name="mail" size={22} />
           </span>
           <div className="news-copy">
-            <h2>{s.title}</h2>
-            <p>{s.text}</p>
+            <h2>
+              <Txt id={slot(i, 'title')} text={s.title} />
+            </h2>
+            <Txt as="p" id={slot(i, 'text')} text={s.text} />
           </div>
           <div className="news-form">
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" aria-label="Email address" aria-invalid={!!err} />

@@ -5,9 +5,9 @@ import { HeroDeals, HeroEditorial, HeroImage, HeroPhoto, HeroShowcase } from './
 import { Cats, Featured, Rail } from './Catalog';
 import { Feature, Flash, News, PromoBenefits, Promos, Testimonial, Usp, Values } from './Promos';
 import { BannerImage, DuoFeature, Intro, SplitBand, Spotlight } from './Editorial';
-import { REQUIRED, type S } from './types';
+import { REQUIRED, type SP } from './types';
 
-type Registry = { [K in SectionType]: (props: { s: S<K> }) => ReactNode };
+type Registry = { [K in SectionType]: (props: SP<K>) => ReactNode };
 
 /** Section type to component. A new section type is the only change a new template can need. */
 export const SECTIONS: Registry = {
@@ -56,8 +56,8 @@ export function HomeSections() {
     <>
       {template.home.map((section, i) => {
         if (!validate(section, i)) return null;
-        const Component = SECTIONS[section.type] as (props: { s: Section }) => ReactNode;
-        return <Component key={`${template.id}-${i}`} s={section} />;
+        const Component = SECTIONS[section.type] as (props: { s: Section; i: number }) => ReactNode;
+        return <Component key={`${template.id}-${i}`} s={section} i={i} />;
       })}
     </>
   );

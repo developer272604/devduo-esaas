@@ -1,8 +1,10 @@
 import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
+import { Txt, useText } from '@/components/demo/Txt';
 
 export function Footer() {
   const { template } = useCatalog();
+  const brand = useText('brand.name', template.name);
   return (
     <footer className="foot">
       <div className="wrap">
@@ -10,9 +12,9 @@ export function Footer() {
           <div>
             <Link className="logo" href="/">
               <span className="le" aria-hidden="true">{template.logo}</span>
-              <span>{template.name}</span>
+              <Txt id="brand.name" text={template.name} />
             </Link>
-            <p>{template.foot}</p>
+            <Txt as="p" id="brand.foot" text={template.foot} />
           </div>
           <div>
             <h4>Shop</h4>
@@ -42,8 +44,8 @@ export function Footer() {
           </div>
         </div>
         <div className="fb">
-          <span>© 2026 {template.name}. Demo store, no real orders.</span>
-          <span>Built on Vilva D2C</span>
+          <span>© 2026 {brand}. Demo store, no real orders.</span>
+          <span>Built on Devduo ESaas</span>
           <div className="chips2">
             <span>UPI</span>
             <span>Cards</span>

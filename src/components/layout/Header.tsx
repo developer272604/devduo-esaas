@@ -7,12 +7,17 @@ import { useWishlistStore } from '@/store/wishlist';
 import { useAuthStore } from '@/store/auth';
 import { useUiStore } from '@/store/ui';
 import { Icon } from '@/components/common/Icon';
+import { Txt } from '@/components/demo/Txt';
 import { SearchBox } from './SearchBox';
 
 const NAV_LIMIT = 3;
 
 export function AnnouncementBar({ text }: { text: string }) {
-  return <div className="announce">{text}</div>;
+  return (
+    <div className="announce">
+      <Txt id="brand.announce" text={text} />
+    </div>
+  );
 }
 
 export function Header() {
@@ -61,7 +66,7 @@ export function Header() {
           <span className="le" aria-hidden="true">
             {template.logo}
           </span>
-          <span>{template.name}</span>
+          <Txt id="brand.name" text={template.name} />
         </Link>
         <nav className="links" aria-label="Main">
           {links.map((c) => (

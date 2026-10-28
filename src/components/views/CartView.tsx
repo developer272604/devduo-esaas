@@ -8,6 +8,7 @@ import { useWishlistStore } from '@/store/wishlist';
 import { useUiStore } from '@/store/ui';
 import { Art } from '@/components/common/Art';
 import { Crumbs, EmptyState, QtyStepper } from '@/components/common/bits';
+import { Txt, productNameId } from '@/components/demo/Txt';
 import { OrderSummary } from '@/components/checkout/parts';
 
 export function CartView() {
@@ -45,7 +46,9 @@ export function CartView() {
     <div className="wrap page">
       <Crumbs trail={[{ label: 'Cart' }]} />
       <div className="ph">
-        <h1>Your cart ({count})</h1>
+        <h1>
+          <Txt id="page.cart.title" text="Your cart" /> ({count})
+        </h1>
       </div>
       <div className="two">
         <div>
@@ -59,7 +62,9 @@ export function CartView() {
                 </Link>
                 <div>
                   <h3>
-                    <Link href={`/product/${p.id}`}>{p.name}</Link>
+                    <Link href={`/product/${p.id}`}>
+                      <Txt id={productNameId(p.id)} text={p.name} />
+                    </Link>
                   </h3>
                   {p.opts && (
                     <small>

@@ -8,6 +8,7 @@ import { useOrdersStore } from '@/store/orders';
 import { useUiStore } from '@/store/ui';
 import { Art } from '@/components/common/Art';
 import { Crumbs, EmptyState } from '@/components/common/bits';
+import { Txt } from '@/components/demo/Txt';
 import type { Order } from '@/lib/types';
 
 export const STAGES = ['Placed', 'Packed', 'Shipped', 'Out for delivery', 'Delivered'];
@@ -110,7 +111,9 @@ export function OrdersView() {
     <div className="wrap page">
       <Crumbs trail={[{ label: 'My orders' }]} />
       <div className="ph">
-        <h1>My orders</h1>
+        <h1>
+          <Txt id="page.orders.title" text="My orders" />
+        </h1>
       </div>
       {mine.length ? (
         mine.map((o) => <OrderCard key={o.id} o={o} />)

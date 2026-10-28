@@ -10,6 +10,7 @@ import { Icon } from '@/components/common/Icon';
 import { Crumbs, EmptyState, Price, QtyStepper, SectionHead, Stars } from '@/components/common/bits';
 import { ProductGrid } from '@/components/common/ProductCard';
 import { Gallery, OptionPicker, PincodeCheck, Tabs } from '@/components/product/parts';
+import { Txt, productDescId, productNameId, useProductName } from '@/components/demo/Txt';
 
 export function ProductView({ id }: { id: string }) {
   const { product, products, category } = useCatalog();
@@ -35,22 +36,23 @@ function ProductDetail({ id, products, category }: { id: string; products: Retur
   const toggleWish = useWishlistStore((s) => s.toggle);
   const toast = useUiStore((s) => s.showToast);
   const c = category(p.cat);
+  const name = useProductName(p.id, p.name);
   const related = products.filter((q) => q.cat === p.cat && q.id !== id);
   const more = (related.length ? related : products.filter((q) => q.id !== id)).slice(0, 4);
 
   return (
     <div className="wrap page">
-      <Crumbs trail={[...(c ? [{ label: c.name, href: `/category/${c.slug}` }] : []), { label: p.name }]} />
+      <Crumbs trail={[...(c ? [{ label: c.name, href: `/category/${c.slug}` }] : []), { label: name }]} />
       <div className="pg">
         <Gallery product={p} view={view} onView={setView} />
         <div className="info">
-          <h1>{p.name}</h1>
+          <Txt as="h1" id={productNameId(p.id)} text={p.name} />
           <div className="info-rating">
             <Stars rating={p.rating} /> <span className="rc">{p.rating} ({p.rev.toLocaleString('en-IN')} reviews)</span>
           </div>
           <Price price={unitPrice(p, opt)} mrp={unitMrp(p, opt)} large />
           <p className="tax">Inclusive of all taxes</p>
-          <p className="lead">{p.desc}</p>
+          <Txt as="p" className="lead" id={productDescId(p.id)} text={p.desc} />
           {p.opts && <OptionPicker opts={p.opts} value={opt} onChange={setOpt} />}
           <div className="buy">
             <QtyStepper value={qty} onChange={setQty} />
@@ -92,7 +94,7 @@ function ProductDetail({ id, products, category }: { id: string; products: Retur
           <div className="perks">
             <div><Icon name="truck" />Free delivery over ₹999</div>
             <div><Icon name="refresh" />7-day easy returns</div>
-            <div><Icon name="shield" />Secure payments with Vilva Pay</div>
+            <div><Icon name="shield" />Secure payments with Devduo Pay</div>
           </div>
         </div>
       </div>

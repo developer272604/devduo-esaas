@@ -2,7 +2,8 @@ import Image from '@/components/common/Img';
 import type { CSSProperties } from 'react';
 import { hash } from '@/lib/format';
 import type { ImageSrc } from '@/lib/types';
-import { ImageControls, useImageEditing, useSlotImage } from '@/components/demo/SlotImg';
+import { ImageControls, useSlotImage } from '@/components/demo/SlotImg';
+import { useEditMode } from '@/components/demo/useEditMode';
 
 type Props = {
   id: string;
@@ -28,7 +29,7 @@ export const productSlot = (id: string) => `product.${id}`;
  */
 export function Art({ id, emoji, name, image, view = 0, sizes = '(max-width: 700px) 50vw, 25vw', priority, className = '', editable }: Props) {
   const custom = useSlotImage(productSlot(id));
-  const editing = useImageEditing() && !!editable;
+  const editing = useEditMode() && !!editable;
   const src = custom ?? image;
   const style = { '--dh': (hash(id) % 5) * 16 - 32 + view * 10 } as CSSProperties;
   const controls = editing && <ImageControls slot={productSlot(id)} />;

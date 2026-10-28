@@ -9,6 +9,8 @@ import { FIELD_ORDER, validateCheckout, type CheckoutErrors } from '@/lib/valida
 import { useAuthStore } from './auth';
 import { useCheckoutStore } from './checkout';
 import { useOrdersStore } from './orders';
+import { useCustomize } from './customize';
+import { productNameId } from '@/lib/textIds';
 
 /**
  * Switching template swaps the whole catalogue, so cart, wishlist and coupon are
@@ -50,7 +52,7 @@ export function checkCheckout(): CheckoutErrors {
 export const firstErrorField = (e: CheckoutErrors) => FIELD_ORDER.find((k) => e[k]);
 
 /**
- * Runs payment through the Vilva Pay adapter, then creates the order, clears the cart and coupon
+ * Runs payment through the Devduo Pay adapter, then creates the order, clears the cart and coupon
  * and goes to the success page. Called directly, or after sign-in when the shopper was signed out.
  */
 export async function runPlaceOrder(navigate: (href: string) => void): Promise<void> {
@@ -62,7 +64,7 @@ export async function runPlaceOrder(navigate: (href: string) => void): Promise<v
   if (!lines.length) return;
   const totals = computeTotals(lines, { coupon: cart.coupon, speed: form.ship, pay: form.pay });
 
-  ui.openModal({ t: 'busy', title: 'Processing payment with Vilva Pay', text: 'Please do not close this page.' });
+  ui.openModal({ t: 'busy', title: 'Processing payment with Devduo Pay', text: 'Please do not close this page.' });
   const charge = await adapters.payment.charge({
     method: form.pay,
     amount: totals.total,
@@ -78,7 +80,7 @@ export async function runPlaceOrder(navigate: (href: string) => void): Promise<v
     tpl,
     items: lines.map((l) => ({
       id: l.product.id,
-      name: l.product.name,
+      name: useCustomize.getState().texts[tpl]?.[productNameId(l.product.id)] ?? l.product.name,
       emoji: l.product.emoji,
       opt: l.product.opts ? l.product.opts.values[l.o] ?? '' : '',
       qty: l.qty,

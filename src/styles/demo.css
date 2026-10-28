@@ -1,0 +1,267 @@
+/* Demo tools: bottom bar, edit mode, first-visit tour, screenshot dialog. */
+
+/* ---------- bottom bar ---------- */
+.demo-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 75;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow-float);
+}
+.demo-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.demo-bar button:hover:not(:disabled) {
+  background: var(--soft);
+}
+.demo-bar button.on,
+.demo-bar button.on:hover:not(:disabled) {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.demo-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 76px;
+  transform: translateX(-50%);
+  z-index: 75;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: var(--radius-btn);
+  max-width: min(92vw, 560px);
+  text-align: center;
+  box-shadow: var(--shadow-float);
+}
+@media (max-width: 520px) {
+  .demo-bar button {
+    padding: 9px 11px;
+    font-size: 13px;
+    gap: 6px;
+  }
+}
+.foot {
+  padding-bottom: 92px;
+}
+#toast {
+  bottom: 84px;
+}
+
+/* ---------- full screen: the site fills the screen, tools step back ---------- */
+.is-preview .stab,
+.is-preview .demo-hint {
+  display: none;
+}
+.is-preview .demo-bar {
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+.is-preview .demo-bar:hover,
+.is-preview .demo-bar:focus-within {
+  opacity: 1;
+}
+
+/* ---------- edit mode ---------- */
+.editable {
+  outline: 1.5px dashed var(--edit-ring);
+  outline-offset: 3px;
+  border-radius: 3px;
+  cursor: text;
+  min-width: 1ch;
+}
+.editable:hover {
+  background: color-mix(in srgb, var(--edit-ring) 14%, transparent);
+}
+.editable:focus {
+  outline-style: solid;
+  background: color-mix(in srgb, var(--edit-ring) 20%, transparent);
+}
+.img-editable {
+  cursor: pointer;
+}
+.img-editable:hover {
+  filter: brightness(0.9);
+}
+.hero-img-scrim,
+.hero-photo-scrim {
+  pointer-events: none;
+}
+
+.img-edit {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+.img-edit-main,
+.img-edit-remove {
+  position: absolute;
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--edit-bg);
+  color: var(--edit-fg);
+  border: 2px solid var(--edit-ring);
+  cursor: pointer;
+}
+.img-edit-main {
+  top: 8px;
+  left: 8px;
+  width: 34px;
+  height: 34px;
+}
+.img-edit-remove {
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+}
+/* small round or square holders: put the control in the middle */
+.ring .img-edit-main,
+.soft-pic .img-edit-main,
+.quick-pic .img-edit-main,
+.tile-pic .img-edit-main,
+.promo-pic .img-edit-main,
+.testi-pic .img-edit-main,
+.flash-pic .img-edit-main {
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, -50%);
+}
+.ring .img-edit-remove,
+.soft-pic .img-edit-remove,
+.quick-pic .img-edit-remove,
+.tile-pic .img-edit-remove,
+.promo-pic .img-edit-remove,
+.testi-pic .img-edit-remove,
+.flash-pic .img-edit-remove {
+  top: 2px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- screenshots: tools and edit marks never appear in the picture ---------- */
+.capturing .editable {
+  outline: none !important;
+  background: none !important;
+}
+.capturing .img-edit {
+  display: none !important;
+}
+.capturing .img-editable {
+  filter: none !important;
+}
+.capturing .foot {
+  padding-bottom: 28px;
+}
+
+.mb.wide {
+  width: min(780px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+}
+.shot-frame {
+  max-height: 56vh;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background: var(--bg);
+}
+.shot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.shot-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.shot-actions .btn {
+  flex: 1;
+  min-width: 150px;
+}
+
+/* ---------- first-visit tour ---------- */
+.tour-dim {
+  position: fixed;
+  inset: 0;
+  background: var(--veil);
+  z-index: 115;
+  pointer-events: none;
+}
+.tour-ring {
+  position: fixed;
+  z-index: 115;
+  border-radius: 14px;
+  box-shadow: 0 0 0 3px var(--accent), 0 0 0 9999px var(--veil);
+  pointer-events: none;
+}
+.tour-card {
+  position: fixed;
+  z-index: 120;
+  left: 20px;
+  bottom: 92px;
+  width: min(380px, calc(100vw - 40px));
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-float);
+}
+.tour-card.center {
+  left: 50%;
+  top: 50%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+}
+.tour-card h2 {
+  font-size: 20px;
+  margin: 2px 0 8px;
+}
+.tour-card p {
+  color: var(--muted);
+  font-size: 14px;
+}
+.tour-card .tour-step {
+  font-size: 12px;
+  color: var(--primary-text);
+  font-weight: 600;
+}
+.tour-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+.tour-actions .sp {
+  flex: 1;
+}
+
+/* ---------- settings drawer additions ---------- */
+.hint.tight {
+  margin: -4px 0 10px;
+}
+.btn.gap {
+  margin-top: 10px;
+}

@@ -3,7 +3,7 @@ import type { Address, Category, Order, PayMethod, Product, Template, Totals, Us
 /**
  * The seam between the storefront and a real backend. UI code talks to these
  * interfaces only; the mock implementations in ./mock.ts can be swapped for
- * Vilva D2C APIs, Vilva Pay and WhatsApp Business without touching components.
+ * Devduo ESaas APIs, Devduo Pay and WhatsApp Business without touching components.
  */
 
 export interface CatalogAdapter {
@@ -29,7 +29,7 @@ export type ChargeRequest = {
 export type ChargeResult = { ok: true; reference: string } | { ok: false; error: string };
 
 export interface PaymentAdapter {
-  /** Vilva Pay charge for UPI, card or cash on delivery (COD resolves without charging). */
+  /** Devduo Pay charge for UPI, card or cash on delivery (COD resolves without charging). */
   charge(req: ChargeRequest): Promise<ChargeResult>;
 }
 
@@ -52,7 +52,7 @@ export interface OrderAdapter {
 }
 
 export interface NotifyAdapter {
-  /** Returns the WhatsApp message text that would be sent through Vilva Business. */
+  /** Returns the WhatsApp message text that would be sent through Devduo Business. */
   orderConfirmation(order: Order, brand: string): Promise<{ channel: 'whatsapp'; text: string }>;
 }
 

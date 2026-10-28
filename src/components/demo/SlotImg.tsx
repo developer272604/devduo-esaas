@@ -1,15 +1,9 @@
 import type { KeyboardEvent, MouseEvent, ReactNode } from 'react';
 import Img from '@/components/common/Img';
 import { Icon } from '@/components/common/Icon';
-import { usePathname } from '@/lib/nav';
 import { useTemplateStore } from '@/store/template';
 import { useCustomize } from '@/store/customize';
-
-/** Images are only editable on the home page, and only while edit mode is on. */
-export function useImageEditing(): boolean {
-  const editing = useCustomize((s) => s.editing);
-  return editing && usePathname() === '/';
-}
+import { useEditMode } from './useEditMode';
 
 /** The replacement image for a slot, if the visitor chose one. */
 export function useSlotImage(slot: string): string | undefined {
@@ -67,7 +61,7 @@ type Props = {
 /** Fills its positioned parent with the template's image, or the visitor's replacement for `slot`. */
 export function SlotImg({ slot, src, alt, className = '', sizes, priority, fallback }: Props) {
   const custom = useSlotImage(slot);
-  const editing = useImageEditing();
+  const editing = useEditMode();
   const url = custom ?? src;
   const pick = () => useCustomize.getState().requestImage(slot);
   return (

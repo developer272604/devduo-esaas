@@ -1,23 +1,24 @@
-import Image from '@/components/common/Img';
 import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
 import { inr } from '@/lib/format';
 import { fromPrice } from '@/lib/pricing';
 import { Icon } from '@/components/common/Icon';
+import { SlotImg } from '@/components/demo/SlotImg';
+import { Txt, useProductName } from '@/components/demo/Txt';
 import type { UspItem } from '@/lib/types';
-import type { S } from './types';
+import { slot, type SP } from './types';
 
 const href = (go: string) => (go.startsWith('/') ? go : `/${go}`);
 
-function Features({ items }: { items: UspItem[] }) {
+function Features({ items, i }: { items: UspItem[]; i: number }) {
   return (
     <ul className="hero-feats">
-      {items.map((f) => (
+      {items.map((f, j) => (
         <li key={f.title}>
           <Icon name={f.icon} size={22} />
           <span>
-            <b>{f.title}</b>
-            <small>{f.text}</small>
+            <Txt as="b" id={slot(i, `features.${j}.title`)} text={f.title} />
+            <Txt as="small" id={slot(i, `features.${j}.text`)} text={f.text} />
           </span>
         </li>
       ))}
@@ -26,23 +27,23 @@ function Features({ items }: { items: UspItem[] }) {
 }
 
 /** Full-bleed photo with copy on the left and trust chips. */
-export function HeroImage({ s }: { s: S<'heroImage'> }) {
+export function HeroImage({ s, i }: SP<'heroImage'>) {
   return (
     <section className="wrap hero-img-wrap">
       <div className="hero-img">
-        <Image src={s.image} alt="" fill priority sizes="(max-width: 1240px) 100vw, 1200px" className="hero-img-photo" />
+        <SlotImg slot={slot(i, 'image')} src={s.image} alt="" priority sizes="(max-width: 1240px) 100vw, 1200px" className="hero-img-photo" />
         <div className="hero-img-scrim" />
         <div className="hero-img-copy">
-          <span className="eyebrow">{s.eyebrow}</span>
-          <h1>{s.title}</h1>
-          <p>{s.text}</p>
+          <Txt as="span" className="eyebrow" id={slot(i, 'eyebrow')} text={s.eyebrow} />
+          <Txt as="h1" id={slot(i, 'title')} text={s.title} />
+          <Txt as="p" id={slot(i, 'text')} text={s.text} />
           <Link className="btn" href={href(s.go)}>
-            {s.cta}
+            <Txt id={slot(i, 'cta')} text={s.cta} />
           </Link>
           <ul className="chip-row">
-            {s.badges.map((b) => (
+            {s.badges.map((b, j) => (
               <li key={b}>
-                <Icon name="check" size={14} /> {b}
+                <Icon name="check" size={14} /> <Txt id={slot(i, `badges.${j}`)} text={b} />
               </li>
             ))}
           </ul>
@@ -70,37 +71,38 @@ function PhoneMock() {
 }
 
 /** Copy, a product showcase in the middle and a spotlight card for one product. */
-export function HeroShowcase({ s }: { s: S<'heroShowcase'> }) {
+export function HeroShowcase({ s, i }: SP<'heroShowcase'>) {
   const { product } = useCatalog();
   const p = product(s.spotlight.productId);
+  const name = useProductName(p?.id ?? '', p?.name ?? '');
   const price = p ? fromPrice(p) : null;
   return (
     <section className="hero-show">
       <div className="wrap hero-show-grid">
         <div className="hero-show-copy">
-          <span className="eyebrow">{s.eyebrow}</span>
-          <h1>{s.title}</h1>
-          <p className="lead">{s.text}</p>
+          <Txt as="span" className="eyebrow" id={slot(i, 'eyebrow')} text={s.eyebrow} />
+          <Txt as="h1" id={slot(i, 'title')} text={s.title} />
+          <Txt as="p" className="lead" id={slot(i, 'text')} text={s.text} />
           <div className="btns">
             <Link className="btn" href={href(s.go)}>
-              {s.cta}
+              <Txt id={slot(i, 'cta')} text={s.cta} />
             </Link>
             <Link className="btn ghost" href={href(s.go2)}>
-              {s.cta2}
+              <Txt id={slot(i, 'cta2')} text={s.cta2} />
             </Link>
           </div>
-          <Features items={s.features} />
+          <Features items={s.features} i={i} />
         </div>
         <PhoneMock />
         {p && price && (
           <aside className="spot">
-            <span className="pill">{s.spotlight.label}</span>
-            <h2>{p.name}</h2>
-            <p>{s.spotlight.tagline}</p>
+            <Txt as="span" className="pill" id={slot(i, 'spotlight.label')} text={s.spotlight.label} />
+            <h2>{name}</h2>
+            <Txt as="p" id={slot(i, 'spotlight.tagline')} text={s.spotlight.tagline} />
             <small>From</small>
             <b className="spot-price">{inr(price.price)}</b>
             <Link className="btn dark block" href={`/product/${p.id}`}>
-              {s.spotlight.cta}
+              <Txt id={slot(i, 'spotlight.cta')} text={s.spotlight.cta} />
             </Link>
           </aside>
         )}
@@ -110,30 +112,30 @@ export function HeroShowcase({ s }: { s: S<'heroShowcase'> }) {
 }
 
 /** Editorial split: copy and trust points on the left, a styled visual with a script callout on the right. */
-export function HeroEditorial({ s }: { s: S<'heroEditorial'> }) {
+export function HeroEditorial({ s, i }: SP<'heroEditorial'>) {
   return (
     <section className="hero-edit">
       <div className="wrap hero-edit-grid">
         <div className="hero-edit-copy">
-          <span className="eyebrow">{s.eyebrow}</span>
-          <h1>{s.title}</h1>
-          <p className="lead">{s.text}</p>
+          <Txt as="span" className="eyebrow" id={slot(i, 'eyebrow')} text={s.eyebrow} />
+          <Txt as="h1" id={slot(i, 'title')} text={s.title} />
+          <Txt as="p" className="lead" id={slot(i, 'text')} text={s.text} />
           <Link className="btn" href={href(s.go)}>
-            {s.cta}
+            <Txt id={slot(i, 'cta')} text={s.cta} />
           </Link>
-          <Features items={s.features} />
+          <Features items={s.features} i={i} />
         </div>
-        <div className="hero-edit-visual" aria-hidden="true">
-          <div className="figures">
-            {s.art.map((e, i) => (
-              <span key={i} className={`fig f${i}`}>
+        <div className="hero-edit-visual">
+          <div className="figures" aria-hidden="true">
+            {s.art.map((e, j) => (
+              <span key={j} className={`fig f${j}`}>
                 {e}
               </span>
             ))}
           </div>
           <p className="script">
-            {s.script.map((w) => (
-              <span key={w}>{w}</span>
+            {s.script.map((w, j) => (
+              <Txt key={w} as="span" id={slot(i, `script.${j}`)} text={w} />
             ))}
           </p>
         </div>
@@ -143,45 +145,45 @@ export function HeroEditorial({ s }: { s: S<'heroEditorial'> }) {
 }
 
 /** Discount badge, headline and photo, with trust points underneath. */
-export function HeroDeals({ s }: { s: S<'heroDeals'> }) {
+export function HeroDeals({ s, i }: SP<'heroDeals'>) {
   return (
     <section className="wrap hero-deals-wrap">
       <div className="hero-deals">
         <div className="hero-deals-copy">
-          <span className="eyebrow pill-eyebrow">{s.eyebrow}</span>
-          <h1>{s.title}</h1>
-          <p className="lead">{s.text}</p>
+          <Txt as="span" className="eyebrow pill-eyebrow" id={slot(i, 'eyebrow')} text={s.eyebrow} />
+          <Txt as="h1" id={slot(i, 'title')} text={s.title} />
+          <Txt as="p" className="lead" id={slot(i, 'text')} text={s.text} />
           <div className="btns">
             <Link className="btn" href={href(s.go)}>
-              {s.cta}
+              <Txt id={slot(i, 'cta')} text={s.cta} />
             </Link>
             <Link className="btn ghost" href={href(s.go2)}>
-              {s.cta2}
+              <Txt id={slot(i, 'cta2')} text={s.cta2} />
             </Link>
           </div>
         </div>
         <div className="hero-deals-visual">
-          <Image src={s.image} alt="" fill priority sizes="(max-width: 860px) 100vw, 560px" className="hero-deals-photo" />
+          <SlotImg slot={slot(i, 'image')} src={s.image} alt="" priority sizes="(max-width: 860px) 100vw, 560px" className="hero-deals-photo" />
           <span className="disc-badge">
             <small>Up to</small>
-            <b>{s.badge.replace(/\D+/g, '') || ''}%</b>
+            <Txt as="b" id={slot(i, 'badge')} text={`${s.badge.replace(/\D+/g, '') || ''}%`} />
             <small>off</small>
           </span>
         </div>
-        <Features items={s.features} />
+        <Features items={s.features} i={i} />
       </div>
     </section>
   );
 }
 
 /** Wide photograph with a centred headline. */
-export function HeroPhoto({ s }: { s: S<'heroPhoto'> }) {
+export function HeroPhoto({ s, i }: SP<'heroPhoto'>) {
   return (
     <section className="wrap hero-photo-wrap">
       <div className="hero-photo">
-        <Image src={s.image} alt="" fill priority sizes="(max-width: 1240px) 100vw, 1200px" className="hero-photo-img" />
+        <SlotImg slot={slot(i, 'image')} src={s.image} alt="" priority sizes="(max-width: 1240px) 100vw, 1200px" className="hero-photo-img" />
         <div className="hero-photo-scrim" />
-        <h1>{s.title}</h1>
+        <Txt as="h1" id={slot(i, 'title')} text={s.title} />
       </div>
     </section>
   );

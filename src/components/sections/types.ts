@@ -1,7 +1,11 @@
 import type { Section, SectionType } from '@/lib/types';
 
-/** Props of one section component, by type. */
+/** Props of one section component, by type. `i` is its position on the home page, used to name its editable slots. */
 export type S<T extends SectionType> = Extract<Section, { type: T }>;
+export type SP<T extends SectionType> = { s: S<T>; i: number };
+
+/** Slot id for a field of the section at position `i`, for example `home.2.title`. */
+export const slot = (i: number, field: string) => `home.${i}.${field}`;
 
 /** Keys every section of a type must carry. Unknown or incomplete sections render nothing and warn in development. */
 export const REQUIRED: Record<SectionType, string[]> = {

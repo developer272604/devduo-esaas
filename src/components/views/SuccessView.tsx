@@ -6,20 +6,22 @@ import { inr } from '@/lib/format';
 import { useOrdersStore } from '@/store/orders';
 import { Icon } from '@/components/common/Icon';
 import { EmptyState } from '@/components/common/bits';
+import { useText } from '@/components/demo/Txt';
 
 export function SuccessView({ orderId }: { orderId: string }) {
   const { template } = useCatalog();
+  const brand = useText('brand.name', template.name);
   const order = useOrdersStore((s) => s.orders.find((o) => o.id === orderId));
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (!order) return;
     let live = true;
-    void adapters.notify.orderConfirmation(order, template.name).then((m) => live && setMessage(m.text));
+    void adapters.notify.orderConfirmation(order, brand).then((m) => live && setMessage(m.text));
     return () => {
       live = false;
     };
-  }, [order, template.name]);
+  }, [order, brand]);
 
   if (!order) {
     return (
@@ -43,7 +45,7 @@ export function SuccessView({ orderId }: { orderId: string }) {
       </div>
       <div className="wa" aria-label="WhatsApp message preview">
         <small>
-          WhatsApp message sent by {template.name} through Vilva Business (demo)
+          WhatsApp message sent by {brand} through Devduo Business (demo)
         </small>
         <div className="bub">{message}</div>
       </div>

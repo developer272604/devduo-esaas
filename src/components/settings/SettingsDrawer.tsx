@@ -8,13 +8,15 @@ import { useTemplate } from '@/store/template';
 import { themeFor, useThemeStore } from '@/store/theme';
 import { switchTemplate } from '@/store/actions';
 import { useUiStore } from '@/store/ui';
+import { editCount, useCustomize } from '@/store/customize';
+import { useDemoStore } from '@/store/demo';
 import { Icon } from '@/components/common/Icon';
 
 export function SettingsTab() {
   const open = useUiStore((s) => s.settingsOpen);
   const setOpen = useUiStore((s) => s.setSettingsOpen);
   return (
-    <button type="button" className="stab" aria-label="Open settings" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
+    <button type="button" className="stab" data-no-capture aria-label="Open settings" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
       <Icon name="gear" size={20} />
       <span>Settings</span>
     </button>
@@ -46,6 +48,9 @@ export function SettingsDrawer() {
   const colorRef = useRef<HTMLInputElement>(null);
   const frame = useRef<number | null>(null);
   const theme = themeFor(themes, template);
+  const edits = useCustomize((st) => editCount(st, template.id));
+  const resetEdits = useCustomize((st) => st.resetTemplate);
+  const startTour = useDemoStore((st) => st.startTour);
 
   // Escape closes the drawer, unless a dialog sits on top of it.
   useFocusTrap(panelRef, open && !modal, () => setOpen(false));
@@ -72,8 +77,8 @@ export function SettingsDrawer() {
 
   return (
     <>
-      <div className={`overlay${open ? ' on' : ''}`} onClick={() => setOpen(false)} aria-hidden="true" />
-      <aside id="drawer" className={open ? 'on' : ''} ref={panelRef} role="dialog" aria-modal={open} aria-label="Storefront settings" tabIndex={-1} {...inert}>
+      <div className={`overlay${open ? ' on' : ''}`} data-no-capture onClick={() => setOpen(false)} aria-hidden="true" />
+      <aside id="drawer" data-no-capture className={open ? 'on' : ''} ref={panelRef} role="dialog" aria-modal={open} aria-label="Storefront settings" tabIndex={-1} {...inert}>
         <div className="dh">
           <h2>Customize storefront</h2>
           <button type="button" className="icon" aria-label="Close settings" onClick={() => setOpen(false)}>
@@ -151,9 +156,35 @@ export function SettingsDrawer() {
             <Segmented<Radius> label="Corners" value={theme.radius} options={['sharp', 'soft', 'round']} onChange={(radius) => patch({ radius })} />
           </section>
 
+          <section aria-labelledby="set-edits">
+            <h3 id="set-edits">Your edits</h3>
+            <p className="hint tight">Text and images you changed on this template. They stay after a refresh and when you change the theme.</p>
+            <button
+              type="button"
+              className="btn ghost block"
+              disabled={edits === 0}
+              onClick={() => {
+                resetEdits(template.id);
+                useUiStore.getState().showToast('Text and images are back to the template originals.');
+              }}
+            >
+              {edits ? `Reset ${edits} edit${edits === 1 ? '' : 's'}` : 'No edits yet'}
+            </button>
+          </section>
+
           <section className="last">
             <button type="button" className="btn ghost block" onClick={() => resetTheme(template)}>
               Reset to template look
+            </button>
+            <button
+              type="button"
+              className="btn ghost block gap"
+              onClick={() => {
+                setOpen(false);
+                startTour();
+              }}
+            >
+              Show the tour again
             </button>
           </section>
         </div>

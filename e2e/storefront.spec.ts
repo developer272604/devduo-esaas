@@ -12,6 +12,10 @@ const openSettings = (page: Page) => page.getByRole('button', { name: 'Open sett
 const pickTemplate = (page: Page, id: string) => page.locator(`[data-template="${id}"]`).click();
 
 test.beforeEach(async ({ page }) => {
+  // the first-visit tour has its own tests in demo.spec.ts
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('devduo.demo')) localStorage.setItem('devduo.demo', JSON.stringify({ state: { toured: true }, version: 0 }));
+  });
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -128,13 +132,13 @@ test('5. full purchase flow, orders, stages and cancelling', async ({ page }) =>
   await expect(auth).toContainText('Demo OTP is 123456');
   await auth.getByLabel('6-digit OTP').fill('123456');
   await auth.getByRole('button', { name: 'Verify and sign in' }).click();
-  await expect(page.getByText('Processing payment with Vilva Pay')).toBeVisible();
+  await expect(page.getByText('Processing payment with Devduo Pay')).toBeVisible();
 
   // success with the WhatsApp preview
   await expect(page.getByRole('heading', { name: 'Order placed' })).toBeVisible({ timeout: 10_000 });
   const orderId = (await page.locator('[data-order-id]').innerText()).trim();
   await expect(page.getByLabel('WhatsApp message preview')).toContainText(orderId);
-  await expect(page.getByLabel('WhatsApp message preview')).toContainText('through Vilva Business (demo)');
+  await expect(page.getByLabel('WhatsApp message preview')).toContainText('through Devduo Business (demo)');
   await expect(page.getByRole('link', { name: 'Cart, 0 items' })).toBeVisible();
 
   // orders: advance the status

@@ -2,6 +2,7 @@ import { useCatalog } from '@/lib/hooks';
 import { useWishlistStore } from '@/store/wishlist';
 import { ProductGrid } from '@/components/common/ProductCard';
 import { Crumbs, EmptyState } from '@/components/common/bits';
+import { Txt } from '@/components/demo/Txt';
 
 export function WishlistView() {
   const { product } = useCatalog();
@@ -11,7 +12,9 @@ export function WishlistView() {
     <div className="wrap page">
       <Crumbs trail={[{ label: 'Wishlist' }]} />
       <div className="ph">
-        <h1>Your wishlist</h1>
+        <h1>
+          <Txt id="page.wishlist.title" text="Your wishlist" />
+        </h1>
       </div>
       {list.length ? (
         <ProductGrid products={list} />

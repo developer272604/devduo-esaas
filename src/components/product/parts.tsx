@@ -3,12 +3,14 @@ import { fmtWeekday, hash } from '@/lib/format';
 import type { Product } from '@/lib/types';
 import { Art } from '@/components/common/Art';
 import { Stars } from '@/components/common/bits';
+import { productDescId, useProductName, useText } from '@/components/demo/Txt';
 
 export function Gallery({ product: p, view, onView }: { product: Product; view: number; onView: (i: number) => void }) {
+  const name = useProductName(p.id, p.name);
   return (
     <div>
       <div className="gmain">
-        <Art id={p.id} emoji={p.emoji} name={p.name} image={p.image} view={view} sizes="(max-width: 860px) 100vw, 560px" priority />
+        <Art id={p.id} emoji={p.emoji} name={name} image={p.image} view={view} sizes="(max-width: 860px) 100vw, 560px" priority />
       </div>
       <div className="thumbs" role="group" aria-label="Product views">
         {[0, 1, 2, 3].map((i) => (
@@ -100,6 +102,7 @@ type TabKey = 'desc' | 'det' | 'rev';
 
 export function Tabs({ product: p }: { product: Product }) {
   const [tab, setTab] = useState<TabKey>('desc');
+  const desc = useText(productDescId(p.id), p.desc);
   const det = (p.d ?? '').split('|').filter(Boolean);
   const tabs: [TabKey, string][] = [
     ['desc', 'Description'],
@@ -116,7 +119,7 @@ export function Tabs({ product: p }: { product: Product }) {
         ))}
       </div>
       <div className="tc" id="tabpanel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
-        {tab === 'desc' && <p>{p.desc}</p>}
+        {tab === 'desc' && <p>{desc}</p>}
         {tab === 'det' && (
           <ul>
             {(det.length ? det : ['Made in India', 'Ships within 24 hours']).map((d) => (
