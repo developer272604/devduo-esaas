@@ -1,19 +1,16 @@
 import type { Template } from '@/lib/types';
 import { inr } from '@/lib/format';
+import { meta } from './meta';
 import { products } from './products';
 
 /** Free standard delivery from this order value. */
 const FREE_SHIP_AT = 999;
 
 export const gadgets: Template = {
-  id: 'gadgets',
-  name: 'MobiStore',
-  logo: '📱',
-  tag: 'Phones and gadgets',
+  ...meta,
   foot: 'The latest mobile technology from top brands at the best prices, with a one-year warranty on every device.',
   freeShipAt: FREE_SHIP_AT,
   announce: `Free shipping on orders over ${inr(FREE_SHIP_AT)}. Use WELCOME10 for 10% off.`,
-  theme: { primary: '#7c3aed', font: 'Manrope', bg: '#f7f5fd', mode: 'light', radius: 'soft' },
   cats: [
     { slug: 'phones', name: 'Smartphones', emoji: '📱', art: 'phone', blurb: 'Latest smartphones from top brands.' },
     { slug: 'earbuds', name: 'Earbuds', emoji: '🎧', art: 'earbuds', blurb: 'Premium sound, unmatched style.' },

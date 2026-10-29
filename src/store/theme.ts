@@ -7,11 +7,14 @@ import { browserStorage, THEME_KEY } from '@/lib/storage';
 
 export { THEME_KEY, defaultTheme, themeFor };
 
+/** All a theme change needs to know about a template: its id and default look. */
+type ThemeTarget = Pick<Template, 'id' | 'theme'>;
+
 type ThemeStore = {
   /** Remembered look per template. A template with no entry uses its own default. */
   themes: Record<string, ThemeState>;
-  setTheme: (t: Template, patch: Partial<ThemeState>) => void;
-  resetTheme: (t: Template) => void;
+  setTheme: (t: ThemeTarget, patch: Partial<ThemeState>) => void;
+  resetTheme: (t: ThemeTarget) => void;
 };
 
 /**

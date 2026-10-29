@@ -3,7 +3,7 @@ import { setQuotaHandler } from '@/lib/storage';
 
 export type ModalState =
   | { t: 'auth' }
-  | { t: 'confirm'; title: string; text: string; yes: string; onYes: () => void }
+  | { t: 'confirm'; title: string; text: string; yes: string; onYes: () => void | Promise<void> }
   | { t: 'busy'; title: string; text: string }
   | { t: 'shot'; url: string; blob: Blob; brand: string }
   | null;

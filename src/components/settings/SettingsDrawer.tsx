@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from '@/lib/nav';
-import { TEMPLATES } from '@/templates';
+import { TEMPLATE_META } from '@/templates';
 import { FONT_NAMES, type Mode, type Radius, type ThemeState } from '@/lib/types';
 import { FONT_FAMILY, SWATCHES, applyTheme } from '@/lib/theme';
 import { useFocusTrap } from '@/lib/useFocusTrap';
@@ -89,14 +89,14 @@ export function SettingsDrawer() {
           <section aria-labelledby="set-tpl">
             <h3 id="set-tpl">Template</h3>
             <div className="tpls">
-              {Object.values(TEMPLATES).map((t) => (
+              {Object.values(TEMPLATE_META).map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   className={`tpl${t.id === template.id ? ' on' : ''}`}
                   aria-pressed={t.id === template.id}
                   data-template={t.id}
-                  onClick={() => switchTemplate(t.id, (href) => router.push(href))}
+                  onClick={() => void switchTemplate(t.id, (href) => router.push(href))}
                 >
                   <span className="te" aria-hidden="true">{t.logo}</span>
                   <b>{t.name}</b>

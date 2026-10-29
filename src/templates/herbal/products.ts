@@ -1,9 +1,9 @@
 import type { Product } from '@/lib/types';
 import { P, PACKS } from '../helpers';
-import honey from './images/honey.jpg';
-import herbal from './images/herbal.jpg';
-import seeds from './images/seeds.jpg';
-import oils from './images/oils.jpg';
+import honey from './images/honey.webp';
+import herbal from './images/herbal.webp';
+import seeds from './images/seeds.webp';
+import oils from './images/oils.webp';
 
 export const products: Product[] = [
   P('h1', 'honey', 'Wild Honey', 499, 599, '🍯', 4.9, 1245, 'Raw wild honey collected by tribal harvesters from the high slopes of the Nilgiris. Unheated and unfiltered, so the pollen stays in the jar.', {

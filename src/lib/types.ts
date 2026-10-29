@@ -120,6 +120,9 @@ export type Section =
 
 export type SectionType = Section['type'];
 
+/** What every screen needs to know about a template before its catalogue has loaded. */
+export type TemplateMeta = Pick<Template, 'id' | 'name' | 'logo' | 'tag' | 'theme'>;
+
 export type Template = {
   id: string;
   name: string;

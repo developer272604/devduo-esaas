@@ -1,10 +1,10 @@
 import type { Product } from '@/lib/types';
 import { P } from '../helpers';
-import jar from './images/jar.jpg';
-import lineup from './images/lineup.jpg';
-import multivitamin from './images/multivitamin.jpg';
-import newline from './images/newline.jpg';
-import capsules from './images/capsules.jpg';
+import jar from './images/jar.webp';
+import lineup from './images/lineup.webp';
+import multivitamin from './images/multivitamin.webp';
+import newline from './images/newline.webp';
+import capsules from './images/capsules.webp';
 
 export const products: Product[] = [
   P('w1', 'gut', 'DS-01 Daily Synbiotic', 3499, 3999, '💊', 4.8, 2140, 'Eases bloating, improves regularity and supports digestive health with 24 targeted probiotic strains and a novel prebiotic.', {

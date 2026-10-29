@@ -1,4 +1,4 @@
-import type { Address, Category, Order, PayMethod, Product, Template, Totals, User, CartLine, ShipSpeed, OrderItem } from '../types';
+import type { Address, Category, Order, PayMethod, Product, Template, TemplateMeta, Totals, User, CartLine, ShipSpeed, OrderItem } from '../types';
 
 /**
  * The seam between the storefront and a real backend. UI code talks to these
@@ -7,8 +7,11 @@ import type { Address, Category, Order, PayMethod, Product, Template, Totals, Us
  */
 
 export interface CatalogAdapter {
-  listTemplates(): Template[];
+  listTemplates(): TemplateMeta[];
+  /** A template that has been loaded. */
   getTemplate(id: string): Template;
+  /** Fetches a template's catalogue. A real backend would call its API here. */
+  loadTemplate(id: string): Promise<Template>;
   listCategories(tpl: string): Category[];
   listProducts(tpl: string): Product[];
   getProduct(tpl: string, id: string): Product | undefined;

@@ -1,19 +1,16 @@
 import type { Template } from '@/lib/types';
 import { inr } from '@/lib/format';
+import { meta } from './meta';
 import { products } from './products';
 
 /** Free standard delivery from this order value. */
 const FREE_SHIP_AT = 2000;
 
 export const fashion: Template = {
-  id: 'fashion',
-  name: 'Aarohi',
-  logo: '🪷',
-  tag: 'Ethnic wear',
+  ...meta,
   foot: 'Grace in every thread. Kurti sets, lehengas and festive wear crafted for comfort, confidence and celebrations.',
   freeShipAt: FREE_SHIP_AT,
   announce: `Free shipping on orders above ${inr(FREE_SHIP_AT)}. Easy returns within 7 days. Use WELCOME10 for 10% off.`,
-  theme: { primary: '#a21a5c', font: 'Playfair Display', bg: '#fbf6f1', mode: 'light', radius: 'sharp' },
   cats: [
     { slug: 'kurtis', name: 'Kurtis', emoji: '👗', art: 'kurti', blurb: 'Everyday kurti sets for work and weekends.' },
     { slug: 'lehengas', name: 'Lehengas', emoji: '🥻', art: 'lehenga', blurb: 'Festive and wedding lehengas in rich fabrics.' },

@@ -1,4 +1,4 @@
-import { getTemplate } from '@/templates';
+import { TEMPLATE_META, getTemplate, loadTemplate } from '@/templates';
 import { useCartStore } from './cart';
 import { useWishlistStore } from './wishlist';
 import { useTemplateStore } from './template';
@@ -17,16 +17,23 @@ import { productNameId } from '@/lib/textIds';
  * cleared. Orders stay (each carries its template id) and the active theme for the
  * new template is whatever was remembered for it, or its default.
  */
-export function switchTemplate(id: string, navigate: (href: string) => void): void {
-  if (id === useTemplateStore.getState().tpl) return;
+export function switchTemplate(id: string, navigate: (href: string) => void): Promise<void> {
+  if (id === useTemplateStore.getState().tpl) return Promise.resolve();
   const ui = useUiStore.getState();
-  const apply = () => {
+  const apply = async () => {
+    // The new catalogue must be here before anything renders with it.
+    try {
+      await loadTemplate(id);
+    } catch {
+      useUiStore.getState().showToast('Could not load that template. Check your connection and try again.');
+      return;
+    }
     const hadItems = useCartStore.getState().lines.length > 0 || useWishlistStore.getState().ids.length > 0;
     useTemplateStore.getState().setTpl(id);
     useCartStore.getState().clear();
     useWishlistStore.getState().clear();
     navigate('/');
-    useUiStore.getState().showToast(`Switched to ${getTemplate(id).name}.${hadItems ? ' Cart and wishlist were cleared.' : ''}`);
+    useUiStore.getState().showToast(`Switched to ${TEMPLATE_META[id]?.name ?? getTemplate(id).name}.${hadItems ? ' Cart and wishlist were cleared.' : ''}`);
   };
   const hasItems = useCartStore.getState().lines.length > 0 || useWishlistStore.getState().ids.length > 0;
   if (hasItems) {
@@ -37,9 +44,9 @@ export function switchTemplate(id: string, navigate: (href: string) => void): vo
       yes: 'Switch template',
       onYes: apply,
     });
-  } else {
-    apply();
+    return Promise.resolve();
   }
+  return apply();
 }
 
 /* ---------- placing an order ---------- */
