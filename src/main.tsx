@@ -29,13 +29,19 @@ import '@/styles/mobile.css';
 
 import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { NotDemo } from './components/NotDemo';
+import { DEMO_MODE } from './lib/demo';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      {DEMO_MODE ? (
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      ) : (
+        <NotDemo />
+      )}
     </ErrorBoundary>
   </StrictMode>,
 );

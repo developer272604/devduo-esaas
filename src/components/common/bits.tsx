@@ -46,15 +46,16 @@ export function QtyStepper({ value, onChange, min = 1, max = MAX_QTY, label = ''
   );
 }
 
-type EmptyProps = { emoji: string; title: string; text?: string; action?: { label: string; href?: string; onClick?: () => void } };
+type EmptyProps = { emoji: string; title: string; text?: string; action?: { label: string; href?: string; onClick?: () => void }; /** Use when this is the whole page, so the page has its h1. */ page?: boolean };
 
-export function EmptyState({ emoji, title, text, action }: EmptyProps) {
+export function EmptyState({ emoji, title, text, action, page }: EmptyProps) {
+  const Heading = page ? 'h1' : 'h2';
   return (
     <div className="empty">
       <div className="ee" aria-hidden="true">
         {emoji}
       </div>
-      <h2>{title}</h2>
+      <Heading>{title}</Heading>
       {text && <p>{text}</p>}
       {action &&
         (action.href ? (

@@ -3,6 +3,7 @@ import Link from '@/components/common/Link';
 import { useRouter } from '@/lib/nav';
 import { useCatalog } from '@/lib/hooks';
 import { inr } from '@/lib/format';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { unitMrp, unitPrice } from '@/lib/pricing';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
@@ -16,10 +17,12 @@ import { Txt, productDescId, productNameId, useProductName } from '@/components/
 export function ProductView({ id }: { id: string }) {
   const { product, products, category, freeShipAt } = useCatalog();
   const p = product(id);
+  const pageName = useProductName(p?.id ?? '', p?.name ?? '');
+  useDocumentTitle(p ? pageName : 'Product not found');
   if (!p) {
     return (
       <div className="wrap page">
-        <EmptyState emoji="🧭" title="Product not found" text="It may belong to another template, or it is no longer in the catalogue." action={{ label: 'Browse all products', href: '/shop' }} />
+        <EmptyState emoji="🧭" title="Product not found" page text="It may belong to another template, or it is no longer in the catalogue." action={{ label: 'Browse all products', href: '/shop' }} />
       </div>
     );
   }

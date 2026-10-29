@@ -9,6 +9,7 @@ import { useUiStore } from '@/store/ui';
 import { Art } from '@/components/common/Art';
 import { Crumbs, EmptyState } from '@/components/common/bits';
 import { Txt } from '@/components/demo/Txt';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import type { Order } from '@/lib/types';
 
 export const STAGES = ['Placed', 'Packed', 'Shipped', 'Out for delivery', 'Delivered'];
@@ -98,11 +99,12 @@ export function OrdersView() {
   const user = useAuthStore((s) => s.user);
   const orders = useOrdersStore((s) => s.orders);
   const openModal = useUiStore((s) => s.openModal);
+  useDocumentTitle('My orders');
 
   if (!user) {
     return (
       <div className="wrap page">
-        <EmptyState emoji="🔐" title="Sign in to see your orders" text="Use your mobile number. It takes ten seconds." action={{ label: 'Sign in', onClick: () => openModal({ t: 'auth' }) }} />
+        <EmptyState emoji="🔐" title="Sign in to see your orders" page text="Use your mobile number. It takes ten seconds." action={{ label: 'Sign in', onClick: () => openModal({ t: 'auth' }) }} />
       </div>
     );
   }

@@ -236,7 +236,7 @@
 .line .art .em {
   font-size: 36px;
 }
-.line h3 {
+.line h2 {
   font-size: 16px;
 }
 .line small {
@@ -266,7 +266,7 @@
   position: sticky;
   top: 150px;
 }
-.sum h3 {
+.sum h2 {
   margin-bottom: 14px;
 }
 .sum .r {
@@ -331,7 +331,7 @@
   padding: 22px;
   margin-bottom: 18px;
 }
-.box h3 {
+.box h2 {
   margin-bottom: 14px;
   font-size: 18px;
 }

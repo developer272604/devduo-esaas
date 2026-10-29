@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useFocusTrap } from '@/lib/useFocusTrap';
 import { useDemoStore, useTourOpen } from '@/store/demo';
 
 type Step = { title: string; text: string; target: string | null; fallback?: string };
@@ -59,6 +60,8 @@ function useTargetBox(selector: string | null, fallback?: string): Box | null {
 export function Tour() {
   const open = useTourOpen();
   const endTour = useDemoStore((s) => s.endTour);
+  const snooze = useDemoStore((s) => s.snooze);
+  const cardRef = useRef<HTMLElement>(null);
   const [step, setStep] = useState(0);
   const next = useRef<HTMLButtonElement>(null);
   const current = STEPS[step];
@@ -69,20 +72,15 @@ export function Tour() {
     if (open) setStep(0);
   }, [open]);
 
-  useEffect(() => {
-    if (!open) return;
-    next.current?.focus({ preventScroll: true });
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && endTour();
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, step, endTour]);
+  // Tab stays inside the card, Escape hides it for now, and focus goes back to where it was.
+  useFocusTrap(cardRef, open, snooze);
 
   if (!open) return null;
 
   return (
     <>
       {box ? <div className="tour-ring" style={box} aria-hidden="true" data-no-capture /> : <div className="tour-dim" aria-hidden="true" data-no-capture />}
-      <section className={`tour-card${box ? '' : ' center'}`} role="dialog" aria-label="Quick tour" data-no-capture data-tour-card>
+      <section ref={cardRef} className={`tour-card${box ? '' : ' center'}`} role="dialog" aria-modal="true" aria-label="Quick tour" tabIndex={-1} data-no-capture data-tour-card>
         <p className="tour-step">
           Step {step + 1} of {STEPS.length}
         </p>
@@ -98,7 +96,7 @@ export function Tour() {
               Back
             </button>
           )}
-          <button type="button" className="btn sm" ref={next} onClick={() => (last ? endTour() : setStep(step + 1))}>
+          <button type="button" className="btn sm" ref={next} data-autofocus onClick={() => (last ? endTour() : setStep(step + 1))}>
             {last ? 'Got it' : step === 0 ? 'Show me' : 'Next'}
           </button>
         </div>

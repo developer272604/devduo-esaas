@@ -813,7 +813,7 @@
 .promo-copy {
   max-width: 62%;
 }
-.promo h3 {
+.promo h2 {
   font-size: clamp(19px, 2vw, 24px);
   line-height: 1.2;
   margin-bottom: 6px;

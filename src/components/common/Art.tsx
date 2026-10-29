@@ -52,19 +52,22 @@ export function Art({ id, name, image, kind, view = 0, sizes = '(max-width: 700p
     );
   }
   return (
-    <div className={`art art-drawn v${view} ${className}`} style={style} role="img" aria-label={name}>
-      <i className="blob b1" />
-      <i className="blob b2" />
-      {view === 1 ? (
-        <div className="row">
-          {[0, 1, 2].map((i) => (
-            <Illustration key={i} kind={drawn} variant={h + i} />
-          ))}
-        </div>
-      ) : (
-        <Illustration kind={drawn} variant={h + view} />
-      )}
-      {view === 3 && <span className="pack">{name}</span>}
+    <div className={`art art-drawn v${view} ${className}`} style={style}>
+      {/* a named picture for screen readers, or hidden when it only decorates a button that has its own name */}
+      <span className="art-draw" {...(name ? { role: 'img', 'aria-label': name } : { 'aria-hidden': true })}>
+        <i className="blob b1" />
+        <i className="blob b2" />
+        {view === 1 ? (
+          <span className="row">
+            {[0, 1, 2].map((i) => (
+              <Illustration key={i} kind={drawn} variant={h + i} />
+            ))}
+          </span>
+        ) : (
+          <Illustration kind={drawn} variant={h + view} />
+        )}
+        {view === 3 && <span className="pack">{name}</span>}
+      </span>
       {controls}
     </div>
   );

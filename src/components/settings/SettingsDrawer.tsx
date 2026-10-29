@@ -44,7 +44,7 @@ export function SettingsDrawer() {
   const setTheme = useThemeStore((s) => s.setTheme);
   const resetTheme = useThemeStore((s) => s.resetTheme);
   const router = useRouter();
-  const panelRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const colorRef = useRef<HTMLInputElement>(null);
   const frame = useRef<number | null>(null);
   const theme = themeFor(themes, template);
@@ -78,7 +78,7 @@ export function SettingsDrawer() {
   return (
     <>
       <div className={`overlay${open ? ' on' : ''}`} data-no-capture onClick={() => setOpen(false)} aria-hidden="true" />
-      <aside id="drawer" data-no-capture className={open ? 'on' : ''} ref={panelRef} role="dialog" aria-modal={open} aria-label="Storefront settings" tabIndex={-1} {...inert}>
+      <div id="drawer" data-no-capture className={open ? 'on' : ''} ref={panelRef} role="dialog" aria-modal={open} aria-label="Storefront settings" tabIndex={-1} {...inert}>
         <div className="dh">
           <h2>Customize storefront</h2>
           <button type="button" className="icon" aria-label="Close settings" onClick={() => setOpen(false)}>
@@ -188,7 +188,7 @@ export function SettingsDrawer() {
             </button>
           </section>
         </div>
-      </aside>
+      </div>
     </>
   );
 }

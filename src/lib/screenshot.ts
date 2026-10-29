@@ -3,7 +3,7 @@ import { toCanvas } from 'html-to-image';
 export type Shot = { blob: Blob; url: string };
 
 const MAX_CANVAS_SIDE = 15000;
-const FILE_NAME = 'storefront-demo.png';
+const FILE_NAME = 'devduo-esaas-demo.png';
 
 /** Anything marked data-no-capture (tools, dialogs, toast) stays out of the picture. */
 const keep = (node: Node) => !(node instanceof HTMLElement && node.hasAttribute('data-no-capture'));

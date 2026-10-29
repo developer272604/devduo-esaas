@@ -10,6 +10,7 @@ import { useUiStore } from '@/store/ui';
 import { Art } from '@/components/common/Art';
 import { Crumbs, EmptyState, QtyStepper } from '@/components/common/bits';
 import { Txt, productNameId } from '@/components/demo/Txt';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { OrderSummary } from '@/components/checkout/parts';
 
 export function CartView() {
@@ -22,12 +23,14 @@ export function CartView() {
   const addWish = useWishlistStore((s) => s.add);
   const toast = useUiStore((s) => s.showToast);
   const [code, setCode] = useState('');
+  const itemCount = lines.reduce((a, l) => a + (Number.isFinite(l.qty) ? l.qty : 0), 0);
+  useDocumentTitle(itemCount ? `Cart (${itemCount})` : 'Cart');
 
   const priced = toPriced(lines, product);
   if (!priced.length) {
     return (
       <div className="wrap page">
-        <EmptyState emoji="🛍️" title="Your cart is empty" text="Add a few things you like and they will show up here." action={{ label: 'Start shopping', href: '/shop' }} />
+        <EmptyState emoji="🛍️" title="Your cart is empty" page text="Add a few things you like and they will show up here." action={{ label: 'Start shopping', href: '/shop' }} />
       </div>
     );
   }
@@ -63,11 +66,11 @@ export function CartView() {
                   <Art id={p.id} emoji={p.emoji} name={p.name} image={p.image} sizes="90px" />
                 </Link>
                 <div>
-                  <h3>
+                  <h2>
                     <Link href={`/product/${p.id}`}>
                       <Txt id={productNameId(p.id)} text={p.name} />
                     </Link>
-                  </h3>
+                  </h2>
                   {p.opts && (
                     <small>
                       {p.opts.label}: {p.opts.values[l.o]}

@@ -79,7 +79,7 @@ export function Promos({ s, i }: SP<'promos'>) {
           {s.items.map((p, j) => (
             <div key={p.title} className={`promo tone${j % 3}`}>
               <div className="promo-copy">
-                <Txt as="h3" id={slot(i, `items.${j}.title`)} text={p.title} />
+                <Txt as="h2" id={slot(i, `items.${j}.title`)} text={p.title} />
                 <Txt as="p" id={slot(i, `items.${j}.text`)} text={p.text} />
                 <Link className="btn sm" href={href(p.go)}>
                   <Txt id={slot(i, `items.${j}.cta`)} text={p.cta} />

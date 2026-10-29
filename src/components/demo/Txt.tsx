@@ -47,6 +47,7 @@ export function Txt({ id, text, as: Tag = 'span', className, max }: Props) {
   const value = override ?? text;
   const Component = Tag as ElementType;
   const limit = limitFor(Tag, max);
+  const isHeading = typeof Tag === 'string' && /^h[1-6]$/.test(Tag);
 
   if (!editing) return <Component className={className}>{value}</Component>;
 
@@ -65,7 +66,7 @@ export function Txt({ id, text, as: Tag = 'span', className, max }: Props) {
       contentEditable
       suppressContentEditableWarning
       spellCheck={false}
-      role="textbox"
+      {...(isHeading ? {} : { role: 'textbox', 'aria-multiline': Tag === 'p' })}
       tabIndex={0}
       aria-label={`Edit text: ${value}`}
       data-editable={id}

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from '@/components/Providers';
 import {
   CartPage, CategoryPage, CheckoutPage, HomePage, NotFoundPage, OrdersPage, ProductPage,
@@ -10,6 +10,7 @@ export default function App() {
     <AppShell>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/index.html" element={<Navigate to="/" replace />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/category/:slug" element={<CategoryPage />} />
         <Route path="/product/:id" element={<ProductPage />} />

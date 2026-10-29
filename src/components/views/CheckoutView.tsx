@@ -9,8 +9,14 @@ import { useCheckoutStore } from '@/store/checkout';
 import { firstErrorField, placeOrder } from '@/store/actions';
 import { Crumbs, EmptyState } from '@/components/common/bits';
 import { Txt, useNameOf } from '@/components/demo/Txt';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { AddressForm, OrderSummary, PaymentOptions, ShippingOptions } from '@/components/checkout/parts';
 import { inr } from '@/lib/format';
+
+const LABELS: Record<keyof CheckoutErrors, string> = {
+  name: 'Full name', phone: 'Mobile number', addr: 'Address', city: 'City', pin: 'Pincode', state: 'State',
+  upi: 'UPI ID', card: 'Card number', exp: 'Expiry', cvv: 'CVV',
+};
 
 export function CheckoutView() {
   const { product, freeShipAt } = useCatalog();
@@ -22,12 +28,14 @@ export function CheckoutView() {
   const set = useCheckoutStore((s) => s.set);
   const busy = useUiStore((s) => s.modal?.t === 'busy');
   const [errors, setErrors] = useState<CheckoutErrors>({});
+  const [announce, setAnnounce] = useState('');
+  useDocumentTitle('Checkout');
 
   const priced = toPriced(lines, product);
   if (!priced.length) {
     return (
       <div className="wrap page">
-        <EmptyState emoji="🛍️" title="Nothing to check out" text="Your cart is empty." action={{ label: 'Start shopping', href: '/shop' }} />
+        <EmptyState emoji="🛍️" title="Nothing to check out" page text="Your cart is empty." action={{ label: 'Start shopping', href: '/shop' }} />
       </div>
     );
   }
@@ -43,6 +51,8 @@ export function CheckoutView() {
   const submit = () => {
     const errs = placeOrder((href) => router.push(href));
     setErrors(errs);
+    const names = Object.keys(errs).map((k) => LABELS[k as keyof CheckoutErrors]);
+    setAnnounce(names.length ? `${names.length} field${names.length === 1 ? ' needs' : 's need'} attention: ${names.join(', ')}.` : '');
     const first = firstErrorField(errs);
     if (first) {
       const el = document.getElementById(`ck-${first}`);
@@ -67,6 +77,9 @@ export function CheckoutView() {
             submit();
           }}
         >
+          <div className="sr-only" role="alert" aria-live="assertive">
+            {announce}
+          </div>
           <AddressForm form={form} errors={errors} set={onSet} />
           <ShippingOptions value={form.ship} onChange={(ship) => set({ ship })} freeAt={freeShipAt} />
           <PaymentOptions form={form} errors={errors} set={onSet} />

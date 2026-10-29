@@ -52,9 +52,8 @@ export function AuthModal() {
       <form onSubmit={submit} noValidate>
         <h2>{step === 'phone' ? 'Sign in' : 'Enter OTP'}</h2>
         <p>
-          {step === 'phone'
-            ? 'We will send a one-time password to your mobile number.'
-            : `Sent to +91 ${phone}. Demo OTP is ${DEMO_OTP}.`}
+          <span className="demo-chip">Demo mode</span>
+          {step === 'phone' ? 'We will send a one-time password to your mobile number.' : `Sent to +91 ${phone}. Demo OTP is ${DEMO_OTP}.`}
         </p>
         <div className="f one">
           {step === 'phone' ? (

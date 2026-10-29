@@ -17,7 +17,8 @@ body {
 .empty h2,
 .empty p,
 .crumbs,
-.line h3,
+.line h2,
+.card h2,
 .card h3 {
   overflow-wrap: anywhere;
 }
@@ -256,8 +257,9 @@ input[type='radio'] {
   .sw {
     gap: 6px;
   }
+  .card h2 a,
   .card h3 a,
-  .line h3 a {
+  .line h2 a {
     display: flex;
     align-items: center;
     min-height: 44px;

@@ -112,7 +112,7 @@ export function ListView({ title, blurb, items, trail, emptyText, titleId, blurb
         </span>
       </div>
       {list.length ? (
-        <ProductGrid products={list} />
+        <ProductGrid products={list} level={2} />
       ) : (
         <EmptyState
           emoji="🔍"

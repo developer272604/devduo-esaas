@@ -58,7 +58,7 @@ test.describe('tampered localStorage', () => {
     await seed(page, { 'devduo.auth': { state: { user: { name: 5, phone: null } }, version: 0 } });
     await page.goto('/');
     await page.getByRole('button', { name: 'Account' }).click();
-    await expect(page.getByRole('menuitem', { name: 'Sign in' })).toBeVisible();
+    await expect(page.locator('#acct-menu').getByRole('button', { name: 'Sign in' })).toBeVisible();
     expect(errors).toEqual([]);
   });
 
