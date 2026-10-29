@@ -141,7 +141,7 @@ describe('the theme font is ready for the first paint (P4)', () => {
   it("picks the template's own font, or the one the visitor chose for that template", async () => {
     await fresh();
     const { savedFontFamily } = await import('@/templates/boot');
-    expect(savedFontFamily()).toBe("'Lora Variable'"); // herbal's default
+    expect(savedFontFamily()).toBe("'Manrope Variable'"); // herbal's default
     window.localStorage.setItem('devduo.template', JSON.stringify({ state: { tpl: 'marketplace' }, version: 0 }));
     expect(savedFontFamily()).toBe("'Poppins'");
     window.localStorage.setItem('devduo.theme', JSON.stringify({ state: { themes: { marketplace: { primary: '#2563eb', font: 'Space Grotesk', mode: 'light', radius: 'soft' } } }, version: 0 }));

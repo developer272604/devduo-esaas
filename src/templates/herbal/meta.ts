@@ -6,5 +6,5 @@ export const meta: TemplateMeta = {
   name: 'Ooty Herbals',
   logo: '🌿',
   tag: 'Honey and herbal care',
-  theme: { primary: '#114a37', font: 'Lora', bg: '#fbf9f4', mode: 'light', radius: 'soft' },
+  theme: { primary: '#2e5e3e', font: 'Manrope', bg: '#fcfaf4', mode: 'light', radius: 'soft' },
 };

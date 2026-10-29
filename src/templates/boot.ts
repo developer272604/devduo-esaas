@@ -13,8 +13,8 @@ export function savedTemplateId(): string {
 
 /** Tells the browser to start fetching the first big picture on the home page, which is what the visitor sees first. */
 export function preloadHero(t: Template): void {
-  const hero = t.home.find((s) => s.type === 'heroImage' || s.type === 'heroDeals' || s.type === 'heroPhoto');
-  const href = hero && 'image' in hero ? hero.image : undefined;
+  const hero = t.home.find((s) => s.type === 'heroImage' || s.type === 'heroDeals' || s.type === 'heroPhoto' || s.type === 'ootyHero');
+  const href = hero?.type === 'ootyHero' ? hero.slides[0]?.image : hero && 'image' in hero ? hero.image : undefined;
   if (!href || typeof document === 'undefined') return;
   const link = document.createElement('link');
   link.setAttribute('rel', 'preload');

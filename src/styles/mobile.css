@@ -185,23 +185,6 @@ body {
   select {
     min-height: 44px;
   }
-  .tools {
-    gap: 10px 14px;
-  }
-  .tools label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 44px;
-  }
-  .tools input[type='checkbox'] {
-    width: 22px;
-    height: 22px;
-  }
-  .tools input[type='range'] {
-    min-height: 44px;
-    width: min(220px, 52vw);
-  }
 }
 input[type='checkbox'],
 input[type='radio'] {

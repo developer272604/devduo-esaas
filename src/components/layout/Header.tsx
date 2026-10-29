@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from '@/components/common/Link';
 import { usePathname } from '@/lib/nav';
 import { useCatalog } from '@/lib/hooks';
 import { useCartStore, cartCount } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
-import { useAuthStore } from '@/store/auth';
 import { useUiStore } from '@/store/ui';
 import { Icon } from '@/components/common/Icon';
 import { Txt } from '@/components/demo/Txt';
 import { SearchBox } from './SearchBox';
+import { AccountMenu } from './AccountMenu';
+import { OtHeader } from '@/components/herbal/Chrome';
 
 const NAV_LIMIT = 3;
 
@@ -22,40 +23,21 @@ export function AnnouncementBar({ text }: { text: string }) {
 
 export function Header() {
   const { template } = useCatalog();
+  return template.chrome === 'ooty' ? <OtHeader /> : <DefaultHeader />;
+}
+
+function DefaultHeader() {
+  const { template } = useCatalog();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [acctOpen, setAcctOpen] = useState(false);
-  const acctRef = useRef<HTMLDivElement>(null);
-  const acctBtn = useRef<HTMLButtonElement>(null);
   const count = useCartStore((s) => cartCount(s.lines));
   const wishCount = useWishlistStore((s) => s.ids.length);
-  const user = useAuthStore((s) => s.user);
-  const signOut = useAuthStore((s) => s.signOut);
-  const openModal = useUiStore((s) => s.openModal);
-  const toast = useUiStore((s) => s.showToast);
+  const openCart = useUiStore((s) => s.openCart);
+  const cartOpen = useUiStore((s) => s.cartOpen);
 
   useEffect(() => {
     setMobileOpen(false);
-    setAcctOpen(false);
   }, [pathname]);
-
-  useEffect(() => {
-    if (!acctOpen) return;
-    const onDown = (e: MouseEvent) => {
-      if (!acctRef.current?.contains(e.target as Node)) setAcctOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      setAcctOpen(false);
-      acctBtn.current?.focus(); // focus goes back to the button that opened it
-    };
-    document.addEventListener('mousedown', onDown);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [acctOpen]);
 
   const links = template.cats.slice(0, NAV_LIMIT);
   const isOn = (href: string) => pathname === href;
@@ -85,64 +67,15 @@ export function Header() {
         </nav>
         <SearchBox />
         <div className="acts">
-          <div
-            className="acct"
-            ref={acctRef}
-            onBlur={(e) => {
-              if (acctOpen && !acctRef.current?.contains(e.relatedTarget as Node | null)) setAcctOpen(false);
-            }}
-          >
-            <button ref={acctBtn} type="button" className="icon" aria-label="Account" aria-expanded={acctOpen} aria-controls="acct-menu" onClick={() => setAcctOpen((o) => !o)}>
-              {user ? <b>{(String(user.name ?? '').trim()[0] || 'U').toUpperCase()}</b> : <Icon name="user" />}
-            </button>
-            {acctOpen && (
-              <div className="menu" id="acct-menu">
-                {user ? (
-                  <>
-                    <div className="who">
-                      {user.name}
-                      <br />+91 {user.phone}
-                    </div>
-                    <Link href="/orders">My orders</Link>
-                    <Link href="/wishlist">Wishlist</Link>
-                    <button
-                      type="button"
-                     
-                      onClick={() => {
-                        signOut();
-                        setAcctOpen(false);
-                        toast('Signed out');
-                      }}
-                    >
-                      Sign out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                     
-                      onClick={() => {
-                        setAcctOpen(false);
-                        openModal({ t: 'auth' });
-                      }}
-                    >
-                      Sign in
-                    </button>
-                    <Link href="/orders">My orders</Link>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+          <AccountMenu />
           <Link className="icon" href="/wishlist" aria-label={`Wishlist, ${wishCount} item${wishCount === 1 ? '' : 's'}`}>
             <Icon name="heart" />
             {wishCount > 0 && <span className="badge">{wishCount}</span>}
           </Link>
-          <Link className="icon" href="/cart" aria-label={`Cart, ${count} item${count === 1 ? '' : 's'}`}>
+          <button type="button" className="icon" aria-label={`Cart, ${count} item${count === 1 ? '' : 's'}`} aria-haspopup="dialog" aria-expanded={cartOpen} onClick={openCart}>
             <Icon name="bag" />
             {count > 0 && <span className="badge">{count}</span>}
-          </Link>
+          </button>
         </div>
       </div>
       <nav className="mnav" aria-label="Mobile">

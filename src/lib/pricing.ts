@@ -21,7 +21,7 @@ const mult = (p: Product, o: number): number => p.opts?.mult?.[o] ?? 1;
 
 /** Unit selling price for the chosen option, whole rupees. */
 export const unitPrice = (p: Product, o = 0): number => Math.round(p.price * mult(p, o));
-export const unitMrp = (p: Product, o = 0): number => Math.round(p.mrp * mult(p, o));
+export const unitMrp = (p: Product, o = 0): number => Math.round(p.mrp * (p.opts?.mrpMult?.[o] ?? mult(p, o)));
 
 /** Lowest price across options, shown as "From" on cards when options change the price. */
 export function fromPrice(p: Product): { price: number; mrp: number; from: boolean } {

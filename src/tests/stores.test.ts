@@ -90,10 +90,10 @@ describe('catalogue', () => {
     expect(adapters.catalog.getProduct('fashion', 'h1')).toBeUndefined();
     expect(adapters.catalog.getProduct('herbal', 'h1')?.name).toBe('Wild Honey');
   });
-  it('every template ships 10 to 12 products and its references resolve', () => {
+  it('every template ships a full catalogue (herbal has 26, the others 10 to 12) and its references resolve', () => {
     for (const t of Object.values(TEMPLATES)) {
       expect(t.products.length, t.id).toBeGreaterThanOrEqual(10);
-      expect(t.products.length, t.id).toBeLessThanOrEqual(12);
+      expect(t.products.length, t.id).toBeLessThanOrEqual(t.id === 'herbal' ? 26 : 12);
       const ids = new Set(t.products.map((p) => p.id));
       const cats = new Set(t.cats.map((c) => c.slug));
       t.products.forEach((p) => expect(cats.has(p.cat), `${t.id}/${p.id} category`).toBe(true));

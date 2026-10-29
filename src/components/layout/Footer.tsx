@@ -1,10 +1,14 @@
 import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
 import { Txt, useText } from '@/components/demo/Txt';
+import { useUiStore } from '@/store/ui';
+import { OtFooter } from '@/components/herbal/Chrome';
 
 export function Footer() {
   const { template } = useCatalog();
   const brand = useText('brand.name', template.name);
+  const openCart = useUiStore((s) => s.openCart);
+  if (template.chrome === 'ooty') return <OtFooter />;
   return (
     <footer className="foot">
       <div className="wrap">
@@ -30,7 +34,7 @@ export function Footer() {
             <h2 className="fh">Help</h2>
             <ul>
               <li><Link href="/orders">Track an order</Link></li>
-              <li><Link href="/cart">Your cart</Link></li>
+              <li><button type="button" className="linkbtn" onClick={openCart}>Your cart</button></li>
               <li><Link href="/wishlist">Wishlist</Link></li>
               <li>7-day easy returns</li>
             </ul>

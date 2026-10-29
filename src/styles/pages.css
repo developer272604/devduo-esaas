@@ -13,30 +13,6 @@
   margin-top: 6px;
   max-width: 60ch;
 }
-.tools {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 12px 0;
-  border-block: 1px solid var(--border);
-  margin-bottom: 22px;
-  font-size: 14px;
-}
-.tools .sp {
-  flex: 1;
-}
-.tools select {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: var(--radius-btn);
-  padding: 7px 10px;
-}
-.tools input[type='range'] {
-  accent-color: var(--primary);
-  vertical-align: middle;
-}
-
 /* product page */
 .pg {
   display: grid;

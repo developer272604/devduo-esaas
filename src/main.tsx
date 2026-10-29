@@ -23,7 +23,10 @@ import '@/styles/layout.css';
 import '@/styles/common.css';
 import '@/styles/sections.css';
 import '@/styles/pages.css';
+import '@/styles/category.css';
 import '@/styles/settings.css';
+import '@/styles/cart.css';
+import '@/styles/herbal.css';
 import '@/styles/demo.css';
 import '@/styles/mobile.css';
 

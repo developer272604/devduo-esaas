@@ -5,6 +5,7 @@ import { HeroDeals, HeroEditorial, HeroImage, HeroPhoto, HeroShowcase } from './
 import { Cats, Featured, Rail } from './Catalog';
 import { Feature, Flash, News, PromoBenefits, Promos, Testimonial, Usp, Values } from './Promos';
 import { BannerImage, DuoFeature, Intro, SplitBand, Spotlight } from './Editorial';
+import { OtBanner, OtHero, OtPerks, OtPromos, OtRail, OtReviews, OtRings, OtTrust } from '@/components/herbal/Home';
 import { REQUIRED, type SP } from './types';
 
 type Registry = { [K in SectionType]: (props: SP<K>) => ReactNode };
@@ -32,6 +33,14 @@ export const SECTIONS: Registry = {
   splitBand: SplitBand,
   duoFeature: DuoFeature,
   news: News,
+  ootyHero: OtHero,
+  ootyTrust: OtTrust,
+  ootyRings: OtRings,
+  ootyBanner: OtBanner,
+  ootyRail: OtRail,
+  ootyPromos: OtPromos,
+  ootyPerks: OtPerks,
+  ootyReviews: OtReviews,
 };
 
 function validate(section: Section, index: number): boolean {

@@ -17,6 +17,7 @@ export function ProductCard({ product: p, sizes, level = 3 }: { product: Product
   const toggle = useWishlistStore((s) => s.toggle);
   const add = useCartStore((s) => s.add);
   const toast = useUiStore((s) => s.showToast);
+  const openCart = useUiStore((s) => s.openCart);
   const name = useProductName(p.id, p.name);
   const { price, mrp, from } = fromPrice(p);
   const off = pct(price, mrp);
@@ -61,7 +62,7 @@ export function ProductCard({ product: p, sizes, level = 3 }: { product: Product
             className="btn sm"
             onClick={() => {
               add(p.id, 0, 1);
-              toast('Added to cart', { label: 'View cart', href: '/cart' });
+              openCart();
             }}
           >
             Add to cart
