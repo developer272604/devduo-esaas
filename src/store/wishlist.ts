@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { browserStorage, KEY_PREFIX } from '@/lib/storage';
+import { persistedState, sanitizeIds } from '@/lib/sanitize';
 
 type WishlistStore = {
   ids: string[];
@@ -26,6 +27,10 @@ export const useWishlistStore = create<WishlistStore>()(
       remove: (id) => set({ ids: get().ids.filter((x) => x !== id) }),
       clear: () => set({ ids: [] }),
     }),
-    { name: KEY_PREFIX + 'wishlist', storage: createJSONStorage(browserStorage) },
+    {
+      name: KEY_PREFIX + 'wishlist',
+      storage: createJSONStorage(browserStorage),
+      merge: (persisted, current) => ({ ...current, ids: sanitizeIds(persistedState(persisted).ids) }),
+    },
   ),
 );

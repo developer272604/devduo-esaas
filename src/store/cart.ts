@@ -3,6 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import type { CartLine, Coupon } from '@/lib/types';
 import { browserStorage, KEY_PREFIX } from '@/lib/storage';
 import { MAX_QTY, lineKey, parseLineKey } from '@/lib/pricing';
+import { persistedState, sanitizeCartLines, sanitizeCoupon } from '@/lib/sanitize';
 
 type CartStore = {
   lines: CartLine[];
@@ -39,7 +40,15 @@ export const useCartStore = create<CartStore>()(
       clearCoupon: () => set({ coupon: null }),
       clear: () => set({ lines: [], coupon: null }),
     }),
-    { name: KEY_PREFIX + 'cart', storage: createJSONStorage(browserStorage) },
+    {
+      name: KEY_PREFIX + 'cart',
+      storage: createJSONStorage(browserStorage),
+      // Stored carts can be hand-edited or corrupt: keep only whole quantities of 1 to MAX_QTY and known coupons.
+      merge: (persisted, current) => {
+        const p = persistedState(persisted);
+        return { ...current, lines: sanitizeCartLines(p.lines), coupon: sanitizeCoupon(p.coupon) };
+      },
+    },
   ),
 );
 

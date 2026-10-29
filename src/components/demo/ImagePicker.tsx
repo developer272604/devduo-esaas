@@ -35,8 +35,8 @@ export function ImagePicker() {
         const result = await fileToDataUrl(file);
         const ui = useUiStore.getState();
         if (!result.ok) return ui.showToast(result.error);
-        useCustomize.getState().setImage(useTemplateStore.getState().tpl, target, result.url);
-        ui.showToast('Image changed. It stays after a refresh.');
+        const saved = useCustomize.getState().setImage(useTemplateStore.getState().tpl, target, result.url);
+        ui.showToast(saved ? 'Image changed. It stays after a refresh.' : 'Image storage is full. Remove an image first, then try again.');
       }}
     />
   );

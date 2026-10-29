@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { setQuotaHandler } from '@/lib/storage';
 
 export type ModalState =
   | { t: 'auth' }
@@ -37,3 +38,8 @@ export const useUiStore = create<UiStore>()((set) => ({
   hideToast: () => set({ toast: null }),
   setAfterAuth: (afterAuth) => set({ afterAuth }),
 }));
+
+// Any store that cannot save because the browser storage is full reports it here, once.
+setQuotaHandler(() =>
+  useUiStore.getState().showToast('Browser storage is full, so recent changes may be lost on refresh. Remove an uploaded image to free space.'),
+);

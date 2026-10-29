@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { Template, ThemeState } from '@/lib/types';
 import { defaultTheme, normaliseTheme, themeFor } from '@/lib/theme';
+import { persistedState, sanitizeThemes } from '@/lib/sanitize';
 import { browserStorage, THEME_KEY } from '@/lib/storage';
 
 export { THEME_KEY, defaultTheme, themeFor };
@@ -31,6 +32,8 @@ export const useThemeStore = create<ThemeStore>()(
         set({ themes: next });
       },
     }),
-    { name: THEME_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ themes: s.themes }) },
+    { name: THEME_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ themes: s.themes }),
+      merge: (persisted, current) => ({ ...current, themes: sanitizeThemes(persistedState(persisted).themes) }),
+    },
   ),
 );

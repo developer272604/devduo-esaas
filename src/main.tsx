@@ -1,3 +1,5 @@
+// Must stay first: moves saved data from the pre-rename keys before the stores read it.
+import './migrate-boot';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -23,13 +25,23 @@ import '@/styles/sections.css';
 import '@/styles/pages.css';
 import '@/styles/settings.css';
 import '@/styles/demo.css';
+import '@/styles/mobile.css';
 
 import App from './App';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { NotDemo } from './components/NotDemo';
+import { DEMO_MODE } from './lib/demo';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ErrorBoundary>
+      {DEMO_MODE ? (
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      ) : (
+        <NotDemo />
+      )}
+    </ErrorBoundary>
   </StrictMode>,
 );

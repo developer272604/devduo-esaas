@@ -62,3 +62,26 @@
   --edit-bg: rgba(15, 18, 17, 0.82);
   --edit-fg: #ffffff;
 }
+
+/* illustration lightness steps: dark ink on light art, light ink on dark art */
+:root {
+  --ill-body-l: 30%;
+  --ill-mid-l: 46%;
+  --ill-light-l: 96%;
+  --ill-ink-l: 15%;
+  --ill-accent-l: 58%;
+  --ill-shadow-a: 0.16;
+}
+:root[data-theme='dark'] {
+  --ill-body-l: 74%;
+  --ill-mid-l: 58%;
+  --ill-light-l: 21%;
+  --ill-ink-l: 94%;
+  --ill-accent-l: 62%;
+  --ill-shadow-a: 0.38;
+}
+
+/* honey is always honey-coloured, whatever the brand colour */
+:root {
+  --ill-honey: hsl(37 88% 52%);
+}

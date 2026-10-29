@@ -4,32 +4,42 @@ import { useCatalog } from '@/lib/hooks';
 import { computeTotals, toPriced, unitPrice } from '@/lib/pricing';
 import type { CheckoutErrors } from '@/lib/validation';
 import { useCartStore } from '@/store/cart';
+import { useUiStore } from '@/store/ui';
 import { useCheckoutStore } from '@/store/checkout';
 import { firstErrorField, placeOrder } from '@/store/actions';
 import { Crumbs, EmptyState } from '@/components/common/bits';
 import { Txt, useNameOf } from '@/components/demo/Txt';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { AddressForm, OrderSummary, PaymentOptions, ShippingOptions } from '@/components/checkout/parts';
 import { inr } from '@/lib/format';
 
+const LABELS: Record<keyof CheckoutErrors, string> = {
+  name: 'Full name', phone: 'Mobile number', addr: 'Address', city: 'City', pin: 'Pincode', state: 'State',
+  upi: 'UPI ID', card: 'Card number', exp: 'Expiry', cvv: 'CVV',
+};
+
 export function CheckoutView() {
-  const { product } = useCatalog();
+  const { product, freeShipAt } = useCatalog();
   const nameOf = useNameOf();
   const router = useRouter();
   const lines = useCartStore((s) => s.lines);
   const coupon = useCartStore((s) => s.coupon);
   const form = useCheckoutStore((s) => s.form);
   const set = useCheckoutStore((s) => s.set);
+  const busy = useUiStore((s) => s.modal?.t === 'busy');
   const [errors, setErrors] = useState<CheckoutErrors>({});
+  const [announce, setAnnounce] = useState('');
+  useDocumentTitle('Checkout');
 
   const priced = toPriced(lines, product);
   if (!priced.length) {
     return (
       <div className="wrap page">
-        <EmptyState emoji="🛍️" title="Nothing to check out" text="Your cart is empty." action={{ label: 'Start shopping', href: '/shop' }} />
+        <EmptyState emoji="🛍️" title="Nothing to check out" page text="Your cart is empty." action={{ label: 'Start shopping', href: '/shop' }} />
       </div>
     );
   }
-  const totals = computeTotals(priced, { coupon, speed: form.ship, pay: form.pay });
+  const totals = computeTotals(priced, { coupon, speed: form.ship, pay: form.pay, freeAt: freeShipAt });
 
   const onSet: typeof set = (patch) => {
     set(patch);
@@ -41,6 +51,8 @@ export function CheckoutView() {
   const submit = () => {
     const errs = placeOrder((href) => router.push(href));
     setErrors(errs);
+    const names = Object.keys(errs).map((k) => LABELS[k as keyof CheckoutErrors]);
+    setAnnounce(names.length ? `${names.length} field${names.length === 1 ? ' needs' : 's need'} attention: ${names.join(', ')}.` : '');
     const first = firstErrorField(errs);
     if (first) {
       const el = document.getElementById(`ck-${first}`);
@@ -65,8 +77,11 @@ export function CheckoutView() {
             submit();
           }}
         >
+          <div className="sr-only" role="alert" aria-live="assertive">
+            {announce}
+          </div>
           <AddressForm form={form} errors={errors} set={onSet} />
-          <ShippingOptions value={form.ship} onChange={(ship) => set({ ship })} />
+          <ShippingOptions value={form.ship} onChange={(ship) => set({ ship })} freeAt={freeShipAt} />
           <PaymentOptions form={form} errors={errors} set={onSet} />
         </form>
         <OrderSummary
@@ -74,7 +89,7 @@ export function CheckoutView() {
           lines={priced.map((l) => ({ label: `${nameOf(l.product.id, l.product.name)} × ${l.qty}`, amount: unitPrice(l.product, l.o) * l.qty }))}
           footer={
             <>
-              <button type="button" className="btn block place" onClick={submit}>
+              <button type="button" className="btn block place" onClick={submit} disabled={busy}>
                 {form.pay === 'cod' ? 'Place order' : `Pay ${inr(totals.total)}`}
               </button>
               <p className="hint">Demo store. No money is charged.</p>

@@ -4,6 +4,7 @@ import { useCatalog } from '@/lib/hooks';
 import { fromPrice } from '@/lib/pricing';
 import { inr } from '@/lib/format';
 import { Icon } from '@/components/common/Icon';
+import { Illustration } from '@/components/common/Illustration';
 import { Stars } from '@/components/common/bits';
 import { SlotImg } from '@/components/demo/SlotImg';
 import { Txt, useProductName } from '@/components/demo/Txt';
@@ -78,14 +79,14 @@ export function Promos({ s, i }: SP<'promos'>) {
           {s.items.map((p, j) => (
             <div key={p.title} className={`promo tone${j % 3}`}>
               <div className="promo-copy">
-                <Txt as="h3" id={slot(i, `items.${j}.title`)} text={p.title} />
+                <Txt as="h2" id={slot(i, `items.${j}.title`)} text={p.title} />
                 <Txt as="p" id={slot(i, `items.${j}.text`)} text={p.text} />
                 <Link className="btn sm" href={href(p.go)}>
                   <Txt id={slot(i, `items.${j}.cta`)} text={p.cta} />
                 </Link>
               </div>
               <div className="promo-pic">
-                <SlotImg slot={slot(i, `items.${j}.image`)} src={p.image} alt="" sizes="200px" className="promo-photo" fallback={<span aria-hidden="true">{p.emoji}</span>} />
+                <SlotImg slot={slot(i, `items.${j}.image`)} src={p.image} alt="" sizes="200px" className="promo-photo" fallback={p.art ? <Illustration kind={p.art} variant={j} /> : undefined} />
               </div>
             </div>
           ))}
@@ -109,7 +110,7 @@ export function PromoBenefits({ s, i }: SP<'promoBenefits'>) {
             </Link>
           </div>
           <div className="pbanner-pic" aria-hidden="true">
-            <span>{s.emoji}</span>
+            <Illustration kind={s.art} />
           </div>
           <ul className="pbanner-list">
             {s.benefits.map((b, j) => (

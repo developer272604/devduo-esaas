@@ -2,35 +2,40 @@ import { useState } from 'react';
 import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
 import { inr } from '@/lib/format';
-import { FREE_SHIP_AT, computeTotals, freeShipRemaining, lineKey, normaliseCoupon, toPriced, unitMrp, unitPrice } from '@/lib/pricing';
+import type { Coupon } from '@/lib/types';
+import { COUPONS, computeTotals, freeShipRemaining, lineKey, normaliseCoupon, toPriced, unitMrp, unitPrice } from '@/lib/pricing';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useUiStore } from '@/store/ui';
 import { Art } from '@/components/common/Art';
 import { Crumbs, EmptyState, QtyStepper } from '@/components/common/bits';
 import { Txt, productNameId } from '@/components/demo/Txt';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { OrderSummary } from '@/components/checkout/parts';
 
 export function CartView() {
-  const { product } = useCatalog();
-  const { lines, coupon } = useCartStore();
+  const { product, freeShipAt } = useCatalog();
+  const { lines, coupon: storedCoupon } = useCartStore();
+  const coupon = COUPONS.includes(storedCoupon as Coupon) ? storedCoupon : null;
   const setQty = useCartStore((s) => s.setQty);
   const remove = useCartStore((s) => s.remove);
   const setCoupon = useCartStore((s) => s.setCoupon);
   const addWish = useWishlistStore((s) => s.add);
   const toast = useUiStore((s) => s.showToast);
   const [code, setCode] = useState('');
+  const itemCount = lines.reduce((a, l) => a + (Number.isFinite(l.qty) ? l.qty : 0), 0);
+  useDocumentTitle(itemCount ? `Cart (${itemCount})` : 'Cart');
 
   const priced = toPriced(lines, product);
   if (!priced.length) {
     return (
       <div className="wrap page">
-        <EmptyState emoji="🛍️" title="Your cart is empty" text="Add a few things you like and they will show up here." action={{ label: 'Start shopping', href: '/shop' }} />
+        <EmptyState emoji="🛍️" title="Your cart is empty" page text="Add a few things you like and they will show up here." action={{ label: 'Start shopping', href: '/shop' }} />
       </div>
     );
   }
-  const totals = computeTotals(priced, { coupon, speed: 'std', pay: 'upi' });
-  const left = freeShipRemaining(totals.sub);
+  const totals = computeTotals(priced, { coupon, speed: 'std', pay: 'upi', freeAt: freeShipAt });
+  const left = freeShipRemaining(totals.sub, freeShipAt);
   const freeShip = left === 0 || coupon === 'FREESHIP';
   const count = priced.reduce((a, l) => a + l.qty, 0);
 
@@ -61,11 +66,11 @@ export function CartView() {
                   <Art id={p.id} emoji={p.emoji} name={p.name} image={p.image} sizes="90px" />
                 </Link>
                 <div>
-                  <h3>
+                  <h2>
                     <Link href={`/product/${p.id}`}>
                       <Txt id={productNameId(p.id)} text={p.name} />
                     </Link>
-                  </h3>
+                  </h2>
                   {p.opts && (
                     <small>
                       {p.opts.label}: {p.opts.values[l.o]}
@@ -134,8 +139,8 @@ export function CartView() {
           ) : (
             <small>Add {inr(left)} more for free delivery</small>
           )}
-          <div className="bar2" role="progressbar" aria-valuemin={0} aria-valuemax={FREE_SHIP_AT} aria-valuenow={Math.min(FREE_SHIP_AT, totals.sub)} aria-label="Progress to free delivery">
-            <i style={{ width: `${freeShip ? 100 : Math.min(100, (totals.sub / FREE_SHIP_AT) * 100)}%` }} />
+          <div className="bar2" role="progressbar" aria-valuemin={0} aria-valuemax={freeShipAt} aria-valuenow={Math.min(freeShipAt, totals.sub)} aria-label="Progress to free delivery">
+            <i style={{ width: `${freeShip ? 100 : Math.min(100, (totals.sub / freeShipAt) * 100)}%` }} />
           </div>
         </OrderSummary>
       </div>

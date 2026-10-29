@@ -1,5 +1,9 @@
 import type { Template } from '@/lib/types';
+import { inr } from '@/lib/format';
 import { products } from './products';
+
+/** Free standard delivery from this order value. */
+const FREE_SHIP_AT = 2000;
 
 export const fashion: Template = {
   id: 'fashion',
@@ -7,15 +11,16 @@ export const fashion: Template = {
   logo: '🪷',
   tag: 'Ethnic wear',
   foot: 'Grace in every thread. Kurti sets, lehengas and festive wear crafted for comfort, confidence and celebrations.',
-  announce: 'Free shipping on orders above ₹2,000. Easy returns within 7 days. Use WELCOME10 for 10% off.',
+  freeShipAt: FREE_SHIP_AT,
+  announce: `Free shipping on orders above ${inr(FREE_SHIP_AT)}. Easy returns within 7 days. Use WELCOME10 for 10% off.`,
   theme: { primary: '#a21a5c', font: 'Playfair Display', bg: '#fbf6f1', mode: 'light', radius: 'sharp' },
   cats: [
-    { slug: 'kurtis', name: 'Kurtis', emoji: '👗', blurb: 'Everyday kurti sets for work and weekends.' },
-    { slug: 'lehengas', name: 'Lehengas', emoji: '🥻', blurb: 'Festive and wedding lehengas in rich fabrics.' },
-    { slug: 'suits', name: 'Suits', emoji: '👘', blurb: 'Straight and Anarkali suits in cotton and chanderi.' },
-    { slug: 'coord', name: 'Co-ord sets', emoji: '🧥', blurb: 'Matching sets you can wear together or apart.' },
-    { slug: 'bottoms', name: 'Bottoms', emoji: '👖', blurb: 'Palazzos, pants and churidars.' },
-    { slug: 'accessories', name: 'Accessories', emoji: '👜', blurb: 'Finishing pieces for every outfit.' },
+    { slug: 'kurtis', name: 'Kurtis', emoji: '👗', art: 'kurti', blurb: 'Everyday kurti sets for work and weekends.' },
+    { slug: 'lehengas', name: 'Lehengas', emoji: '🥻', art: 'lehenga', blurb: 'Festive and wedding lehengas in rich fabrics.' },
+    { slug: 'suits', name: 'Suits', emoji: '👘', art: 'suit', blurb: 'Straight and Anarkali suits in cotton and chanderi.' },
+    { slug: 'coord', name: 'Co-ord sets', emoji: '🧥', art: 'coord', blurb: 'Matching sets you can wear together or apart.' },
+    { slug: 'bottoms', name: 'Bottoms', emoji: '👖', art: 'trousers', blurb: 'Palazzos, pants and churidars.' },
+    { slug: 'accessories', name: 'Accessories', emoji: '👜', art: 'potli', blurb: 'Finishing pieces for every outfit.' },
   ],
   products,
   reviews: [
@@ -32,11 +37,11 @@ export const fashion: Template = {
       cta: 'Shop now',
       go: 'shop',
       features: [
-        { icon: 'truck', title: 'Free shipping', text: 'Above ₹2,000' },
+        { icon: 'truck', title: 'Free shipping', text: `Above ${inr(FREE_SHIP_AT)}` },
         { icon: 'refresh', title: 'Easy returns', text: 'Within 7 days' },
         { icon: 'shield', title: '100% original', text: 'Products' },
       ],
-      art: ['🥻', '👗', '👘'],
+      art: ['lehenga', 'kurti', 'suit'],
       script: ['Ethnic', 'Style', 'Redefined'],
     },
     { type: 'cats', style: 'circles', title: 'Explore our collections', link: 'View all' },
@@ -48,7 +53,7 @@ export const fashion: Template = {
       text: 'On selected ethnic wear',
       cta: 'Shop sale',
       go: 'shop',
-      emoji: '🥻',
+      art: 'lehenga',
       benefits: [
         { title: 'Premium fabric', text: 'For lasting comfort' },
         { title: 'Trendy designs', text: 'For every occasion' },

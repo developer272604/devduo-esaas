@@ -6,6 +6,7 @@ import { inr } from '@/lib/format';
 import { Art } from '@/components/common/Art';
 import { Icon } from '@/components/common/Icon';
 import { useNameOf } from '@/components/demo/Txt';
+import { MAX_QUERY, clampQuery } from '@/lib/search';
 
 export function SearchBox() {
   const { search } = useCatalog();
@@ -37,6 +38,7 @@ export function SearchBox() {
       <Icon name="search" size={18} />
       <input
         type="search"
+        maxLength={MAX_QUERY}
         role="combobox"
         aria-autocomplete="list"
         value={q}
@@ -46,7 +48,7 @@ export function SearchBox() {
         aria-controls={listId}
         aria-expanded={open && !!term}
         onChange={(e) => {
-          setQ(e.target.value);
+          setQ(clampQuery(e.target.value));
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}

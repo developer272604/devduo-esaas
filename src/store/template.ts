@@ -14,7 +14,12 @@ export const useTemplateStore = create<TemplateStore>()(
       tpl: DEFAULT_TEMPLATE,
       setTpl: (id) => set({ tpl: TEMPLATES[id] ? id : DEFAULT_TEMPLATE }),
     }),
-    { name: TEMPLATE_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ tpl: s.tpl }) },
+    { name: TEMPLATE_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ tpl: s.tpl }),
+      merge: (persisted, current) => {
+        const tpl = (persisted as { tpl?: unknown } | null)?.tpl;
+        return { ...current, tpl: typeof tpl === 'string' && TEMPLATES[tpl] ? tpl : current.tpl };
+      },
+    },
   ),
 );
 

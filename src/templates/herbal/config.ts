@@ -1,4 +1,5 @@
 import type { Template } from '@/lib/types';
+import { inr } from '@/lib/format';
 import { products } from './products';
 import hero from './images/hero.jpg';
 import honey from './images/honey.jpg';
@@ -6,23 +7,27 @@ import herbalImg from './images/herbal.jpg';
 import seeds from './images/seeds.jpg';
 import oils from './images/oils.jpg';
 
+/** Free standard delivery from this order value. */
+const FREE_SHIP_AT = 499;
+
 export const herbal: Template = {
   id: 'herbal',
   name: 'Ooty Herbals',
   logo: '🌿',
   tag: 'Honey and herbal care',
   foot: 'Raw honey and traditional herbal formulations, harvested in the high-altitude forests of the Nilgiris.',
-  announce: 'Free shipping on orders above ₹499. Use WELCOME10 for 10% off your first order.',
+  freeShipAt: FREE_SHIP_AT,
+  announce: `Free shipping on orders above ${inr(FREE_SHIP_AT)}. Use WELCOME10 for 10% off your first order.`,
   theme: { primary: '#114a37', font: 'Lora', bg: '#fbf9f4', mode: 'light', radius: 'soft' },
   cats: [
     { slug: 'honey', name: 'Honey', emoji: '🍯', blurb: 'Raw honey from Nilgiri farms and forests.', image: honey },
     { slug: 'herbal', name: 'Herbal products', emoji: '🌿', blurb: 'Stone-ground powders for daily wellness.', image: herbalImg },
     { slug: 'seeds', name: 'Herbal seeds', emoji: '🌱', blurb: 'High-germination seeds to grow your own wellness.', image: seeds },
     { slug: 'oils', name: 'Oils and extracts', emoji: '🥥', blurb: 'Cold-pressed, unrefined and single origin.', image: oils },
-    { slug: 'care', name: 'Personal care', emoji: '🧴', blurb: 'Gels and balms made from garden botanicals.' },
-    { slug: 'wellness', name: 'Wellness', emoji: '🍵', blurb: 'Teas and daily rituals in a cup.' },
-    { slug: 'spices', name: 'Spices and herbs', emoji: '🌼', blurb: 'Single-origin spices ground in small batches.' },
-    { slug: 'gifts', name: 'Gift packs', emoji: '🎁', blurb: 'Hampers for festivals and family.' },
+    { slug: 'care', name: 'Personal care', emoji: '🧴', art: 'tube', blurb: 'Gels and balms made from garden botanicals.' },
+    { slug: 'wellness', name: 'Wellness', emoji: '🍵', art: 'teabox', blurb: 'Teas and daily rituals in a cup.' },
+    { slug: 'spices', name: 'Spices and herbs', emoji: '🌼', art: 'pouch', blurb: 'Single-origin spices ground in small batches.' },
+    { slug: 'gifts', name: 'Gift packs', emoji: '🎁', art: 'giftbox', blurb: 'Hampers for festivals and family.' },
   ],
   products,
   reviews: [
@@ -45,7 +50,7 @@ export const herbal: Template = {
       type: 'usp',
       style: 'card',
       items: [
-        { icon: 'box', title: 'Free shipping', text: 'On orders above ₹499' },
+        { icon: 'box', title: 'Free shipping', text: `On orders above ${inr(FREE_SHIP_AT)}` },
         { icon: 'leaf', title: '100% natural', text: 'Pure products' },
         { icon: 'shield', title: 'Secure payments', text: 'Safe and trusted' },
         { icon: 'refresh', title: 'Easy returns', text: 'Hassle free' },

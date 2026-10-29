@@ -24,7 +24,7 @@ export function ShotModal({ url, blob, brand }: Props) {
     <Modal title="Screenshot ready" onClose={close} wide>
       <h2>Your screenshot is ready</h2>
       <p>The whole site, with a Devduo ESaas watermark.</p>
-      <div className="shot-frame">
+      <div className="shot-frame" tabIndex={0} role="region" aria-label="Screenshot preview">
         <img src={url} alt={`Screenshot of the ${brand} storefront`} />
       </div>
       <div className="shot-actions">

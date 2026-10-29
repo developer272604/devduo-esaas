@@ -7,12 +7,14 @@ import { useOrdersStore } from '@/store/orders';
 import { Icon } from '@/components/common/Icon';
 import { EmptyState } from '@/components/common/bits';
 import { useText } from '@/components/demo/Txt';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 export function SuccessView({ orderId }: { orderId: string }) {
   const { template } = useCatalog();
   const brand = useText('brand.name', template.name);
   const order = useOrdersStore((s) => s.orders.find((o) => o.id === orderId));
   const [message, setMessage] = useState('');
+  useDocumentTitle(order ? 'Order placed' : 'Order not found');
 
   useEffect(() => {
     if (!order) return;
@@ -26,7 +28,7 @@ export function SuccessView({ orderId }: { orderId: string }) {
   if (!order) {
     return (
       <div className="wrap page">
-        <EmptyState emoji="🧾" title="Order not found" text="It may belong to another template, or it was placed on another device." action={{ label: 'My orders', href: '/orders' }} />
+        <EmptyState emoji="🧾" title="Order not found" page text="It may belong to another template, or it was placed on another device." action={{ label: 'My orders', href: '/orders' }} />
       </div>
     );
   }

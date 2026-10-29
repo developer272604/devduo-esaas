@@ -1,4 +1,5 @@
 import type { Template } from '@/lib/types';
+import { inr } from '@/lib/format';
 import { products } from './products';
 import hero from './images/hero.jpg';
 import watch from './images/watch.jpg';
@@ -12,12 +13,16 @@ import catHome from './images/cat-home.jpg';
 import catGrocery from './images/cat-grocery.jpg';
 import catSports from './images/cat-sports.jpg';
 
+/** Free standard delivery from this order value. */
+const FREE_SHIP_AT = 999;
+
 export const marketplace: Template = {
   id: 'marketplace',
   name: 'Marketly',
   logo: '🛍️',
   tag: 'Everyday marketplace',
   foot: 'Millions of products from top brands and trusted sellers. Best prices, premium quality and dependable service.',
+  freeShipAt: FREE_SHIP_AT,
   announce: '🎉 Mega Summer Sale is live. Get up to 60% off. Use WELCOME10 for an extra 10%.',
   theme: { primary: '#2563eb', font: 'Poppins', bg: '#f6f8fc', mode: 'light', radius: 'soft' },
   cats: [
@@ -48,7 +53,7 @@ export const marketplace: Template = {
       go2: 'shop',
       image: hero,
       features: [
-        { icon: 'truck', title: 'Free shipping', text: 'On orders over ₹999' },
+        { icon: 'truck', title: 'Free shipping', text: `On orders over ${inr(FREE_SHIP_AT)}` },
         { icon: 'refresh', title: 'Easy returns', text: '30-day return policy' },
         { icon: 'shield', title: 'Secure payment', text: '100% protected' },
       ],

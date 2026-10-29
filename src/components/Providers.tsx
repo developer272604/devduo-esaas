@@ -2,7 +2,6 @@ import { useEffect, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { applyTheme } from '@/lib/theme';
 import { useTemplate } from '@/store/template';
-import { useText } from '@/components/demo/Txt';
 import { themeFor, useThemeStore } from '@/store/theme';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -18,13 +17,9 @@ function ThemeApplier() {
   const template = useTemplate();
   const themes = useThemeStore((s) => s.themes);
   const theme = themeFor(themes, template);
-  const brand = useText('brand.name', template.name);
   useEffect(() => {
     applyTheme(theme, template.theme.bg);
   }, [theme, template]);
-  useEffect(() => {
-    document.title = `${brand} · Devduo ESaas demo`;
-  }, [brand]);
   return null;
 }
 
@@ -50,11 +45,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         {children}
       </main>
       <Footer />
-      <SettingsTab />
+      <aside className="demo-tools" aria-label="Demo tools" data-no-capture>
+        <SettingsTab />
+        <DemoBar />
+      </aside>
       <SettingsDrawer />
       <ModalHost />
       <ToastHost />
-      <DemoBar />
       <ImagePicker />
       <Tour />
     </>

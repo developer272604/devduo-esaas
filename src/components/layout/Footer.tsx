@@ -17,7 +17,7 @@ export function Footer() {
             <Txt as="p" id="brand.foot" text={template.foot} />
           </div>
           <div>
-            <h4>Shop</h4>
+            <h2 className="fh">Shop</h2>
             <ul>
               {template.cats.slice(0, 6).map((c) => (
                 <li key={c.slug}>
@@ -27,7 +27,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4>Help</h4>
+            <h2 className="fh">Help</h2>
             <ul>
               <li><Link href="/orders">Track an order</Link></li>
               <li><Link href="/cart">Your cart</Link></li>
@@ -36,7 +36,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4>Pay and talk</h4>
+            <h2 className="fh">Pay and talk</h2>
             <ul>
               <li>UPI, cards and cash on delivery</li>
               <li>Order updates on WhatsApp</li>
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
         </div>
         <div className="fb">
-          <span>© 2026 {brand}. Demo store, no real orders.</span>
+          <span>© {new Date().getFullYear()} {brand}. Demo store, no real orders.</span>
           <span>Built on Devduo ESaas</span>
           <div className="chips2">
             <span>UPI</span>

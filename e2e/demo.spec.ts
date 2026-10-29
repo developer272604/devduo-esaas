@@ -201,7 +201,7 @@ test.describe('full screen, screenshot and share', () => {
 
     // tools and the dialog itself are not in the picture: the bottom of the page is the footer, not the demo bar
     const [download] = await Promise.all([page.waitForEvent('download'), dialog.getByRole('button', { name: 'Download' }).click()]);
-    expect(download.suggestedFilename()).toBe('storefront-demo.png');
+    expect(download.suggestedFilename()).toBe('devduo-esaas-demo.png');
 
     const [popup] = await Promise.all([page.waitForEvent('popup'), dialog.getByTestId('share-whatsapp').click()]);
     expect(popup.url()).toMatch(/wa\.me|whatsapp\.com/);

@@ -9,21 +9,28 @@ type DemoStore = {
   toured: boolean;
   /** The tour was reopened on purpose (from Settings) after being finished. */
   reopened: boolean;
+  /** Escape pressed: hidden for this visit only. It returns next time because `toured` stays false. Not saved. */
+  snoozed: boolean;
   startTour: () => void;
   endTour: () => void;
+  snooze: () => void;
 };
 
 /** The tour is showing when the visitor has not seen it yet, or asked to see it again. */
-export const useTourOpen = (): boolean => useDemoStore((s) => !s.toured || s.reopened);
+export const useTourOpen = (): boolean => useDemoStore((s) => (!s.toured && !s.snoozed) || s.reopened);
 
 export const useDemoStore = create<DemoStore>()(
   persist(
     (set) => ({
       toured: false,
       reopened: false,
-      startTour: () => set({ reopened: true }),
-      endTour: () => set({ toured: true, reopened: false }),
+      snoozed: false,
+      startTour: () => set({ reopened: true, snoozed: false }),
+      endTour: () => set({ toured: true, reopened: false, snoozed: false }),
+      snooze: () => set({ snoozed: true, reopened: false }),
     }),
-    { name: DEMO_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ toured: s.toured }) },
+    { name: DEMO_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ toured: s.toured }),
+      merge: (persisted, current) => ({ ...current, toured: (persisted as { toured?: unknown } | null)?.toured === true }),
+    },
   ),
 );

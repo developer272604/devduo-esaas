@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
-import { KEY_PREFIX, safeStorage } from '@/lib/storage';
-import { useUiStore } from './ui';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import { KEY_PREFIX, browserStorage } from '@/lib/storage';
+import { IMAGE_BUDGET } from '@/lib/constants';
+import { isImageData, persistedState, sanitizeImages, sanitizeTexts } from '@/lib/sanitize';
 
 export const CUSTOM_KEY = KEY_PREFIX + 'custom';
 
@@ -19,25 +20,20 @@ type CustomizeStore = {
   setEditing: (on: boolean) => void;
   setText: (tpl: string, id: string, value: string) => void;
   clearText: (tpl: string, id: string) => void;
-  setImage: (tpl: string, slot: string, url: string) => void;
+  /** Saves a replacement image. Returns false when it is not inline raster data or would exceed the storage budget. */
+  setImage: (tpl: string, slot: string, url: string) => boolean;
   clearImage: (tpl: string, slot: string) => void;
   /** Forget every edit for one template. */
   resetTemplate: (tpl: string) => void;
   requestImage: (slot: string) => void;
 };
 
-/** localStorage with a loud failure: a full browser quota would otherwise lose an image on refresh without a word. */
-const quotaAwareStorage: StateStorage = {
-  getItem: (n) => safeStorage.getItem(n),
-  removeItem: (n) => safeStorage.removeItem(n),
-  setItem: (name, value) => {
-    try {
-      window.localStorage.setItem(name, value);
-    } catch {
-      useUiStore.getState().showToast('Browser storage is full, so this edit will be lost on refresh. Remove an image to free space.');
-    }
-  },
-};
+/** Characters of replacement images already stored, across all templates. */
+export const imageChars = (images: Bag): number => Object.values(images).reduce((a, bag) => a + Object.values(bag).reduce((b, v) => b + v.length, 0), 0);
+
+/** Would saving `url` into `slot` keep the images within IMAGE_BUDGET? A replaced image frees its old space. */
+export const fitsBudget = (images: Bag, tpl: string, slot: string, url: string): boolean =>
+  imageChars(images) - (images[tpl]?.[slot]?.length ?? 0) + url.length <= IMAGE_BUDGET;
 
 const put = (bag: Bag, tpl: string, key: string, value: string): Bag => ({ ...bag, [tpl]: { ...(bag[tpl] ?? {}), [key]: value } });
 const drop = (bag: Bag, tpl: string, key: string): Bag => {
@@ -56,7 +52,11 @@ export const useCustomize = create<CustomizeStore>()(
       setEditing: (editing) => set({ editing }),
       setText: (tpl, id, value) => set({ texts: put(get().texts, tpl, id, value) }),
       clearText: (tpl, id) => set({ texts: drop(get().texts, tpl, id) }),
-      setImage: (tpl, slot, url) => set({ images: put(get().images, tpl, slot, url) }),
+      setImage: (tpl, slot, url) => {
+        if (!isImageData(url) || !fitsBudget(get().images, tpl, slot, url)) return false;
+        set({ images: put(get().images, tpl, slot, url) });
+        return true;
+      },
       clearImage: (tpl, slot) => set({ images: drop(get().images, tpl, slot) }),
       resetTemplate: (tpl) => {
         const texts = { ...get().texts };
@@ -69,8 +69,12 @@ export const useCustomize = create<CustomizeStore>()(
     }),
     {
       name: CUSTOM_KEY,
-      storage: createJSONStorage(() => quotaAwareStorage),
+      storage: createJSONStorage(browserStorage),
       partialize: (s) => ({ texts: s.texts, images: s.images }),
+      merge: (persisted, current) => {
+        const p = persistedState(persisted);
+        return { ...current, texts: sanitizeTexts(p.texts), images: sanitizeImages(p.images) };
+      },
     },
   ),
 );

@@ -1,6 +1,6 @@
 import type { Product } from '@/lib/types';
 
-type Extra = Partial<Pick<Product, 'image' | 'tag' | 'd' | 'opts'>>;
+type Extra = Partial<Pick<Product, 'image' | 'art' | 'tag' | 'd' | 'opts'>>;
 
 /** Compact product factory so template catalogues stay readable. */
 export const P = (

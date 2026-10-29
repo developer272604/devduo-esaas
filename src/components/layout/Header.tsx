@@ -26,6 +26,7 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
   const acctRef = useRef<HTMLDivElement>(null);
+  const acctBtn = useRef<HTMLButtonElement>(null);
   const count = useCartStore((s) => cartCount(s.lines));
   const wishCount = useWishlistStore((s) => s.ids.length);
   const user = useAuthStore((s) => s.user);
@@ -43,7 +44,11 @@ export function Header() {
     const onDown = (e: MouseEvent) => {
       if (!acctRef.current?.contains(e.target as Node)) setAcctOpen(false);
     };
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setAcctOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setAcctOpen(false);
+      acctBtn.current?.focus(); // focus goes back to the button that opened it
+    };
     document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);
     return () => {
@@ -80,23 +85,29 @@ export function Header() {
         </nav>
         <SearchBox />
         <div className="acts">
-          <div className="acct" ref={acctRef}>
-            <button type="button" className="icon" aria-label="Account" aria-haspopup="menu" aria-expanded={acctOpen} onClick={() => setAcctOpen((o) => !o)}>
-              {user ? <b>{(user.name.trim()[0] || 'U').toUpperCase()}</b> : <Icon name="user" />}
+          <div
+            className="acct"
+            ref={acctRef}
+            onBlur={(e) => {
+              if (acctOpen && !acctRef.current?.contains(e.relatedTarget as Node | null)) setAcctOpen(false);
+            }}
+          >
+            <button ref={acctBtn} type="button" className="icon" aria-label="Account" aria-expanded={acctOpen} aria-controls="acct-menu" onClick={() => setAcctOpen((o) => !o)}>
+              {user ? <b>{(String(user.name ?? '').trim()[0] || 'U').toUpperCase()}</b> : <Icon name="user" />}
             </button>
             {acctOpen && (
-              <div className="menu" role="menu">
+              <div className="menu" id="acct-menu">
                 {user ? (
                   <>
                     <div className="who">
                       {user.name}
                       <br />+91 {user.phone}
                     </div>
-                    <Link href="/orders" role="menuitem">My orders</Link>
-                    <Link href="/wishlist" role="menuitem">Wishlist</Link>
+                    <Link href="/orders">My orders</Link>
+                    <Link href="/wishlist">Wishlist</Link>
                     <button
                       type="button"
-                      role="menuitem"
+                     
                       onClick={() => {
                         signOut();
                         setAcctOpen(false);
@@ -110,7 +121,7 @@ export function Header() {
                   <>
                     <button
                       type="button"
-                      role="menuitem"
+                     
                       onClick={() => {
                         setAcctOpen(false);
                         openModal({ t: 'auth' });
@@ -118,7 +129,7 @@ export function Header() {
                     >
                       Sign in
                     </button>
-                    <Link href="/orders" role="menuitem">My orders</Link>
+                    <Link href="/orders">My orders</Link>
                   </>
                 )}
               </div>

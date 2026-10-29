@@ -10,7 +10,9 @@ import { Txt, productNameId, useProductName } from '@/components/demo/Txt';
 import { Icon } from './Icon';
 import { Price, Stars } from './bits';
 
-export function ProductCard({ product: p, sizes }: { product: Product; sizes?: string }) {
+/** `level` is the heading level of the product name: 2 on a page whose title is the h1, 3 under a section heading. */
+export function ProductCard({ product: p, sizes, level = 3 }: { product: Product; sizes?: string; level?: 2 | 3 }) {
+  const Heading = level === 2 ? 'h2' : 'h3';
   const wished = useWishlistStore((s) => s.ids.includes(p.id));
   const toggle = useWishlistStore((s) => s.toggle);
   const add = useCartStore((s) => s.add);
@@ -40,11 +42,11 @@ export function ProductCard({ product: p, sizes }: { product: Product; sizes?: s
         <Art id={p.id} emoji={p.emoji} name={name} image={p.image} sizes={sizes} editable />
       </Link>
       <div className="body">
-        <h3>
+        <Heading>
           <Link href={`/product/${p.id}`}>
             <Txt id={productNameId(p.id)} text={p.name} />
           </Link>
-        </h3>
+        </Heading>
         <div className="rating">
           <Stars rating={p.rating} /> <span className="rc">({p.rev.toLocaleString('en-IN')})</span>
         </div>
@@ -70,11 +72,11 @@ export function ProductCard({ product: p, sizes }: { product: Product; sizes?: s
   );
 }
 
-export function ProductGrid({ products, cols }: { products: Product[]; cols?: 2 | 4 | 6 }) {
+export function ProductGrid({ products, cols, level }: { products: Product[]; cols?: 2 | 4 | 6; level?: 2 | 3 }) {
   return (
     <div className={`grid${cols ? ` cols-${cols}` : ''}`}>
       {products.map((p) => (
-        <ProductCard key={p.id} product={p} sizes={cols === 6 ? '(max-width: 700px) 50vw, 17vw' : undefined} />
+        <ProductCard key={p.id} product={p} level={level} sizes={cols === 6 ? '(max-width: 700px) 50vw, 17vw' : undefined} />
       ))}
     </div>
   );
