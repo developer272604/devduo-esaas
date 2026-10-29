@@ -75,7 +75,7 @@ describe('template switching', () => {
     expect(useThemeStore.getState().themes.herbal.primary).toBe('#be185d');
   });
   it('keeps orders from other templates', () => {
-    useOrdersStore.setState({ orders: [{ id: 'VD1', tpl: 'herbal' } as never] });
+    useOrdersStore.setState({ orders: [{ id: 'DD00000001', tpl: 'herbal' } as never] });
     switchTemplate('fashion', nav);
     expect(useOrdersStore.getState().orders).toHaveLength(1);
   });

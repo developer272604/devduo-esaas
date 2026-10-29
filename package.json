@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run check:brand && tsc --noEmit && vite build",
     "preview": "vite preview --port 3100",
     "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit && node scripts/check-colors.mjs",
+    "check:brand": "node scripts/check-brand.mjs",
+    "lint": "tsc --noEmit && node scripts/check-colors.mjs && node scripts/check-brand.mjs",
     "test": "vitest run",
     "e2e": "playwright test"
   },

@@ -8,6 +8,13 @@ export const DEMO_OTP = '123456';
 export const PAYMENT_DELAY_MS = 1200;
 export { MAX_STAGE };
 
+/** Order ids look like DD7F3A9C21: Devduo plus 8 random hex characters (a clock fallback if crypto is missing). */
+export const newOrderId = (): string =>
+  'DD' + (globalThis.crypto?.randomUUID?.().replace(/-/g, '').slice(0, 8).toUpperCase() ?? String(Date.now()).slice(-8));
+
+/** Devduo Pay reference: DP plus 8 digits. */
+export const newPaymentRef = (): string => `DP${Date.now().toString().slice(-8)}`;
+
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 const catalog: CatalogAdapter = {
@@ -41,14 +48,14 @@ const payment: PaymentAdapter = {
   async charge(req) {
     await wait(PAYMENT_DELAY_MS);
     if (req.amount <= 0) return { ok: false, error: 'Nothing to charge.' };
-    return { ok: true, reference: `VP${Date.now().toString().slice(-8)}` };
+    return { ok: true, reference: newPaymentRef() };
   },
 };
 
 const orders: OrderAdapter = {
   async create(input) {
     const order: Order = {
-      id: 'VD' + String(Date.now()).slice(-7),
+      id: newOrderId(),
       tpl: input.tpl,
       date: Date.now(),
       items: input.items,
