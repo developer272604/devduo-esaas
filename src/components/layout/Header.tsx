@@ -10,6 +10,7 @@ import { Txt } from '@/components/demo/Txt';
 import { SearchBox } from './SearchBox';
 import { AccountMenu } from './AccountMenu';
 import { OtHeader } from '@/components/herbal/Chrome';
+import { BrandLogo } from '@/components/common/BrandLogo';
 
 const NAV_LIMIT = 3;
 
@@ -50,9 +51,9 @@ function DefaultHeader() {
           <Icon name={mobileOpen ? 'x' : 'menu'} />
         </button>
         <Link className="logo" href="/" aria-label={`${template.name} home`}>
-          <span className="le" aria-hidden="true">
+          <BrandLogo><span className="le" aria-hidden="true">
             {template.logo}
-          </span>
+          </span></BrandLogo>
           <Txt id="brand.name" text={template.name} />
         </Link>
         <nav className="links" aria-label="Main">

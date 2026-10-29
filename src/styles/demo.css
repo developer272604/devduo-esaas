@@ -278,3 +278,22 @@
   color: var(--on-accent);
   vertical-align: 1px;
 }
+/* A welcoming, compact guided demo. */
+.tour-card { width: min(420px, calc(100vw - 40px)); padding: 24px; border-radius: 20px; max-height: calc(100dvh - 48px); overflow-y: auto; }
+.tour-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.tour-label { display: flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: .1em; font-weight: 800; color: var(--primary-text); }
+.tour-close { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--soft); color: var(--primary-text); flex-shrink: 0; }
+.tour-intro { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.tour-illustration { display: grid; place-items: center; width: 62px; height: 62px; border-radius: 20px 20px 20px 6px; color: var(--primary-text); background: var(--soft); border: 1px solid var(--border); }
+.tour-guide-name { font-size: 12px; font-weight: 700; }
+.tour-card .tour-step { margin: 4px 0 0; font-size: 11px; }
+.tour-card h2 { font-family: inherit; font-size: 24px; line-height: 1.25; letter-spacing: -.035em; margin-bottom: 12px; }
+.tour-card p { line-height: 1.65; }
+.tour-progress { display: flex; gap: 5px; margin: 22px 0 0; }
+.tour-progress span { height: 4px; width: 24px; border-radius: 99px; background: var(--border); }
+.tour-progress .complete { background: var(--primary); }
+.tour-actions { padding-top: 16px; border-top: 1px solid var(--border); }
+.tour-actions .btn { min-height: 44px; border-radius: 10px; font-size: 12px; padding: 10px 12px; }
+.tour-actions > .btn:first-child { border-color: transparent; color: var(--muted); padding-left: 0; }
+.tour-illustration { width: 106px; height: 118px; flex-shrink: 0; overflow: hidden; border-radius: 14px; }
+.tour-illustration img { width: 100%; height: 100%; object-fit: cover; }

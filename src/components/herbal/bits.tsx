@@ -10,6 +10,7 @@ import type { Product } from '@/lib/types';
 import { useCartStore } from '@/store/cart';
 import { useUiStore } from '@/store/ui';
 import { useWishlistStore } from '@/store/wishlist';
+import { BrandLogo } from '@/components/common/BrandLogo';
 
 /** Routes in templates are written without a leading slash. */
 export const to = (go: string) => (go.startsWith('/') ? go : `/${go}`);
@@ -28,7 +29,7 @@ export function OtLogo({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
   const { template } = useCatalog();
   return (
     <Link className={`ot-logo ${tone}`} href="/" aria-label={`${template.name} home`}>
-      <LogoMark />
+      <BrandLogo><LogoMark /></BrandLogo>
       <span>
         <Txt as="b" id="brand.name" text={template.name} />
         <small>{template.tag}</small>

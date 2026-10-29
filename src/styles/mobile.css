@@ -295,3 +295,38 @@ input[type='radio'] {
     min-height: 44px;
   }
 }
+/* Settings stays one tap away on phones, alongside the labelled demo menu. */
+@media (max-width: 700px) {
+  .stab {
+    display: inline-flex;
+    left: 12px;
+    right: auto;
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    min-height: 48px;
+    padding: 12px 16px;
+    z-index: 76;
+  }
+  .is-preview .stab { display: none; }
+  .demo-bar .demo-fab {
+    display: flex;
+    gap: 8px;
+    width: auto;
+    height: 48px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+  }
+  .demo-hint { left: 12px; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  .tour-card { padding: 20px; max-height: calc(100dvh - 112px); border-radius: 18px; }
+  .tour-card h2 { font-size: 22px; }
+  .tour-card p { font-size: 13px; }
+  .tour-close { width: 44px; height: 44px; }
+  .tour-header { margin-bottom: 12px; }
+  .tour-actions { gap: 6px; }
+}
+@media (max-height: 600px) {
+  .tour-card, .tour-card.center { top: 12px; bottom: auto; transform: none; max-height: calc(100dvh - 96px); }
+  .tour-card.center { left: 50%; transform: translateX(-50%); }
+  .tour-intro { display: none; }
+}

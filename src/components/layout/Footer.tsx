@@ -3,6 +3,7 @@ import { useCatalog } from '@/lib/hooks';
 import { Txt, useText } from '@/components/demo/Txt';
 import { useUiStore } from '@/store/ui';
 import { OtFooter } from '@/components/herbal/Chrome';
+import { BrandLogo } from '@/components/common/BrandLogo';
 
 export function Footer() {
   const { template } = useCatalog();
@@ -15,7 +16,7 @@ export function Footer() {
         <div className="fg">
           <div>
             <Link className="logo" href="/">
-              <span className="le" aria-hidden="true">{template.logo}</span>
+              <BrandLogo><span className="le" aria-hidden="true">{template.logo}</span></BrandLogo>
               <Txt id="brand.name" text={template.name} />
             </Link>
             <Txt as="p" id="brand.foot" text={template.foot} />
