@@ -16,6 +16,37 @@ export type ThemeState = { primary: string; font: FontName; mode: Mode; radius: 
 
 export type ImageSrc = string;
 
+/** A drawn illustration (see components/common/Illustration.tsx) shown when a product has no photo. */
+export type ArtKind =
+  | 'phone'
+  | 'tablet'
+  | 'earbuds'
+  | 'neckband'
+  | 'watch'
+  | 'band'
+  | 'charger'
+  | 'powerbank'
+  | 'kurti'
+  | 'lehenga'
+  | 'suit'
+  | 'coord'
+  | 'trousers'
+  | 'potli'
+  | 'bottle'
+  | 'serum'
+  | 'jar'
+  | 'honey'
+  | 'tube'
+  | 'teabox'
+  | 'pouch'
+  | 'giftbox'
+  | 'sack'
+  | 'mat'
+  | 'plates'
+  | 'box'
+  | 'sachets'
+  | 'case';
+
 export type ProductOptions = { label: string; values: string[]; mult?: number[] };
 
 export type Product = {
@@ -25,6 +56,8 @@ export type Product = {
   price: number;
   mrp: number;
   image?: ImageSrc;
+  /** What to draw when there is no photo. */
+  art?: ArtKind;
   emoji: string;
   rating: number;
   rev: number;
@@ -34,7 +67,7 @@ export type Product = {
   opts?: ProductOptions;
 };
 
-export type Category = { slug: string; name: string; emoji: string; blurb: string; image?: ImageSrc };
+export type Category = { slug: string; name: string; emoji: string; blurb: string; image?: ImageSrc; art?: ArtKind };
 export type Review = { q: string; n: string; c: string };
 
 export type IconName = 'truck' | 'shield' | 'refresh' | 'chat' | 'leaf' | 'bolt' | 'star' | 'card' | 'headset' | 'box' | 'tag' | 'sparkle';
@@ -55,7 +88,7 @@ export type Section =
       features: UspItem[];
       spotlight: { productId: string; label: string; tagline: string; cta: string };
     } & Cta)
-  | ({ type: 'heroEditorial'; eyebrow: string; title: string; text: string; features: UspItem[]; art: string[]; script: string[] } & Cta)
+  | ({ type: 'heroEditorial'; eyebrow: string; title: string; text: string; features: UspItem[]; art: ArtKind[]; script: string[] } & Cta)
   | ({
       type: 'heroDeals';
       badge: string;
@@ -73,8 +106,8 @@ export type Section =
   | { type: 'featured'; title: string; sub?: string; count: number; cols: 2 | 4 | 6; link?: string; ids?: string[] }
   | { type: 'rail'; cat: string; title: string }
   | ({ type: 'feature'; eyebrow: string; title: string; checks: string[]; image: ImageSrc; sticker: string[] } & Cta)
-  | { type: 'promos'; cols: 2 | 3; items: ({ title: string; text: string; image?: ImageSrc; emoji?: string } & Cta)[] }
-  | ({ type: 'promoBenefits'; eyebrow: string; title: string; text: string; emoji: string; benefits: { title: string; text: string }[] } & Cta)
+  | { type: 'promos'; cols: 2 | 3; items: ({ title: string; text: string; image?: ImageSrc; art?: ArtKind } & Cta)[] }
+  | ({ type: 'promoBenefits'; eyebrow: string; title: string; text: string; art: ArtKind; benefits: { title: string; text: string }[] } & Cta)
   | { type: 'flash'; productId: string; title: string; label: string; image: ImageSrc; cta: string; endsInHours: number }
   | { type: 'testimonial'; quote: string; name: string; role: string; image?: ImageSrc }
   | { type: 'values'; items: string[] }

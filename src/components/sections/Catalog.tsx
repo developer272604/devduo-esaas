@@ -1,6 +1,6 @@
 import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
-import { EmojiTile } from '@/components/common/Art';
+import { CategoryTile } from '@/components/common/Art';
 import { ProductGrid, ProductCard } from '@/components/common/ProductCard';
 import { SectionHead } from '@/components/common/bits';
 import { SlotImg } from '@/components/demo/SlotImg';
@@ -11,7 +11,7 @@ import { slot, type SP } from './types';
 const catSlot = (slug: string) => `cat.${slug}`;
 
 function CatPicture({ c, sizes }: { c: Category; sizes: string }) {
-  return <SlotImg slot={catSlot(c.slug)} src={c.image} alt="" sizes={sizes} className="cat-photo" fallback={<EmojiTile emoji={c.emoji} id={c.slug} />} />;
+  return <SlotImg slot={catSlot(c.slug)} src={c.image} alt="" sizes={sizes} className="cat-photo" fallback={<CategoryTile emoji={c.emoji} art={c.art} id={c.slug} />} />;
 }
 
 /** A category name, editable once and shown the same in every style. */

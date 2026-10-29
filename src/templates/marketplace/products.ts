@@ -8,7 +8,6 @@ import airfryer from './images/airfryer.jpg';
 import sofa from './images/sofa.jpg';
 import watch from './images/watch.jpg';
 import summer from './images/summer.jpg';
-import living from './images/living.jpg';
 
 const SHOE_SIZES = { label: 'Size', values: ['UK 7', 'UK 8', 'UK 9', 'UK 10'] };
 
@@ -19,11 +18,11 @@ export const products: Product[] = [
   P('m2', 'electronics', 'Premium Wireless Earbuds Pro', 5799, 7249, '🎧', 4.6, 2631, 'Noise cancelling earbuds with 30 hours of battery and a wireless charging case.', {
     image: earbuds, d: 'Battery: 30 h with case|Bluetooth 5.3|IPX4',
   }),
-  P('m3', 'electronics', 'iPhone 15 Pro Max 256GB', 124999, 159900, '📱', 4.7, 1200, 'Titanium design, A17 Pro chip and a 48 MP main camera.', {
-    image: iphone, tag: 'Bestseller', d: 'Display: 6.7 inch Super Retina XDR|Storage: 256 GB|Warranty: 1 year',
+  P('m3', 'electronics', 'Smartphone Pro Max 256GB', 124999, 159900, '📱', 4.7, 1200, 'A premium metal design, a flagship chip and a 48 MP main camera.', {
+    image: iphone, tag: 'Bestseller', d: 'Display: 6.7 inch OLED|Storage: 256 GB|Warranty: 1 year',
   }),
-  P('m4', 'electronics', 'MacBook Air M2 13-inch', 89999, 109900, '💻', 4.7, 1200, 'Thin and silent, with up to 18 hours of battery and the M2 chip.', {
-    image: macbook, d: 'Chip: Apple M2|Memory: 8 GB|Storage: 256 GB SSD',
+  P('m4', 'electronics', 'Slim Laptop Air 13-inch', 89999, 109900, '💻', 4.7, 1200, 'Thin and silent, with up to 18 hours of battery and a fast, efficient chip.', {
+    image: macbook, d: 'Chip: 8-core efficiency processor|Memory: 8 GB|Storage: 256 GB SSD',
   }),
   P('m5', 'home', 'Air Fryer 4.5L Digital Display', 6299, 8299, '🍟', 4.4, 862, 'Cook with up to 90% less oil. Eight presets and a digital touch display.', {
     image: airfryer, d: 'Capacity: 4.5 L|Power: 1500 W|8 presets',
@@ -38,15 +37,15 @@ export const products: Product[] = [
     image: summer, opts: { label: 'Size', values: ['S', 'M', 'L', 'XL'] }, d: 'Fabric: cotton|Flared fit|Machine washable',
   }),
   P('m9', 'beauty', 'Vitamin C Glow Serum', 899, 1299, '🧴', 4.5, 980, 'A 10% vitamin C serum that brightens dull skin in four weeks.', {
-    d: 'Size: 30 ml|10% vitamin C|Fragrance free',
+    art: 'serum', d: 'Size: 30 ml|10% vitamin C|Fragrance free',
   }),
   P('m10', 'grocery', 'Aged Basmati Rice, 5 kg', 649, 799, '🍚', 4.7, 2300, 'Long-grain basmati aged for 24 months. Fluffy, fragrant and never sticky.', {
-    d: 'Weight: 5 kg|Aged 24 months|Grain length: 8.3 mm',
+    art: 'sack', d: 'Weight: 5 kg|Aged 24 months|Grain length: 8.3 mm',
   }),
   P('m11', 'sports', 'Pro Yoga Mat, 6 mm', 1299, 1799, '🧘', 4.4, 760, 'A dense, non-slip mat that cushions joints without losing balance.', {
-    opts: { label: 'Colour', values: ['Teal', 'Grey', 'Plum'] }, d: 'Thickness: 6 mm|Non-slip|Carry strap included',
+    art: 'mat', opts: { label: 'Colour', values: ['Teal', 'Grey', 'Plum'] }, d: 'Thickness: 6 mm|Non-slip|Carry strap included',
   }),
   P('m12', 'home', 'Ceramic Dinner Set, 24 pieces', 2499, 3499, '🍽️', 4.3, 390, 'A 24-piece dinner set in matte ceramic. Microwave and dishwasher safe.', {
-    image: living, d: 'Pieces: 24|Microwave safe|Dishwasher safe',
+    art: 'plates', d: 'Pieces: 24|Microwave safe|Dishwasher safe',
   }),
 ];

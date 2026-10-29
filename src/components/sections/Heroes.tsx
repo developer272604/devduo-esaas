@@ -3,6 +3,7 @@ import { useCatalog } from '@/lib/hooks';
 import { inr } from '@/lib/format';
 import { fromPrice } from '@/lib/pricing';
 import { Icon } from '@/components/common/Icon';
+import { Illustration } from '@/components/common/Illustration';
 import { SlotImg } from '@/components/demo/SlotImg';
 import { Txt, useProductName } from '@/components/demo/Txt';
 import type { UspItem } from '@/lib/types';
@@ -127,9 +128,9 @@ export function HeroEditorial({ s, i }: SP<'heroEditorial'>) {
         </div>
         <div className="hero-edit-visual">
           <div className="figures" aria-hidden="true">
-            {s.art.map((e, j) => (
-              <span key={j} className={`fig f${j}`}>
-                {e}
+            {s.art.map((kind, j) => (
+              <span key={j} className={`fig f${j}`} style={{ '--dh': j * 38 } as React.CSSProperties}>
+                <Illustration kind={kind} variant={j} />
               </span>
             ))}
           </div>

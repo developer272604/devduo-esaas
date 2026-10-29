@@ -22,10 +22,10 @@ export const wellness: Template = {
   announce: `Free shipping on orders over ${inr(FREE_SHIP_AT)}. Use WELCOME10 for 10% off your first order.`,
   theme: { primary: '#244a33', font: 'Manrope', bg: '#f6f4ef', mode: 'light', radius: 'round' },
   cats: [
-    { slug: 'gut', name: 'Gut health', emoji: '🌱', blurb: 'Probiotics and prebiotics for a balanced microbiome.' },
-    { slug: 'nutrition', name: 'Nutrition', emoji: '💊', blurb: 'Targeted daily nutrition for energy and long-term health.' },
-    { slug: 'sleep', name: 'Sleep', emoji: '🌙', blurb: 'Gentle support for winding down and staying asleep.' },
-    { slug: 'bundles', name: 'Bundles', emoji: '🎁', blurb: 'Starter bundles and travel packs.' },
+    { slug: 'gut', name: 'Gut health', emoji: '🌱', art: 'bottle', blurb: 'Probiotics and prebiotics for a balanced microbiome.' },
+    { slug: 'nutrition', name: 'Nutrition', emoji: '💊', art: 'jar', blurb: 'Targeted daily nutrition for energy and long-term health.' },
+    { slug: 'sleep', name: 'Sleep', emoji: '🌙', art: 'bottle', blurb: 'Gentle support for winding down and staying asleep.' },
+    { slug: 'bundles', name: 'Bundles', emoji: '🎁', art: 'box', blurb: 'Starter bundles and travel packs.' },
   ],
   products,
   reviews: [
