@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDemoStore, useTourOpen } from '@/store/demo';
 
-type Step = { title: string; text: string; target: string | null };
+type Step = { title: string; text: string; target: string | null; fallback?: string };
 
 const STEPS: Step[] = [
   {
@@ -18,6 +18,7 @@ const STEPS: Step[] = [
     title: 'Change any text or image',
     text: 'On the home page, press Edit in the bar below. Click any text to type over it, and click any image to swap in your own. Changes stay after a refresh, and a small × puts the original back. Other pages show your changes but are not editable.',
     target: '[data-tour="edit"]',
+    fallback: '[data-tour="bar"]',
   },
   {
     title: 'Show it full screen and share it',
@@ -30,14 +31,15 @@ type Box = { top: number; left: number; width: number; height: number };
 
 const PAD = 8;
 
-function useTargetBox(selector: string | null): Box | null {
+function useTargetBox(selector: string | null, fallback?: string): Box | null {
   const [box, setBox] = useState<Box | null>(null);
   useEffect(() => {
     if (!selector) return setBox(null);
     const measure = () => {
-      const el = document.querySelector(selector);
-      if (!el) return setBox(null);
-      const r = el.getBoundingClientRect();
+      // The first target that is actually on screen; on a phone the tools hide inside a menu.
+      const found = [selector, fallback].flatMap((q) => (q ? [document.querySelector(q)] : [])).find((el) => el && el.getBoundingClientRect().width > 0);
+      if (!found) return setBox(null);
+      const r = found.getBoundingClientRect();
       setBox({ top: r.top - PAD, left: r.left - PAD, width: r.width + PAD * 2, height: r.height + PAD * 2 });
     };
     measure();
@@ -49,7 +51,7 @@ function useTargetBox(selector: string | null): Box | null {
       window.removeEventListener('resize', measure);
       window.removeEventListener('scroll', measure, true);
     };
-  }, [selector]);
+  }, [selector, fallback]);
   return box;
 }
 
@@ -60,7 +62,7 @@ export function Tour() {
   const [step, setStep] = useState(0);
   const next = useRef<HTMLButtonElement>(null);
   const current = STEPS[step];
-  const box = useTargetBox(open ? current.target : null);
+  const box = useTargetBox(open ? current.target : null, current.fallback);
   const last = step === STEPS.length - 1;
 
   useEffect(() => {

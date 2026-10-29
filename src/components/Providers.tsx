@@ -50,11 +50,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         {children}
       </main>
       <Footer />
-      <SettingsTab />
+      <aside className="demo-tools" aria-label="Demo tools" data-no-capture>
+        <SettingsTab />
+        <DemoBar />
+      </aside>
       <SettingsDrawer />
       <ModalHost />
       <ToastHost />
-      <DemoBar />
       <ImagePicker />
       <Tour />
     </>

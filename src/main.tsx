@@ -23,6 +23,7 @@ import '@/styles/sections.css';
 import '@/styles/pages.css';
 import '@/styles/settings.css';
 import '@/styles/demo.css';
+import '@/styles/mobile.css';
 
 import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';

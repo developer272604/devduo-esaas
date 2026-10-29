@@ -1,6 +1,7 @@
 import { useCatalog } from '@/lib/hooks';
 import { ListView } from '@/components/ListView';
 import { EmptyState } from '@/components/common/bits';
+import { clampQuery, shortQuery } from '@/lib/search';
 
 export function ShopView() {
   const { products } = useCatalog();
@@ -20,13 +21,14 @@ export function CategoryView({ slug }: { slug: string }) {
   return <ListView key={slug} title={c.name} blurb={c.blurb} items={products.filter((p) => p.cat === slug)} trail={[{ label: c.name }]} titleId={`cat.${slug}.name`} blurbId={`cat.${slug}.blurb`} />;
 }
 
-export function SearchView({ q }: { q: string }) {
+export function SearchView({ q: rawQuery }: { q: string }) {
   const { search } = useCatalog();
+  const q = clampQuery(rawQuery);
   const results = search(q);
   return (
     <ListView
       key={q}
-      title={`Results for “${q}”`}
+      title={`Results for “${shortQuery(q)}”`}
       blurb={results.length ? '' : 'Nothing matched. Try a shorter word or a different spelling.'}
       items={results}
       trail={[{ label: 'Search' }]}

@@ -1,0 +1,312 @@
+/*
+  Phone and touch refinements. Loaded last so it can adjust the desktop rules in the other files.
+  Rules: nothing scrolls sideways from 320 px up, tap targets are at least 44 px on touch devices,
+  form fields are at least 16 px on small screens (iOS zooms the page on smaller ones), and the demo tools
+  never sit on top of the shop.
+*/
+
+/* A safety net only. The causes of overflow are fixed where they happen. */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* ---------- long text never stretches the page ---------- */
+.ph h1,
+.ph p,
+.empty h2,
+.empty p,
+.crumbs,
+.line h3,
+.card h3 {
+  overflow-wrap: anywhere;
+}
+
+/* ---------- demo tools ---------- */
+.demo-bar .demo-fab,
+.demo-bar .demo-settings {
+  display: none;
+}
+.demo-menu {
+  display: flex;
+  gap: 4px;
+}
+
+@media (max-width: 860px) {
+  /* header: menu button, logo that can shrink, actions */
+  .bar {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    gap: 6px 4px;
+  }
+  .logo {
+    min-width: 0;
+    font-size: clamp(17px, 5vw, 22px);
+  }
+  .logo > span:last-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .acts {
+    gap: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  /* a smaller emoji leaves the whole brand name room to show on a 360 px phone */
+  .logo {
+    gap: 6px;
+    font-size: 17px;
+  }
+  .logo .le {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .wrap {
+    padding-inline: 16px;
+  }
+  .page {
+    padding-inline: 16px;
+  }
+
+  /* one round button replaces the bar and the vertical Settings tab */
+  .stab {
+    display: none;
+  }
+  .demo-bar {
+    left: auto;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    transform: none;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .demo-bar .demo-fab {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--on-primary);
+    border: 2px solid var(--surface);
+    box-shadow: var(--shadow-float);
+  }
+  /* a tap leaves the hover state on touch screens: keep the button its own colour */
+  .demo-bar .demo-fab:hover:not(:disabled) {
+    background: var(--primary);
+  }
+  .demo-menu {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    width: min(240px, calc(100vw - 24px));
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px;
+    box-shadow: var(--shadow-float);
+  }
+  .demo-bar.open .demo-menu {
+    display: flex;
+  }
+  .demo-menu button {
+    min-height: 48px;
+    justify-content: flex-start;
+    border-radius: var(--radius-btn);
+  }
+  .demo-bar .demo-settings {
+    display: inline-flex;
+  }
+  .demo-hint {
+    left: 12px;
+    right: 72px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    transform: none;
+    max-width: none;
+    text-align: left;
+  }
+  #toast {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+  .tour-card {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+  .tour-card.center {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    transform: translateY(-50%);
+  }
+  .foot {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+  .mb.wide {
+    padding: 18px;
+  }
+}
+
+/* ---------- newsletter (U6) ---------- */
+.news-form input[type='email'] {
+  min-width: 0;
+  flex: 1 1 160px;
+}
+.news-form .btn {
+  flex: 0 0 auto;
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .news {
+    padding: 20px;
+  }
+}
+
+/* ---------- form fields: no iOS zoom, comfortable height (U9) ---------- */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+  select {
+    min-height: 44px;
+  }
+  .tools {
+    gap: 10px 14px;
+  }
+  .tools label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+  }
+  .tools input[type='checkbox'] {
+    width: 22px;
+    height: 22px;
+  }
+  .tools input[type='range'] {
+    min-height: 44px;
+    width: min(220px, 52vw);
+  }
+}
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--primary);
+}
+.opt input,
+.news-form label input {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.news-form label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+}
+
+/* ---------- touch targets (U10) ---------- */
+@media (pointer: coarse) {
+  .btn,
+  .btn.sm {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .icon,
+  .heart,
+  .sqr {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .heart {
+    width: 44px;
+    height: 44px;
+    top: 6px;
+    right: 6px;
+  }
+  .qty button {
+    width: 44px;
+    height: 44px;
+  }
+  .chip,
+  .tabs button,
+  .seg button,
+  .fonts button,
+  .tpl {
+    min-height: 44px;
+  }
+  .sw button {
+    width: 44px;
+    height: 44px;
+  }
+  .sw {
+    gap: 6px;
+  }
+  .card h3 a,
+  .line h3 a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .sh a,
+  .crumbs a,
+  .foot a,
+  .menu a,
+  .menu button,
+  .mnav a,
+  .line .lk button,
+  .linkbtn,
+  .tile-link,
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .mnav a {
+    display: flex;
+  }
+  .menu a,
+  .menu button {
+    display: flex;
+    width: 100%;
+  }
+  .foot li {
+    margin: 0;
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 4px;
+  }
+  .line .lk {
+    gap: 6px 14px;
+    flex-wrap: wrap;
+  }
+  .demo-menu button,
+  .demo-bar .demo-fab {
+    min-height: 44px;
+  }
+  .opt,
+  .cp input {
+    min-height: 44px;
+  }
+  .thumb {
+    min-height: 44px;
+  }
+}
