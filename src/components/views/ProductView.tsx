@@ -12,9 +12,15 @@ import { Icon } from '@/components/common/Icon';
 import { Crumbs, EmptyState, Price, QtyStepper, SectionHead, Stars } from '@/components/common/bits';
 import { ProductGrid } from '@/components/common/ProductCard';
 import { Gallery, OptionPicker, PincodeCheck, Tabs } from '@/components/product/parts';
+import { OtProductView } from '@/components/herbal/Product';
 import { Txt, productDescId, productNameId, useProductName } from '@/components/demo/Txt';
 
 export function ProductView({ id }: { id: string }) {
+  const { template } = useCatalog();
+  return template.chrome === 'ooty' ? <OtProductView id={id} /> : <DefaultProductView id={id} />;
+}
+
+function DefaultProductView({ id }: { id: string }) {
   const { product, products, category, freeShipAt } = useCatalog();
   const p = product(id);
   const pageName = useProductName(p?.id ?? '', p?.name ?? '');
@@ -39,6 +45,7 @@ function ProductDetail({ id, products, category, freeShipAt }: { id: string; pro
   const wished = useWishlistStore((s) => s.ids.includes(id));
   const toggleWish = useWishlistStore((s) => s.toggle);
   const toast = useUiStore((s) => s.showToast);
+  const openCart = useUiStore((s) => s.openCart);
   const c = category(p.cat);
   const name = useProductName(p.id, p.name);
   const related = products.filter((q) => q.cat === p.cat && q.id !== id);
@@ -65,7 +72,7 @@ function ProductDetail({ id, products, category, freeShipAt }: { id: string; pro
               className="btn"
               onClick={() => {
                 add(id, opt, qty);
-                toast('Added to cart', { label: 'View cart', href: '/cart' });
+                openCart();
               }}
             >
               Add to cart

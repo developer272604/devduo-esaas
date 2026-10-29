@@ -1,5 +1,3 @@
-import { toCanvas } from 'html-to-image';
-
 export type Shot = { blob: Blob; url: string };
 
 const MAX_CANVAS_SIDE = 15000;
@@ -61,6 +59,8 @@ export function stampWatermark(canvas: HTMLCanvasElement, label: string, scale: 
 
 /** Renders the whole page (not just what is on screen) to a watermarked PNG. */
 export async function captureSite(label: string): Promise<Shot> {
+  // A separate chunk: nobody downloads it until they press Screenshot.
+  const { toCanvas } = await import('html-to-image');
   await document.fonts?.ready;
   const root = document.body;
   const width = Math.max(root.scrollWidth, document.documentElement.clientWidth);

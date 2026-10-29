@@ -63,7 +63,7 @@ export function CheckoutView() {
 
   return (
     <div className="wrap page">
-      <Crumbs trail={[{ label: 'Cart', href: '/cart' }, { label: 'Checkout' }]} />
+      <Crumbs trail={[{ label: 'Checkout' }]} />
       <div className="ph">
         <h1>
           <Txt id="page.checkout.title" text="Checkout" />

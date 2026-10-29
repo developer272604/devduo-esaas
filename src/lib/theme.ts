@@ -137,7 +137,7 @@ export function applyTheme(theme: ThemeState, lightBg: string, root: HTMLElement
   safeStorage.setItem(THEME_VARS_KEY, JSON.stringify({ vars, mode: theme.mode }));
 }
 
-export const defaultTheme = (t: Template): ThemeState => ({
+export const defaultTheme = (t: Pick<Template, 'theme'>): ThemeState => ({
   primary: t.theme.primary,
   font: t.theme.font,
   mode: t.theme.mode,
@@ -152,4 +152,4 @@ export const normaliseTheme = (t: Partial<ThemeState> | undefined, fallback: The
 });
 
 /** The remembered theme for a template, or its own default. */
-export const themeFor = (themes: Record<string, ThemeState>, t: Template): ThemeState => normaliseTheme(themes[t.id], defaultTheme(t));
+export const themeFor = (themes: Record<string, ThemeState>, t: Pick<Template, 'id' | 'theme'>): ThemeState => normaliseTheme(themes[t.id], defaultTheme(t));

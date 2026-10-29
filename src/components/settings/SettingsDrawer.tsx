@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from '@/lib/nav';
-import { TEMPLATES } from '@/templates';
+import { TEMPLATE_META } from '@/templates';
 import { FONT_NAMES, type Mode, type Radius, type ThemeState } from '@/lib/types';
 import { FONT_FAMILY, SWATCHES, applyTheme } from '@/lib/theme';
 import { useFocusTrap } from '@/lib/useFocusTrap';
@@ -11,6 +11,15 @@ import { useUiStore } from '@/store/ui';
 import { editCount, useCustomize } from '@/store/customize';
 import { useDemoStore } from '@/store/demo';
 import { Icon } from '@/components/common/Icon';
+import { BrandLogo } from '@/components/common/BrandLogo';
+
+const PREVIEW_LABELS: Record<string, { category: string; mood: string }> = {
+  herbal: { category: 'Botanical wellness', mood: 'Nilgiri Reserve' },
+  gadgets: { category: 'Phones & gadgets', mood: 'Clean Tech' },
+  fashion: { category: 'Artisanal & silk', mood: 'Modern Heritage' },
+  marketplace: { category: 'Everyday essentials', mood: 'Daily Deals' },
+  wellness: { category: 'Gut nutrition', mood: 'Natural Wellness' },
+};
 
 export function SettingsTab() {
   const open = useUiStore((s) => s.settingsOpen);
@@ -51,6 +60,9 @@ export function SettingsDrawer() {
   const edits = useCustomize((st) => editCount(st, template.id));
   const resetEdits = useCustomize((st) => st.resetTemplate);
   const startTour = useDemoStore((st) => st.startTour);
+  const logo = useCustomize((st) => st.images[template.id]?.['brand.logo']);
+  const requestImage = useCustomize((st) => st.requestImage);
+  const clearImage = useCustomize((st) => st.clearImage);
 
   // Escape closes the drawer, unless a dialog sits on top of it.
   useFocusTrap(panelRef, open && !modal, () => setOpen(false));
@@ -80,27 +92,52 @@ export function SettingsDrawer() {
       <div className={`overlay${open ? ' on' : ''}`} data-no-capture onClick={() => setOpen(false)} aria-hidden="true" />
       <div id="drawer" data-no-capture className={open ? 'on' : ''} ref={panelRef} role="dialog" aria-modal={open} aria-label="Storefront settings" tabIndex={-1} {...inert}>
         <div className="dh">
-          <h2>Customize storefront</h2>
+          <h2><Icon name="gear" size={19} />Customize storefront</h2>
           <button type="button" className="icon" aria-label="Close settings" onClick={() => setOpen(false)}>
             <Icon name="x" />
           </button>
         </div>
         <div className="db">
+          <section aria-labelledby="set-logo">
+            <h3 id="set-logo">Store logo</h3>
+            <div className="settings-logo-row">
+              <span className="settings-logo-preview"><BrandLogo><Icon name="leaf" size={30} /></BrandLogo></span>
+              <div><strong>Your brand starts here</strong><p>Upload your logo for this store.</p></div>
+            </div>
+            <div className="settings-logo-actions">
+              <button type="button" className="btn ghost sm" onClick={() => requestImage('brand.logo')}><Icon name="camera" size={16} />{logo ? 'Change logo' : 'Upload logo'}</button>
+              {logo && <button type="button" className="btn ghost sm" onClick={() => clearImage(template.id, 'brand.logo')}>Reset logo</button>}
+            </div>
+            <p className="hint">PNG, JPG or WebP. Saved on this browser and shown in your header and footer.</p>
+          </section>
           <section aria-labelledby="set-tpl">
-            <h3 id="set-tpl">Template</h3>
+            <div className="settings-section-heading">
+              <h3 id="set-tpl">Template design</h3>
+              <span className="settings-count">{Object.keys(TEMPLATE_META).length} ready stores</span>
+              <span className="settings-active-count">1 active</span>
+            </div>
+            <p className="template-tip"><Icon name="sparkle" size={18} /><span>Make it yours. Pick a store design, then explore colours, fonts and finishes in real time.</span></p>
             <div className="tpls">
-              {Object.values(TEMPLATES).map((t) => (
+              {Object.values(TEMPLATE_META).map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   className={`tpl${t.id === template.id ? ' on' : ''}`}
                   aria-pressed={t.id === template.id}
                   data-template={t.id}
-                  onClick={() => switchTemplate(t.id, (href) => router.push(href))}
+                  onClick={() => void switchTemplate(t.id, (href) => router.push(href))}
                 >
-                  <span className="te" aria-hidden="true">{t.logo}</span>
-                  <b>{t.name}</b>
-                  <small>{t.tag}</small>
+                  <span className="template-preview">
+                    <img src={`/template-previews/${t.id}.png`} alt={`${t.name} homepage preview`} loading="lazy" width="640" height="410" />
+                    <span className={`template-category${t.id === template.id ? ' active' : ''}`}>
+                      {t.id === template.id ? <><Icon name="check" size={12} />Active store</> : PREVIEW_LABELS[t.id]?.category}
+                    </span>
+                    <span className="template-mood">{PREVIEW_LABELS[t.id]?.mood}</span>
+                  </span>
+                  <span className="template-details">
+                    <span><b>{t.name}</b><small>{t.tag}</small></span>
+                    <span className="template-action">{t.id === template.id ? <><Icon name="check" size={12} />Current</> : 'Switch & load'}</span>
+                  </span>
                 </button>
               ))}
             </div>
@@ -108,7 +145,7 @@ export function SettingsDrawer() {
           </section>
 
           <section aria-labelledby="set-colour">
-            <h3 id="set-colour">Colour</h3>
+            <div className="settings-section-heading"><h3 id="set-colour">Colour</h3><span className="settings-value">{theme.primary.toUpperCase()}</span></div>
             <div className="sw">
               {SWATCHES.map((c) => (
                 <button
@@ -124,12 +161,12 @@ export function SettingsDrawer() {
             </div>
             <label className="cust">
               <input ref={colorRef} type="color" defaultValue={theme.primary} aria-label="Custom colour" onInput={(e) => onColorInput((e.target as HTMLInputElement).value)} />
-              Custom colour
+              <span>Custom colour</span><code>{theme.primary.toUpperCase()}</code>
             </label>
           </section>
 
           <section aria-labelledby="set-font">
-            <h3 id="set-font">Font</h3>
+            <div className="settings-section-heading"><h3 id="set-font">Font</h3><span className="settings-value">{theme.font}</span></div>
             <div className="fonts">
               {FONT_NAMES.map((f) => (
                 <button
@@ -141,6 +178,7 @@ export function SettingsDrawer() {
                   onClick={() => patch({ font: f })}
                 >
                   {f}
+                  {f === theme.font && <Icon name="check" size={14} />}
                 </button>
               ))}
             </div>
@@ -174,7 +212,7 @@ export function SettingsDrawer() {
 
           <section className="last">
             <button type="button" className="btn ghost block" onClick={() => resetTheme(template)}>
-              Reset to template look
+              <Icon name="refresh" size={16} />Reset to template look
             </button>
             <button
               type="button"
@@ -184,7 +222,7 @@ export function SettingsDrawer() {
                 startTour();
               }}
             >
-              Show the tour again
+              <Icon name="sparkle" size={16} />Show the tour again
             </button>
           </section>
         </div>

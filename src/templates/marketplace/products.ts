@@ -1,13 +1,13 @@
 import type { Product } from '@/lib/types';
 import { P } from '../helpers';
-import sneakers from './images/sneakers.jpg';
-import earbuds from './images/earbuds.jpg';
-import iphone from './images/iphone.jpg';
-import macbook from './images/macbook.jpg';
-import airfryer from './images/airfryer.jpg';
-import sofa from './images/sofa.jpg';
-import watch from './images/watch.jpg';
-import summer from './images/summer.jpg';
+import sneakers from './images/sneakers.webp';
+import earbuds from './images/earbuds.webp';
+import iphone from './images/iphone.webp';
+import macbook from './images/macbook.webp';
+import airfryer from './images/airfryer.webp';
+import sofa from './images/sofa.webp';
+import watch from './images/watch.webp';
+import summer from './images/summer.webp';
 
 const SHOE_SIZES = { label: 'Size', values: ['UK 7', 'UK 8', 'UK 9', 'UK 10'] };
 

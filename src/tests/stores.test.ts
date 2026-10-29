@@ -47,36 +47,36 @@ describe('template switching', () => {
   const nav = vi.fn();
   beforeEach(() => nav.mockClear());
 
-  it('switches straight away when cart and wishlist are empty', () => {
-    switchTemplate('fashion', nav);
+  it('switches straight away when cart and wishlist are empty', async () => {
+    await switchTemplate('fashion', nav);
     expect(useTemplateStore.getState().tpl).toBe('fashion');
     expect(useUiStore.getState().modal).toBeNull();
     expect(nav).toHaveBeenCalledWith('/');
   });
-  it('asks first, then clears cart, wishlist and coupon', () => {
+  it('asks first, then clears cart, wishlist and coupon', async () => {
     useCartStore.getState().add('h1', 0, 1);
     useCartStore.getState().setCoupon('WELCOME10');
     useWishlistStore.getState().add('h2');
-    switchTemplate('gadgets', nav);
+    await switchTemplate('gadgets', nav);
     const m = useUiStore.getState().modal;
     expect(m?.t).toBe('confirm');
     expect(m && m.t === 'confirm' && m.text).toContain('cart and wishlist will be cleared');
     expect(useTemplateStore.getState().tpl).toBe('herbal');
-    if (m && m.t === 'confirm') m.onYes();
+    if (m && m.t === 'confirm') await m.onYes();
     expect(useTemplateStore.getState().tpl).toBe('gadgets');
     expect(useCartStore.getState()).toMatchObject({ lines: [], coupon: null });
     expect(useWishlistStore.getState().ids).toEqual([]);
     expect(nav).toHaveBeenCalledWith('/');
   });
-  it('remembers the look of each template', () => {
+  it('remembers the look of each template', async () => {
     useThemeStore.getState().setTheme(TEMPLATES.herbal, { primary: '#be185d' });
-    switchTemplate('fashion', nav);
+    await switchTemplate('fashion', nav);
     expect(useThemeStore.getState().themes.fashion).toBeUndefined();
     expect(useThemeStore.getState().themes.herbal.primary).toBe('#be185d');
   });
-  it('keeps orders from other templates', () => {
+  it('keeps orders from other templates', async () => {
     useOrdersStore.setState({ orders: [{ id: 'DD00000001', tpl: 'herbal' } as never] });
-    switchTemplate('fashion', nav);
+    await switchTemplate('fashion', nav);
     expect(useOrdersStore.getState().orders).toHaveLength(1);
   });
 });
@@ -90,10 +90,10 @@ describe('catalogue', () => {
     expect(adapters.catalog.getProduct('fashion', 'h1')).toBeUndefined();
     expect(adapters.catalog.getProduct('herbal', 'h1')?.name).toBe('Wild Honey');
   });
-  it('every template ships 10 to 12 products and its references resolve', () => {
+  it('every template ships a full catalogue (herbal has 26, the others 10 to 12) and its references resolve', () => {
     for (const t of Object.values(TEMPLATES)) {
       expect(t.products.length, t.id).toBeGreaterThanOrEqual(10);
-      expect(t.products.length, t.id).toBeLessThanOrEqual(12);
+      expect(t.products.length, t.id).toBeLessThanOrEqual(t.id === 'herbal' ? 26 : 12);
       const ids = new Set(t.products.map((p) => p.id));
       const cats = new Set(t.cats.map((c) => c.slug));
       t.products.forEach((p) => expect(cats.has(p.cat), `${t.id}/${p.id} category`).toBe(true));

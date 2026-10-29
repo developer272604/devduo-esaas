@@ -7,7 +7,7 @@ import { clampQuery, shortQuery } from '@/lib/search';
 export function ShopView() {
   const { products } = useCatalog();
   useDocumentTitle('All products');
-  return <ListView title="All products" blurb="Everything in the store." items={products} trail={[{ label: 'All products' }]} titleId="page.shop.title" blurbId="page.shop.blurb" />;
+  return <ListView title="All products" blurb="Everything in the store." items={products} trail={[{ label: 'All products' }]} titleId="page.shop.title" blurbId="page.shop.blurb" activeSlug="all" />;
 }
 
 export function CategoryView({ slug }: { slug: string }) {
@@ -21,7 +21,7 @@ export function CategoryView({ slug }: { slug: string }) {
       </div>
     );
   }
-  return <ListView key={slug} title={c.name} blurb={c.blurb} items={products.filter((p) => p.cat === slug)} trail={[{ label: c.name }]} titleId={`cat.${slug}.name`} blurbId={`cat.${slug}.blurb`} />;
+  return <ListView key={slug} title={c.name} blurb={c.blurb} items={products.filter((p) => p.cat === slug)} trail={[{ label: c.name }]} titleId={`cat.${slug}.name`} blurbId={`cat.${slug}.blurb`} activeSlug={slug} />;
 }
 
 export function SearchView({ q: rawQuery }: { q: string }) {
@@ -36,6 +36,7 @@ export function SearchView({ q: rawQuery }: { q: string }) {
       blurb={results.length ? '' : 'Nothing matched. Try a shorter word or a different spelling.'}
       items={results}
       trail={[{ label: 'Search' }]}
+      eyebrow="Search results"
       emptyText="Try a different search, or browse everything."
     />
   );

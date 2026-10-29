@@ -10,6 +10,8 @@ type OrdersStore = {
   replace: (o: Order) => void;
 };
 
+// TODO(backend): orders and their status belong in a database, changed only by staff tools and carrier or payment
+// webhooks. localStorage is user-editable. See docs/PRODUCTION.md.
 export const useOrdersStore = create<OrdersStore>()(
   persist(
     (set, get) => ({

@@ -19,6 +19,7 @@ function OrderCard({ o }: { o: Order }) {
   const replace = useOrdersStore((s) => s.replace);
   const add = useCartStore((s) => s.add);
   const toast = useUiStore((s) => s.showToast);
+  const openCart = useUiStore((s) => s.openCart);
   const canCancel = !o.cancelled && o.stage < 2;
   const canAdvance = !o.cancelled && o.stage < MAX_STAGE;
 
@@ -67,7 +68,7 @@ function OrderCard({ o }: { o: Order }) {
               const p = product(i.id);
               if (p) add(i.id, p.opts ? Math.max(0, p.opts.values.indexOf(i.opt)) : 0, i.qty);
             });
-            toast('Items added to cart', { label: 'View cart', href: '/cart' });
+            openCart();
           }}
         >
           Buy again

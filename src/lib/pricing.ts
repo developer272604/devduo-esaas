@@ -21,7 +21,7 @@ const mult = (p: Product, o: number): number => p.opts?.mult?.[o] ?? 1;
 
 /** Unit selling price for the chosen option, whole rupees. */
 export const unitPrice = (p: Product, o = 0): number => Math.round(p.price * mult(p, o));
-export const unitMrp = (p: Product, o = 0): number => Math.round(p.mrp * mult(p, o));
+export const unitMrp = (p: Product, o = 0): number => Math.round(p.mrp * (p.opts?.mrpMult?.[o] ?? mult(p, o)));
 
 /** Lowest price across options, shown as "From" on cards when options change the price. */
 export function fromPrice(p: Product): { price: number; mrp: number; from: boolean } {
@@ -42,7 +42,11 @@ export const normaliseCoupon = (raw: string): Coupon | null => {
   return (COUPONS as string[]).includes(c) ? (c as Coupon) : null;
 };
 
-/** WELCOME10 is 10% off, capped at ₹500. */
+/**
+ * WELCOME10 is 10% off, capped at ₹500.
+ * TODO(backend): coupon rules (first order only, usage limits, expiry, minimum basket) and every total here must be
+ * recomputed on the server before charging. This browser copy is only a preview. See docs/PRODUCTION.md.
+ */
 export const couponDiscount = (coupon: Coupon | null, sub: number): number =>
   coupon === 'WELCOME10' ? Math.min(500, Math.round(sub * 0.1)) : 0;
 

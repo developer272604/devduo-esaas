@@ -23,7 +23,10 @@ import '@/styles/layout.css';
 import '@/styles/common.css';
 import '@/styles/sections.css';
 import '@/styles/pages.css';
+import '@/styles/category.css';
 import '@/styles/settings.css';
+import '@/styles/cart.css';
+import '@/styles/herbal.css';
 import '@/styles/demo.css';
 import '@/styles/mobile.css';
 
@@ -31,17 +34,28 @@ import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { NotDemo } from './components/NotDemo';
 import { DEMO_MODE } from './lib/demo';
+import { applySavedTheme, loadSavedTemplate, loadThemeFont } from './templates/boot';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ErrorBoundary>
-      {DEMO_MODE ? (
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      ) : (
-        <NotDemo />
-      )}
-    </ErrorBoundary>
-  </StrictMode>,
-);
+async function start() {
+  // The saved template's catalogue loads before the first render, so nothing renders half-ready.
+  // The template's catalogue and the theme font download side by side.
+  if (DEMO_MODE) {
+    const [template] = await Promise.all([loadSavedTemplate(), loadThemeFont()]);
+    applySavedTheme(template);
+  }
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <ErrorBoundary>
+        {DEMO_MODE ? (
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        ) : (
+          <NotDemo />
+        )}
+      </ErrorBoundary>
+    </StrictMode>,
+  );
+}
+
+void start();

@@ -8,7 +8,8 @@ import { Icon } from '@/components/common/Icon';
 import { useNameOf } from '@/components/demo/Txt';
 import { MAX_QUERY, clampQuery } from '@/lib/search';
 
-export function SearchBox() {
+/** `pill`: the Ooty look, with a round submit button on the right. */
+export function SearchBox({ pill }: { pill?: boolean }) {
   const { search } = useCatalog();
   const router = useRouter();
   const nameOf = useNameOf();
@@ -57,6 +58,11 @@ export function SearchBox() {
           if (e.key === 'Escape') setOpen(false);
         }}
       />
+      {pill && (
+        <button type="button" className="ot-search-go" aria-label="Search" onClick={go}>
+          <Icon name="search" size={18} />
+        </button>
+      )}
       <div id={listId} className={`sugg${open && term ? ' on' : ''}`}>
         {results.length > 0 ? (
           results.map((p) => (

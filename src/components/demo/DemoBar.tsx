@@ -114,6 +114,7 @@ export function DemoBar() {
           onClick={() => setMenu((o) => !o)}
         >
           <Icon name={menu ? 'x' : 'sparkle'} size={22} />
+          <span>{menu ? 'Close' : 'Demo tools'}</span>
         </button>
         <div id="demo-menu" className="demo-menu" role="group" aria-label="Tools">
           {onHome && (

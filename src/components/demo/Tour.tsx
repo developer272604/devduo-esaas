@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFocusTrap } from '@/lib/useFocusTrap';
 import { useDemoStore, useTourOpen } from '@/store/demo';
+import { Icon } from '@/components/common/Icon';
 
 type Step = { title: string; text: string; target: string | null; fallback?: string };
 
@@ -12,7 +13,7 @@ const STEPS: Step[] = [
   },
   {
     title: 'Pick a template, colour and font',
-    text: 'Open Settings on the right edge. Choose a template, then a colour, font, light or dark mode and corner style. The whole store changes at once.',
+    text: 'Tap Settings to explore five store designs. Choose your colours, font and finishing touches, and see your store change instantly.',
     target: '.stab',
   },
   {
@@ -81,11 +82,25 @@ export function Tour() {
     <>
       {box ? <div className="tour-ring" style={box} aria-hidden="true" data-no-capture /> : <div className="tour-dim" aria-hidden="true" data-no-capture />}
       <section ref={cardRef} className={`tour-card${box ? '' : ' center'}`} role="dialog" aria-modal="true" aria-label="Quick tour" tabIndex={-1} data-no-capture data-tour-card>
+        <div className="tour-header">
+          <span className="tour-label"><Icon name="sparkle" size={14} />YOUR STORE, YOUR STYLE</span>
+          <button type="button" className="tour-close" aria-label="Close tour" onClick={endTour}><Icon name="x" size={18} /></button>
+        </div>
+        <div className="tour-intro">
+          <span className="tour-illustration"><img src="/images/tour-guide.png" alt="Ivy, your friendly botanical storefront guide" width="1024" height="1024" /></span>
+          <div><span className="tour-guide-name">Ivy · Your storefront guide</span>
         <p className="tour-step">
           Step {step + 1} of {STEPS.length}
         </p>
+          </div>
+        </div>
+        <div aria-live="polite" aria-atomic="true">
         <h2>{current.title}</h2>
         <p>{current.text}</p>
+        </div>
+        <div className="tour-progress" aria-label={`Step ${step + 1} of ${STEPS.length}`}>
+          {STEPS.map((s, i) => <span key={s.title} className={i <= step ? 'complete' : ''} />)}
+        </div>
         <div className="tour-actions">
           <button type="button" className="btn ghost sm" onClick={endTour}>
             Skip tour
@@ -98,6 +113,7 @@ export function Tour() {
           )}
           <button type="button" className="btn sm" ref={next} data-autofocus onClick={() => (last ? endTour() : setStep(step + 1))}>
             {last ? 'Got it' : step === 0 ? 'Show me' : 'Next'}
+            <Icon name={last ? 'check' : 'chevronRight'} size={16} />
           </button>
         </div>
       </section>

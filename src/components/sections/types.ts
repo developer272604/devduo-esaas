@@ -30,4 +30,12 @@ export const REQUIRED: Record<SectionType, string[]> = {
   splitBand: ['title', 'image'],
   duoFeature: ['name', 'image', 'cta', 'go'],
   news: ['title'],
+  ootyHero: ['slides'],
+  ootyTrust: ['items'],
+  ootyRings: ['title', 'items'],
+  ootyBanner: ['title', 'image', 'cta', 'go'],
+  ootyRail: ['key', 'title', 'ids'],
+  ootyPromos: ['items'],
+  ootyPerks: ['title', 'items'],
+  ootyReviews: ['title'],
 };

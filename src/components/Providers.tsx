@@ -6,6 +6,7 @@ import { themeFor, useThemeStore } from '@/store/theme';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SettingsDrawer, SettingsTab } from '@/components/settings/SettingsDrawer';
+import { CartDrawer } from '@/components/cart/CartDrawer';
 import { ModalHost } from '@/components/common/ModalHost';
 import { ToastHost } from '@/components/common/Toast';
 import { DemoBar } from '@/components/demo/DemoBar';
@@ -50,6 +51,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <DemoBar />
       </aside>
       <SettingsDrawer />
+      <CartDrawer />
       <ModalHost />
       <ToastHost />
       <ImagePicker />

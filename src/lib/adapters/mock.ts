@@ -1,4 +1,4 @@
-import { TEMPLATES, getTemplate } from '@/templates';
+import { TEMPLATE_META, getTemplate, loadTemplate } from '@/templates';
 import { inr } from '../format';
 import type { Order } from '../types';
 import { MAX_STAGE } from '../constants';
@@ -17,9 +17,13 @@ export const newPaymentRef = (): string => `DP${Date.now().toString().slice(-8)}
 
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
+// TODO(backend): every adapter below is a demo stand-in. Real versions must run on a server: OTP with expiry and
+// rate limits, payment through the gateway's hosted fields confirmed by webhook, orders in a database, prices and
+// coupons recomputed server-side. See docs/PRODUCTION.md.
 const catalog: CatalogAdapter = {
-  listTemplates: () => Object.values(TEMPLATES),
+  listTemplates: () => Object.values(TEMPLATE_META),
   getTemplate,
+  loadTemplate,
   listCategories: (tpl) => getTemplate(tpl).cats,
   listProducts: (tpl) => getTemplate(tpl).products,
   getProduct: (tpl, id) => getTemplate(tpl).products.find((p) => p.id === id),

@@ -1,30 +1,27 @@
 import type { Template } from '@/lib/types';
 import { inr } from '@/lib/format';
+import { meta } from './meta';
 import { products } from './products';
-import hero from './images/hero.jpg';
-import watch from './images/watch.jpg';
-import summer from './images/summer.jpg';
-import living from './images/living.jpg';
-import emily from './images/emily.jpg';
-import catFashion from './images/cat-fashion.jpg';
-import catElectronics from './images/cat-electronics.jpg';
-import catBeauty from './images/cat-beauty.jpg';
-import catHome from './images/cat-home.jpg';
-import catGrocery from './images/cat-grocery.jpg';
-import catSports from './images/cat-sports.jpg';
+import hero from './images/hero.webp';
+import watch from './images/watch.webp';
+import summer from './images/summer.webp';
+import living from './images/living.webp';
+import emily from './images/emily.webp';
+import catFashion from './images/cat-fashion.webp';
+import catElectronics from './images/cat-electronics.webp';
+import catBeauty from './images/cat-beauty.webp';
+import catHome from './images/cat-home.webp';
+import catGrocery from './images/cat-grocery.webp';
+import catSports from './images/cat-sports.webp';
 
 /** Free standard delivery from this order value. */
 const FREE_SHIP_AT = 999;
 
 export const marketplace: Template = {
-  id: 'marketplace',
-  name: 'Marketly',
-  logo: '🛍️',
-  tag: 'Everyday marketplace',
+  ...meta,
   foot: 'Millions of products from top brands and trusted sellers. Best prices, premium quality and dependable service.',
   freeShipAt: FREE_SHIP_AT,
   announce: '🎉 Mega Summer Sale is live. Get up to 60% off. Use WELCOME10 for an extra 10%.',
-  theme: { primary: '#2563eb', font: 'Poppins', bg: '#f6f8fc', mode: 'light', radius: 'soft' },
   cats: [
     { slug: 'fashion', name: 'Fashion', emoji: '👗', blurb: 'Clothing and accessories for every season.', image: catFashion },
     { slug: 'electronics', name: 'Electronics', emoji: '🎧', blurb: 'Phones, laptops, audio and wearables.', image: catElectronics },

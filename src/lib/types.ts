@@ -47,7 +47,8 @@ export type ArtKind =
   | 'sachets'
   | 'case';
 
-export type ProductOptions = { label: string; values: string[]; mult?: number[] };
+/** `mult` scales the price per option; `mrpMult` scales the MRP when it does not move in step with the price. */
+export type ProductOptions = { label: string; values: string[]; mult?: number[]; mrpMult?: number[] };
 
 export type Product = {
   id: string; // globally unique, prefixed per template
@@ -65,6 +66,14 @@ export type Product = {
   tag?: string;
   d?: string; // pipe-separated detail bullets
   opts?: ProductOptions;
+  /** Gallery, first picture first. Without it the page shows `image`, or drawn views. */
+  images?: ImageSrc[];
+  /** One-line description for cards and the product page. */
+  short?: string;
+  ingredients?: string[];
+  usage?: string;
+  storage?: string;
+  weight?: string;
 };
 
 export type Category = { slug: string; name: string; emoji: string; blurb: string; image?: ImageSrc; art?: ArtKind };
@@ -116,12 +125,29 @@ export type Section =
   | ({ type: 'spotlight'; badge: string; code: string; name: string; text: string; image: ImageSrc; cta2: string; sideImage: ImageSrc } & Cta)
   | { type: 'splitBand'; title: string; text: string; image: ImageSrc }
   | ({ type: 'duoFeature'; badge: string; code: string; name: string; text: string; image: ImageSrc; image2: ImageSrc } & Cta)
-  | { type: 'news'; title: string; text: string };
+  | { type: 'news'; title: string; text: string }
+  | { type: 'ootyHero'; slides: (Cta & { image: ImageSrc; alt: string; eyebrow: string; title: string; accent: string; text: string; chips: string[] })[] }
+  | { type: 'ootyTrust'; items: UspItem[] }
+  | { type: 'ootyRings'; title: string; link: string; items: { label: string; go: string; image: ImageSrc }[] }
+  | ({ type: 'ootyBanner'; eyebrow: string; title: string; checks: string[]; image: ImageSrc; alt: string; sticker: string[] } & Cta)
+  | { type: 'ootyRail'; key: string; title: string; link: string; go: string; ids: string[] }
+  | { type: 'ootyPromos'; items: (Cta & { title: string; text: string; image: ImageSrc; alt: string })[] }
+  | ({ type: 'ootyPerks'; eyebrow: string; title: string; text: string; items: { icon: IconName; title: string; text: string }[] } & Cta)
+  | { type: 'ootyReviews'; eyebrow: string; title: string; note: string };
 
 export type SectionType = Section['type'];
 
+/** What every screen needs to know about a template before its catalogue has loaded. */
+export type TemplateMeta = Pick<Template, 'id' | 'name' | 'logo' | 'tag' | 'theme'>;
+
+export type IngredientInfo = { name: string; text: string; image: ImageSrc };
+
 export type Template = {
   id: string;
+  /** `ooty`: the header, footer and product page of the Ooty Herbals design instead of the shared ones. */
+  chrome?: 'ooty';
+  /** Ingredient pictures and blurbs for the "Key ingredients" block of the Ooty product page. */
+  ingredientInfo?: IngredientInfo[];
   name: string;
   logo: string;
   tag: string;
