@@ -5,6 +5,8 @@ import { useTemplate } from '@/store/template';
 
 export type Catalog = {
   template: Template;
+  /** The active template's free-delivery threshold. */
+  freeShipAt: number;
   products: Product[];
   category: (slug: string) => Category | undefined;
   product: (id: string) => Product | undefined;
@@ -20,6 +22,7 @@ export function useCatalog(): Catalog {
     const cats = adapters.catalog.listCategories(id);
     return {
       template,
+      freeShipAt: template.freeShipAt,
       products,
       category: (slug) => cats.find((c) => c.slug === slug),
       product: (pid) => adapters.catalog.getProduct(id, pid),

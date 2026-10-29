@@ -67,7 +67,7 @@ export async function runPlaceOrder(navigate: (href: string) => void): Promise<v
   const form = useCheckoutStore.getState().form;
   const lines = toPriced(cart.lines, (id) => adapters.catalog.getProduct(tpl, id));
   if (!lines.length) return;
-  const totals = computeTotals(lines, { coupon: cart.coupon, speed: form.ship, pay: form.pay });
+  const totals = computeTotals(lines, { coupon: cart.coupon, speed: form.ship, pay: form.pay, freeAt: adapters.catalog.getTemplate(tpl).freeShipAt });
 
   placing = true;
   useUiStore.getState().openModal({ t: 'busy', title: 'Processing payment with Devduo Pay', text: 'Please do not close this page.' });

@@ -1,4 +1,5 @@
 import type { Template } from '@/lib/types';
+import { inr } from '@/lib/format';
 import { products } from './products';
 import hero from './images/hero.jpg';
 import lineup from './images/lineup.jpg';
@@ -8,13 +9,17 @@ import newline from './images/newline.jpg';
 import multivitamin from './images/multivitamin.jpg';
 import capsuleTech from './images/capsule-tech.jpg';
 
+/** Free standard delivery from this order value. */
+const FREE_SHIP_AT = 999;
+
 export const wellness: Template = {
   id: 'wellness',
   name: 'Gutwell',
   logo: '🌱',
   tag: 'Probiotics and nutrition',
   foot: 'Science-led probiotics and daily nutrition for a healthy microbiome and a healthy life.',
-  announce: 'Free shipping on orders over ₹999. Use WELCOME10 for 10% off your first order.',
+  freeShipAt: FREE_SHIP_AT,
+  announce: `Free shipping on orders over ${inr(FREE_SHIP_AT)}. Use WELCOME10 for 10% off your first order.`,
   theme: { primary: '#244a33', font: 'Manrope', bg: '#f6f4ef', mode: 'light', radius: 'round' },
   cats: [
     { slug: 'gut', name: 'Gut health', emoji: '🌱', blurb: 'Probiotics and prebiotics for a balanced microbiome.' },

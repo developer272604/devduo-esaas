@@ -1,5 +1,9 @@
 import type { Template } from '@/lib/types';
+import { inr } from '@/lib/format';
 import { products } from './products';
+
+/** Free standard delivery from this order value. */
+const FREE_SHIP_AT = 999;
 
 export const gadgets: Template = {
   id: 'gadgets',
@@ -7,7 +11,8 @@ export const gadgets: Template = {
   logo: '📱',
   tag: 'Phones and gadgets',
   foot: 'The latest mobile technology from top brands at the best prices, with a one-year warranty on every device.',
-  announce: 'Free shipping on orders over ₹999. Use WELCOME10 for 10% off.',
+  freeShipAt: FREE_SHIP_AT,
+  announce: `Free shipping on orders over ${inr(FREE_SHIP_AT)}. Use WELCOME10 for 10% off.`,
   theme: { primary: '#7c3aed', font: 'Manrope', bg: '#f7f5fd', mode: 'light', radius: 'soft' },
   cats: [
     { slug: 'phones', name: 'Smartphones', emoji: '📱', blurb: 'Latest smartphones from top brands.' },
@@ -33,7 +38,7 @@ export const gadgets: Template = {
       cta2: 'Explore deals',
       go2: 'shop',
       features: [
-        { icon: 'truck', title: 'Free shipping', text: 'On orders over ₹999' },
+        { icon: 'truck', title: 'Free shipping', text: `On orders over ${inr(FREE_SHIP_AT)}` },
         { icon: 'refresh', title: 'Easy returns', text: '30-day return policy' },
         { icon: 'shield', title: 'Secure payment', text: '100% secure checkout' },
       ],
@@ -56,7 +61,7 @@ export const gadgets: Template = {
       items: [
         { icon: 'shield', title: '100% original', text: 'Genuine products' },
         { icon: 'card', title: 'Secure payments', text: 'Multiple payment options' },
-        { icon: 'truck', title: 'Free shipping', text: 'On orders over ₹999' },
+        { icon: 'truck', title: 'Free shipping', text: `On orders over ${inr(FREE_SHIP_AT)}` },
         { icon: 'refresh', title: '30-day returns', text: 'Hassle-free returns' },
         { icon: 'headset', title: 'Support all week', text: 'We’re here to help' },
       ],

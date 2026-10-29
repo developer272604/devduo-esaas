@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { inr } from '@/lib/format';
 import type { CheckoutForm, ShipSpeed, PayMethod, Totals } from '@/lib/types';
 import type { CheckoutErrors } from '@/lib/validation';
-import { COD_FEE, EXPRESS_SHIP, FREE_SHIP_AT, STD_SHIP } from '@/lib/pricing';
+import { COD_FEE, EXPRESS_SHIP, STD_SHIP } from '@/lib/pricing';
 
 type Patch = (p: Partial<CheckoutForm>) => void;
 
@@ -65,11 +65,11 @@ function Opt<T extends string>({ group, value, current, title, hint, onPick }: {
   );
 }
 
-export function ShippingOptions({ value, onChange }: { value: ShipSpeed; onChange: (v: ShipSpeed) => void }) {
+export function ShippingOptions({ value, onChange, freeAt }: { value: ShipSpeed; onChange: (v: ShipSpeed) => void; freeAt: number }) {
   return (
     <div className="box">
       <h3>Delivery speed</h3>
-      <Opt group="ship" value="std" current={value} title="Standard delivery" hint={`3 to 5 days. Free over ${inr(FREE_SHIP_AT)}, otherwise ${inr(STD_SHIP)}`} onPick={onChange} />
+      <Opt group="ship" value="std" current={value} title="Standard delivery" hint={`3 to 5 days. Free over ${inr(freeAt)}, otherwise ${inr(STD_SHIP)}`} onPick={onChange} />
       <Opt group="ship" value="exp" current={value} title="Express delivery" hint={`1 to 2 days for ${inr(EXPRESS_SHIP)}`} onPick={onChange} />
     </div>
   );

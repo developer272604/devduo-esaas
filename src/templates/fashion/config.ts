@@ -1,5 +1,9 @@
 import type { Template } from '@/lib/types';
+import { inr } from '@/lib/format';
 import { products } from './products';
+
+/** Free standard delivery from this order value. */
+const FREE_SHIP_AT = 2000;
 
 export const fashion: Template = {
   id: 'fashion',
@@ -7,7 +11,8 @@ export const fashion: Template = {
   logo: '🪷',
   tag: 'Ethnic wear',
   foot: 'Grace in every thread. Kurti sets, lehengas and festive wear crafted for comfort, confidence and celebrations.',
-  announce: 'Free shipping on orders above ₹2,000. Easy returns within 7 days. Use WELCOME10 for 10% off.',
+  freeShipAt: FREE_SHIP_AT,
+  announce: `Free shipping on orders above ${inr(FREE_SHIP_AT)}. Easy returns within 7 days. Use WELCOME10 for 10% off.`,
   theme: { primary: '#a21a5c', font: 'Playfair Display', bg: '#fbf6f1', mode: 'light', radius: 'sharp' },
   cats: [
     { slug: 'kurtis', name: 'Kurtis', emoji: '👗', blurb: 'Everyday kurti sets for work and weekends.' },
@@ -32,7 +37,7 @@ export const fashion: Template = {
       cta: 'Shop now',
       go: 'shop',
       features: [
-        { icon: 'truck', title: 'Free shipping', text: 'Above ₹2,000' },
+        { icon: 'truck', title: 'Free shipping', text: `Above ${inr(FREE_SHIP_AT)}` },
         { icon: 'refresh', title: 'Easy returns', text: 'Within 7 days' },
         { icon: 'shield', title: '100% original', text: 'Products' },
       ],

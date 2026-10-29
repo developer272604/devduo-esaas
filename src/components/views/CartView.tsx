@@ -3,7 +3,7 @@ import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
 import { inr } from '@/lib/format';
 import type { Coupon } from '@/lib/types';
-import { COUPONS, FREE_SHIP_AT, computeTotals, freeShipRemaining, lineKey, normaliseCoupon, toPriced, unitMrp, unitPrice } from '@/lib/pricing';
+import { COUPONS, computeTotals, freeShipRemaining, lineKey, normaliseCoupon, toPriced, unitMrp, unitPrice } from '@/lib/pricing';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useUiStore } from '@/store/ui';
@@ -13,7 +13,7 @@ import { Txt, productNameId } from '@/components/demo/Txt';
 import { OrderSummary } from '@/components/checkout/parts';
 
 export function CartView() {
-  const { product } = useCatalog();
+  const { product, freeShipAt } = useCatalog();
   const { lines, coupon: storedCoupon } = useCartStore();
   const coupon = COUPONS.includes(storedCoupon as Coupon) ? storedCoupon : null;
   const setQty = useCartStore((s) => s.setQty);
@@ -31,8 +31,8 @@ export function CartView() {
       </div>
     );
   }
-  const totals = computeTotals(priced, { coupon, speed: 'std', pay: 'upi' });
-  const left = freeShipRemaining(totals.sub);
+  const totals = computeTotals(priced, { coupon, speed: 'std', pay: 'upi', freeAt: freeShipAt });
+  const left = freeShipRemaining(totals.sub, freeShipAt);
   const freeShip = left === 0 || coupon === 'FREESHIP';
   const count = priced.reduce((a, l) => a + l.qty, 0);
 
@@ -136,8 +136,8 @@ export function CartView() {
           ) : (
             <small>Add {inr(left)} more for free delivery</small>
           )}
-          <div className="bar2" role="progressbar" aria-valuemin={0} aria-valuemax={FREE_SHIP_AT} aria-valuenow={Math.min(FREE_SHIP_AT, totals.sub)} aria-label="Progress to free delivery">
-            <i style={{ width: `${freeShip ? 100 : Math.min(100, (totals.sub / FREE_SHIP_AT) * 100)}%` }} />
+          <div className="bar2" role="progressbar" aria-valuemin={0} aria-valuemax={freeShipAt} aria-valuenow={Math.min(freeShipAt, totals.sub)} aria-label="Progress to free delivery">
+            <i style={{ width: `${freeShip ? 100 : Math.min(100, (totals.sub / freeShipAt) * 100)}%` }} />
           </div>
         </OrderSummary>
       </div>

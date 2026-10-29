@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Link from '@/components/common/Link';
 import { useRouter } from '@/lib/nav';
 import { useCatalog } from '@/lib/hooks';
+import { inr } from '@/lib/format';
 import { unitMrp, unitPrice } from '@/lib/pricing';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
@@ -13,7 +14,7 @@ import { Gallery, OptionPicker, PincodeCheck, Tabs } from '@/components/product/
 import { Txt, productDescId, productNameId, useProductName } from '@/components/demo/Txt';
 
 export function ProductView({ id }: { id: string }) {
-  const { product, products, category } = useCatalog();
+  const { product, products, category, freeShipAt } = useCatalog();
   const p = product(id);
   if (!p) {
     return (
@@ -22,10 +23,10 @@ export function ProductView({ id }: { id: string }) {
       </div>
     );
   }
-  return <ProductDetail key={p.id} id={p.id} products={products} category={category} />;
+  return <ProductDetail key={p.id} id={p.id} products={products} category={category} freeShipAt={freeShipAt} />;
 }
 
-function ProductDetail({ id, products, category }: { id: string; products: ReturnType<typeof useCatalog>['products']; category: ReturnType<typeof useCatalog>['category'] }) {
+function ProductDetail({ id, products, category, freeShipAt }: { id: string; products: ReturnType<typeof useCatalog>['products']; category: ReturnType<typeof useCatalog>['category']; freeShipAt: number }) {
   const p = products.find((x) => x.id === id)!;
   const router = useRouter();
   const [opt, setOpt] = useState(0);
@@ -92,7 +93,7 @@ function ProductDetail({ id, products, category }: { id: string; products: Retur
           </button>
           <PincodeCheck />
           <div className="perks">
-            <div><Icon name="truck" />Free delivery over ₹999</div>
+            <div><Icon name="truck" />Free delivery over {inr(freeShipAt)}</div>
             <div><Icon name="refresh" />7-day easy returns</div>
             <div><Icon name="shield" />Secure payments with Devduo Pay</div>
           </div>

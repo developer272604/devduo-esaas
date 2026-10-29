@@ -13,7 +13,7 @@ import { AddressForm, OrderSummary, PaymentOptions, ShippingOptions } from '@/co
 import { inr } from '@/lib/format';
 
 export function CheckoutView() {
-  const { product } = useCatalog();
+  const { product, freeShipAt } = useCatalog();
   const nameOf = useNameOf();
   const router = useRouter();
   const lines = useCartStore((s) => s.lines);
@@ -31,7 +31,7 @@ export function CheckoutView() {
       </div>
     );
   }
-  const totals = computeTotals(priced, { coupon, speed: form.ship, pay: form.pay });
+  const totals = computeTotals(priced, { coupon, speed: form.ship, pay: form.pay, freeAt: freeShipAt });
 
   const onSet: typeof set = (patch) => {
     set(patch);
@@ -68,7 +68,7 @@ export function CheckoutView() {
           }}
         >
           <AddressForm form={form} errors={errors} set={onSet} />
-          <ShippingOptions value={form.ship} onChange={(ship) => set({ ship })} />
+          <ShippingOptions value={form.ship} onChange={(ship) => set({ ship })} freeAt={freeShipAt} />
           <PaymentOptions form={form} errors={errors} set={onSet} />
         </form>
         <OrderSummary

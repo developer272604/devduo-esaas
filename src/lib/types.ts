@@ -94,6 +94,8 @@ export type Template = {
   tag: string;
   foot: string;
   announce: string;
+  /** Order value from which standard delivery is free. The banners and the cart both read this. */
+  freeShipAt: number;
   theme: { primary: string; font: FontName; bg: string; mode: Mode; radius: Radius };
   cats: Category[];
   products: Product[];
