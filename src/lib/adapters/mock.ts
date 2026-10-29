@@ -1,11 +1,12 @@
 import { TEMPLATES, getTemplate } from '@/templates';
 import { inr } from '../format';
 import type { Order } from '../types';
+import { MAX_STAGE } from '../constants';
 import type { Adapters, CatalogAdapter, AuthAdapter, PaymentAdapter, OrderAdapter, NotifyAdapter } from './types';
 
 export const DEMO_OTP = '123456';
 export const PAYMENT_DELAY_MS = 1200;
-export const MAX_STAGE = 4;
+export { MAX_STAGE };
 
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 

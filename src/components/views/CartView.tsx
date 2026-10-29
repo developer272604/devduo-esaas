@@ -2,7 +2,8 @@ import { useState } from 'react';
 import Link from '@/components/common/Link';
 import { useCatalog } from '@/lib/hooks';
 import { inr } from '@/lib/format';
-import { FREE_SHIP_AT, computeTotals, freeShipRemaining, lineKey, normaliseCoupon, toPriced, unitMrp, unitPrice } from '@/lib/pricing';
+import type { Coupon } from '@/lib/types';
+import { COUPONS, FREE_SHIP_AT, computeTotals, freeShipRemaining, lineKey, normaliseCoupon, toPriced, unitMrp, unitPrice } from '@/lib/pricing';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useUiStore } from '@/store/ui';
@@ -13,7 +14,8 @@ import { OrderSummary } from '@/components/checkout/parts';
 
 export function CartView() {
   const { product } = useCatalog();
-  const { lines, coupon } = useCartStore();
+  const { lines, coupon: storedCoupon } = useCartStore();
+  const coupon = COUPONS.includes(storedCoupon as Coupon) ? storedCoupon : null;
   const setQty = useCartStore((s) => s.setQty);
   const remove = useCartStore((s) => s.remove);
   const setCoupon = useCartStore((s) => s.setCoupon);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contrast, defaultTheme, normaliseTheme, onColor, readableOn, themeFor, themeVars } from '@/lib/theme';
+import { contrast, defaultTheme, isSafeThemeVar, normaliseTheme, onColor, readableOn, themeFor, themeVars } from '@/lib/theme';
 import { TEMPLATES } from '@/templates';
 import { FONT_NAMES } from '@/lib/types';
 
@@ -51,6 +51,18 @@ describe('themeVars', () => {
         expect(contrast(v['--primary-text'], v['--surface'])).toBeGreaterThanOrEqual(4.5);
         expect(contrast(v['--primary-text'], v['--bg'])).toBeGreaterThanOrEqual(4.5);
         expect(contrast(v['--on-primary'], v['--primary'])).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+});
+
+describe('theme variable safety', () => {
+  it('accepts every variable the theme itself produces, in every template and mode', () => {
+    for (const t of Object.values(TEMPLATES)) {
+      for (const mode of ['light', 'dark'] as const) {
+        for (const [k, v] of Object.entries(themeVars({ ...defaultTheme(t), mode }, t.theme.bg))) {
+          expect(isSafeThemeVar(k, v), `${t.id}/${mode} ${k}: ${v}`).toBe(true);
+        }
       }
     }
   });

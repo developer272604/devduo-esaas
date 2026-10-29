@@ -4,6 +4,7 @@ import { useCatalog } from '@/lib/hooks';
 import { computeTotals, toPriced, unitPrice } from '@/lib/pricing';
 import type { CheckoutErrors } from '@/lib/validation';
 import { useCartStore } from '@/store/cart';
+import { useUiStore } from '@/store/ui';
 import { useCheckoutStore } from '@/store/checkout';
 import { firstErrorField, placeOrder } from '@/store/actions';
 import { Crumbs, EmptyState } from '@/components/common/bits';
@@ -19,6 +20,7 @@ export function CheckoutView() {
   const coupon = useCartStore((s) => s.coupon);
   const form = useCheckoutStore((s) => s.form);
   const set = useCheckoutStore((s) => s.set);
+  const busy = useUiStore((s) => s.modal?.t === 'busy');
   const [errors, setErrors] = useState<CheckoutErrors>({});
 
   const priced = toPriced(lines, product);
@@ -74,7 +76,7 @@ export function CheckoutView() {
           lines={priced.map((l) => ({ label: `${nameOf(l.product.id, l.product.name)} × ${l.qty}`, amount: unitPrice(l.product, l.o) * l.qty }))}
           footer={
             <>
-              <button type="button" className="btn block place" onClick={submit}>
+              <button type="button" className="btn block place" onClick={submit} disabled={busy}>
                 {form.pay === 'cod' ? 'Place order' : `Pay ${inr(totals.total)}`}
               </button>
               <p className="hint">Demo store. No money is charged.</p>

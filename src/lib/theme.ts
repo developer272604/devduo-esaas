@@ -123,9 +123,15 @@ export function themeVars(theme: ThemeState, lightBg: string): Record<string, st
   };
 }
 
+/** A theme variable is a --custom-property with a colour, number, length or font list. Anything that could load a URL or break out of the declaration is refused. */
+const VAR_NAME = /^--[a-z0-9-]+$/i;
+const VAR_VALUE = /^(#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)|[\w\s,'"%.-]{1,80})$/i;
+export const isSafeThemeVar = (name: string, value: unknown): value is string =>
+  typeof value === 'string' && VAR_NAME.test(name) && VAR_VALUE.test(value) && !/url\(|[;{}]/i.test(value);
+
 export function applyTheme(theme: ThemeState, lightBg: string, root: HTMLElement = document.documentElement): void {
   const vars = themeVars(theme, lightBg);
-  for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
+  for (const [k, v] of Object.entries(vars)) if (isSafeThemeVar(k, v)) root.style.setProperty(k, v);
   root.dataset.theme = theme.mode;
   // Read back by the inline script in index.html on the next load, so the first paint is already themed.
   safeStorage.setItem(THEME_VARS_KEY, JSON.stringify({ vars, mode: theme.mode }));

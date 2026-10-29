@@ -1,10 +1,11 @@
 import type { CartLine, Coupon, PayMethod, Product, ShipSpeed, Totals } from './types';
+import { MAX_QTY } from './constants';
 
 export const FREE_SHIP_AT = 999;
 export const STD_SHIP = 59;
 export const EXPRESS_SHIP = 129;
 export const COD_FEE = 40;
-export const MAX_QTY = 10;
+export { MAX_QTY };
 export const COUPONS: Coupon[] = ['WELCOME10', 'FREESHIP'];
 
 export type PricedLine = { product: Product; o: number; qty: number };
@@ -68,7 +69,10 @@ export function computeTotals(
 }
 
 export const toPriced = (cart: CartLine[], find: (id: string) => Product | undefined): PricedLine[] =>
-  cart.flatMap((l) => {
+  (Array.isArray(cart) ? cart : []).flatMap((l) => {
     const product = find(l.id);
-    return product ? [{ product, o: l.o, qty: l.qty }] : [];
+    // Quantities are clamped here too, so a bad value can never reach a price.
+    const qty = Math.min(MAX_QTY, Math.max(1, Math.floor(Number(l.qty)) || 1));
+    const o = Number.isInteger(l.o) && l.o >= 0 ? l.o : 0;
+    return product ? [{ product, o, qty }] : [];
   });

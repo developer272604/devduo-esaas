@@ -24,6 +24,8 @@ export const useDemoStore = create<DemoStore>()(
       startTour: () => set({ reopened: true }),
       endTour: () => set({ toured: true, reopened: false }),
     }),
-    { name: DEMO_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ toured: s.toured }) },
+    { name: DEMO_KEY, storage: createJSONStorage(browserStorage), partialize: (s) => ({ toured: s.toured }),
+      merge: (persisted, current) => ({ ...current, toured: (persisted as { toured?: unknown } | null)?.toured === true }),
+    },
   ),
 );

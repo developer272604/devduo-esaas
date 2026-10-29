@@ -86,7 +86,7 @@ export function PaymentOptions({ form, errors, set }: { form: CheckoutForm; erro
           <Field id="upi" label="UPI ID (for example name@upi)" value={form.upi} error={errors.upi} wide onChange={(v) => set({ upi: v.trim() })} />
         </div>
       )}
-      <Opt group="pay" value="card" current={form.pay} title="Debit or credit card" hint="Visa, Mastercard and RuPay" onPick={pick} />
+      <Opt group="pay" value="card" current={form.pay} title="Debit or credit card" hint="Demo only: use 4242 4242 4242 4242, any future expiry and any CVV" onPick={pick} />
       {form.pay === 'card' && (
         <div className="f sub">
           <Field id="card" label="Card number" value={form.card} error={errors.card} wide maxLength={19} inputMode="numeric" autoComplete="cc-number" onChange={(v) => set({ card: digits(v).slice(0, 16).replace(/(.{4})/g, '$1 ').trim() })} />

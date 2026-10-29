@@ -51,12 +51,17 @@ export function checkCheckout(): CheckoutErrors {
 
 export const firstErrorField = (e: CheckoutErrors) => FIELD_ORDER.find((k) => e[k]);
 
+let placing = false;
+
 /**
  * Runs payment through the Devduo Pay adapter, then creates the order, clears the cart and coupon
  * and goes to the success page. Called directly, or after sign-in when the shopper was signed out.
+ *
+ * A second call while one is running is ignored, so a double click cannot charge twice. If the
+ * payment or the order step throws, the dialog closes, the cart stays as it was and the shopper is told.
  */
 export async function runPlaceOrder(navigate: (href: string) => void): Promise<void> {
-  const ui = useUiStore.getState();
+  if (placing) return;
   const tpl = useTemplateStore.getState().tpl;
   const cart = useCartStore.getState();
   const form = useCheckoutStore.getState().form;
@@ -64,38 +69,46 @@ export async function runPlaceOrder(navigate: (href: string) => void): Promise<v
   if (!lines.length) return;
   const totals = computeTotals(lines, { coupon: cart.coupon, speed: form.ship, pay: form.pay });
 
-  ui.openModal({ t: 'busy', title: 'Processing payment with Devduo Pay', text: 'Please do not close this page.' });
-  const charge = await adapters.payment.charge({
-    method: form.pay,
-    amount: totals.total,
-    upi: form.upi,
-    cardLast4: form.card.replace(/\s/g, '').slice(-4),
-  });
-  if (!charge.ok) {
+  placing = true;
+  useUiStore.getState().openModal({ t: 'busy', title: 'Processing payment with Devduo Pay', text: 'Please do not close this page.' });
+  try {
+    const charge = await adapters.payment.charge({
+      method: form.pay,
+      amount: totals.total,
+      upi: form.upi,
+      cardLast4: form.card.replace(/\s/g, '').slice(-4),
+    });
+    if (!charge.ok) {
+      useUiStore.setState({ modal: null });
+      useUiStore.getState().showToast(charge.error);
+      return;
+    }
+    const order = await adapters.orders.create({
+      tpl,
+      items: lines.map((l) => ({
+        id: l.product.id,
+        name: useCustomize.getState().texts[tpl]?.[productNameId(l.product.id)] ?? l.product.name,
+        emoji: l.product.emoji,
+        opt: l.product.opts ? l.product.opts.values[l.o] ?? '' : '',
+        qty: l.qty,
+        price: unitPrice(l.product, l.o),
+      })),
+      totals,
+      address: { name: form.name, phone: form.phone, addr: form.addr, city: form.city, pin: form.pin, state: form.state },
+      pay: form.pay,
+      ship: form.ship,
+    });
+    useOrdersStore.getState().add(order);
+    useCartStore.getState().clear();
+    useCheckoutStore.getState().set({ card: '', exp: '', cvv: '' });
+    // The busy dialog stays up until the success page is showing (ModalHost closes it), so the emptied cart never flashes.
+    navigate(`/success/${order.id}`);
+  } catch {
     useUiStore.setState({ modal: null });
-    useUiStore.getState().showToast(charge.error);
-    return;
+    useUiStore.getState().showToast('Something went wrong. You were not charged. Please try again.');
+  } finally {
+    placing = false;
   }
-  const order = await adapters.orders.create({
-    tpl,
-    items: lines.map((l) => ({
-      id: l.product.id,
-      name: useCustomize.getState().texts[tpl]?.[productNameId(l.product.id)] ?? l.product.name,
-      emoji: l.product.emoji,
-      opt: l.product.opts ? l.product.opts.values[l.o] ?? '' : '',
-      qty: l.qty,
-      price: unitPrice(l.product, l.o),
-    })),
-    totals,
-    address: { name: form.name, phone: form.phone, addr: form.addr, city: form.city, pin: form.pin, state: form.state },
-    pay: form.pay,
-    ship: form.ship,
-  });
-  useOrdersStore.getState().add(order);
-  useCartStore.getState().clear();
-  useCheckoutStore.getState().set({ card: '', exp: '', cvv: '' });
-  // The busy dialog stays up until the success page is showing (ModalHost closes it), so the emptied cart never flashes.
-  navigate(`/success/${order.id}`);
 }
 
 /** Place order button: validate, sign in if needed (then resume), then pay. */

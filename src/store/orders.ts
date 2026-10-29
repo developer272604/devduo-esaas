@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { Order } from '@/lib/types';
 import { browserStorage, KEY_PREFIX } from '@/lib/storage';
+import { persistedState, sanitizeOrders } from '@/lib/sanitize';
 
 type OrdersStore = {
   orders: Order[];
@@ -16,6 +17,10 @@ export const useOrdersStore = create<OrdersStore>()(
       add: (o) => set({ orders: [o, ...get().orders] }),
       replace: (o) => set({ orders: get().orders.map((x) => (x.id === o.id ? o : x)) }),
     }),
-    { name: KEY_PREFIX + 'orders', storage: createJSONStorage(browserStorage) },
+    {
+      name: KEY_PREFIX + 'orders',
+      storage: createJSONStorage(browserStorage),
+      merge: (persisted, current) => ({ ...current, orders: sanitizeOrders(persistedState(persisted).orders) }),
+    },
   ),
 );

@@ -11,10 +11,10 @@ const load = (src: string) =>
   });
 
 /**
- * Reads a picked file and shrinks it so it fits in browser storage: longest side 1400 px,
+ * Reads a picked file and shrinks it so it fits in browser storage: longest side 1200 px,
  * JPEG for photos and WebP for everything else (keeps transparency).
  */
-export async function fileToDataUrl(file: File, maxSide = 1400): Promise<ImageResult> {
+export async function fileToDataUrl(file: File, maxSide = 1200): Promise<ImageResult> {
   if (!file.type.startsWith('image/')) return { ok: false, error: 'Choose an image file (JPG, PNG, WebP or GIF).' };
   if (file.size > MAX_BYTES) return { ok: false, error: 'That image is over 15 MB. Choose a smaller one.' };
   const objectUrl = URL.createObjectURL(file);
@@ -34,7 +34,7 @@ export async function fileToDataUrl(file: File, maxSide = 1400): Promise<ImageRe
       ctx.fillRect(0, 0, w, h);
     }
     ctx.drawImage(img, 0, 0, w, h);
-    return { ok: true, url: canvas.toDataURL(jpeg ? 'image/jpeg' : 'image/webp', 0.84) };
+    return { ok: true, url: canvas.toDataURL(jpeg ? 'image/jpeg' : 'image/webp', 0.8) };
   } catch {
     return { ok: false, error: 'That file could not be read as an image.' };
   } finally {

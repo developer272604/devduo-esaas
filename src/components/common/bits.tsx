@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from '@/components/common/Link';
 import { inr, pct } from '@/lib/format';
+import { MAX_QTY } from '@/lib/constants';
 import { Icon } from './Icon';
 
 export function Stars({ rating }: { rating: number }) {
@@ -31,14 +32,14 @@ export function Price({ price, mrp, from, large }: PriceProps) {
 
 type QtyProps = { value: number; onChange: (n: number) => void; min?: number; max?: number; label?: string };
 
-export function QtyStepper({ value, onChange, min = 1, max = 10, label = '' }: QtyProps) {
+export function QtyStepper({ value, onChange, min = 1, max = MAX_QTY, label = '' }: QtyProps) {
   return (
     <div className="qty" role="group" aria-label={`Quantity${label}`}>
       <button type="button" onClick={() => onChange(Math.max(min, value - 1))} aria-label={`Decrease quantity${label}`}>
         <Icon name="minus" size={16} />
       </button>
       <span aria-live="polite">{value}</span>
-      <button type="button" onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max} aria-label={`Increase quantity${label}`}>
+      <button type="button" onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max} aria-label={`Increase quantity${label}`} title={value >= max ? `Max ${max} per order` : undefined}>
         <Icon name="plus" size={16} />
       </button>
     </div>

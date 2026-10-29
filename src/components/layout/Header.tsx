@@ -82,7 +82,7 @@ export function Header() {
         <div className="acts">
           <div className="acct" ref={acctRef}>
             <button type="button" className="icon" aria-label="Account" aria-haspopup="menu" aria-expanded={acctOpen} onClick={() => setAcctOpen((o) => !o)}>
-              {user ? <b>{(user.name.trim()[0] || 'U').toUpperCase()}</b> : <Icon name="user" />}
+              {user ? <b>{(String(user.name ?? '').trim()[0] || 'U').toUpperCase()}</b> : <Icon name="user" />}
             </button>
             {acctOpen && (
               <div className="menu" role="menu">

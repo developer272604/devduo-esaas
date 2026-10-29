@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { CheckoutForm } from '@/lib/types';
 import { browserStorage, KEY_PREFIX } from '@/lib/storage';
+import { persistedState, sanitizeCheckout } from '@/lib/sanitize';
 
 export const emptyCheckout: CheckoutForm = {
   name: '', phone: '', addr: '', city: '', pin: '', state: '',
@@ -22,7 +23,7 @@ export const useCheckoutStore = create<CheckoutStore>()(
       storage: createJSONStorage(browserStorage),
       // Card details are never written to storage.
       partialize: (s) => ({ form: { ...s.form, card: '', exp: '', cvv: '' } }),
-      merge: (persisted, current) => ({ ...current, form: { ...emptyCheckout, ...((persisted as { form?: Partial<CheckoutForm> } | undefined)?.form ?? {}) } }),
+      merge: (persisted, current) => ({ ...current, form: sanitizeCheckout(persistedState(persisted).form, emptyCheckout) }),
     },
   ),
 );
